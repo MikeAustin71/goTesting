@@ -1,0 +1,155 @@
+
+NewtonInitialGuess()
+Initial Guesses
+lastHighGuess = 10.00000000000000000000000000000000000000000000000000
+lastLowGuess  = 1.00000000000000000000000000000000000000000000000000
+       guess  = 1.00000000000000000000000000000000000000000000000000
+
+======================================================================
+TestNewtonNthRoot01()
+First Guess Data
+              Initial Guess = 1.04292392730712890625000000000000000000000000000000
+          Expected Nth Root = 1.0429287773878709622074291041279
+         Nth Root Variance  = -0.00000485008074205595742910412790000000000000000000
+                  precision = 4096
+      calculation precision = 4128
+                          n = 92
+                      alpha = 47.80000000000000000000000000000000000000000000000000
+Initial Guess raisedToPower = 47.77955353892763389196416563006581125531834708963871
+              absAlphaDelta = 0.02044646107236610803583436993418874468165291036129
+   Requested Accuracy Delta = 0.05000000000000000000000000000000000000000000000000
+              compareResult = -1
+      Compare Result Status = Initial Guess Lower Than Actual Nth Root
+ Initialization Cycle Count = 0
+    Calculation Cycle Count = 21
+
+======================================================================
+TestNewtonNthRoot01()
+****** Summary Results ******
+              Precision = 4096
+   Calculated Precision = 7416
+Actual Newton Precision = 7416
+        Local Precision = 50
+                      n = 92
+                  alpha = 47.80000000000000000000000000000000000000000000000000
+       Calculated alpha = 47.80000000000000000000000000000000000000000000000000
+          Initial Guess = 1.04292392730712890625000000000000000000000000000000
+   Requested Calc Steps = 132
+      Actual Calc Steps = 16
+======================================================================
+Summary Actual nth Root = 1.04292877738787096220742910412789580044178124590568
+Actual nth Root Rounded = 1.0429287773878709622074291041279
+      Expected nth Root = 1.0429287773878709622074291041279
+          Initial Guess = 1.04292392730712890625000000000000000000000000000000
+======================================================================
+Alpha And Calculated Alpha Comparison
+======================================================================
+                Total Number Of Alpha Digits = 7419
+  Total Number of Matching Calc Alpha Digits = 2230
+           Required Alpha Digits of Accuracy = 2000
+Number of Matching Calc Alpha Decimal Digits = 2228
+======================================================================
+
+
+NewtonInitialGuess()
+Initial Guesses
+lastHighGuess = 10100000000.00000000000000000000000000000000000000000000000000
+lastLowGuess  = 10.10000000000000000000000000000000000000000000000000
+       guess  = 10.10000000000000000000000000000000000000000000000000
+
+======================================================================
+TestNewtonNthRoot01()
+First Guess Data
+              Initial Guess = 41.94736432948437217760621864080756516016124102463891
+          Expected Nth Root = 41.94736432948444636907
+         Nth Root Variance  = -0.00000000000007419146378135919243483983875897536109
+                  precision = 4096
+      calculation precision = 4128
+                          n = 8
+                      alpha = 9586000000000.00000000000000000000000000000000000000000000000000
+Initial Guess raisedToPower = 9585999999999.86436347616696605720463937292685690907309124731666
+              absAlphaDelta = 0.13563652383303394279536062707314309092690875268334
+   Requested Accuracy Delta = 0.50000000000000000000000000000000000000000000000000
+              compareResult = -1
+      Compare Result Status = Initial Guess Lower Than Actual Nth Root
+ Initialization Cycle Count = 1
+    Calculation Cycle Count = 76
+
+======================================================================
+TestNewtonNthRoot01()
+****** Summary Results ******
+              Precision = 4096
+   Calculated Precision = 7416
+Actual Newton Precision = 7416
+        Local Precision = 50
+                      n = 8
+                  alpha = 9586000000000.00000000000000000000000000000000000000000000000000
+       Calculated alpha = 9586000000000.00000000000000000000000000000000000000000000000000
+          Initial Guess = 41.94736432948437217760621864080756516016124102463891
+   Requested Calc Steps = 132
+      Actual Calc Steps = 16
+======================================================================
+Summary Actual nth Root = 41.94736432948444636906618120483591503308437017539660
+Actual nth Root Rounded = 41.94736432948444636907
+      Expected nth Root = 41.94736432948444636907
+          Initial Guess = 41.94736432948437217760621864080756516016124102463891
+======================================================================
+Alpha And Calculated Alpha Comparison
+======================================================================
+                Total Number Of Alpha Digits = 7430
+  Total Number of Matching Calc Alpha Digits = 2231
+           Required Alpha Digits of Accuracy = 2000
+Number of Matching Calc Alpha Decimal Digits = 2218
+======================================================================
+
+
+NewtonInitialGuess()
+Initial Guesses
+lastHighGuess = 1.00000000000000000000000000000000000000000000000000
+lastLowGuess  = 0.00000000100000000000000000000000000000000000000000
+       guess  = 0.00000000100000000000000000000000000000000000000000
+
+======================================================================
+TestNewtonNthRoot01()
+First Guess Data
+              Initial Guess = 0.00000306481843677745200693607330322265625000000000
+          Expected Nth Root = 0.0000030648829156192458114498573382988
+         Nth Root Variance  = -0.00000000006447884179380451378403507614375000000000
+                  precision = 4096
+      calculation precision = 4128
+                          n = 3
+                      alpha = 0.00000000000000002879000000000000000000000000000000
+Initial Guess raisedToPower = 0.00000000000000002878818299081604074654734985256757
+              absAlphaDelta = 0.00000000000000000000181700918395925345265014743243
+   Requested Accuracy Delta = 0.00000000000000000000500000000000000000000000000000
+              compareResult = -1
+      Compare Result Status = Initial Guess Lower Than Actual Nth Root
+ Initialization Cycle Count = 139
+    Calculation Cycle Count = 33
+
+======================================================================
+TestNewtonNthRoot01()
+****** Summary Results ******
+              Precision = 4096
+   Calculated Precision = 7416
+Actual Newton Precision = 7416
+        Local Precision = 50
+                      n = 3
+                  alpha = 0.00000000000000002879000000000000000000000000000000
+       Calculated alpha = 0.00000000000000002879000000000000000000000000000000
+          Initial Guess = 0.00000306481843677745200693607330322265625000000000
+   Requested Calc Steps = 132
+      Actual Calc Steps = 16
+======================================================================
+Summary Actual nth Root = 0.00000306488291561924581144985733829880565009869623
+Actual nth Root Rounded = 0.0000030648829156192458114498573382988
+      Expected nth Root = 0.0000030648829156192458114498573382988
+          Initial Guess = 0.00000306481843677745200693607330322265625000000000
+======================================================================
+Alpha And Calculated Alpha Comparison
+======================================================================
+                Total Number Of Alpha Digits = 7418
+  Total Number of Matching Calc Alpha Digits = 2248
+           Required Alpha Digits of Accuracy = 2000
+Number of Matching Calc Alpha Decimal Digits = 2247
+======================================================================

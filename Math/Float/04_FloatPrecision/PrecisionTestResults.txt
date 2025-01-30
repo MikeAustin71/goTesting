@@ -1,0 +1,65 @@
+Function: PrecisionTest01()
+==================================================
+
+==================================================
+PrecisionTest01()
+                      Precision = 2048
+         Number of Total Digits = 617
+       Number of Integer Digits = 1
+    Number of Fractional Digits = 616
+Estimated Number of Digits 3.33 = 614.646
+                Number Exponent = 2
+                         Number = 3.300000000000000000000000000000000000000000000000000000000000
+
+Function: PrecisionTest01()
+==================================================
+
+==================================================
+PrecisionTest01()
+                      Precision = 4096
+         Number of Total Digits = 1234
+       Number of Integer Digits = 1
+    Number of Fractional Digits = 1233
+Estimated Number of Digits 3.33 = 1229.292
+                Number Exponent = 2
+                         Number = 3.300000000000000000000000000000000000000000000000000000000000
+
+==================================================
+Function: PrecisionTest01()
+==================================================
+                     Precision = 8192
+        Number of Total Digits = 2467
+      Number of Integer Digits = 1
+   Number of Fractional Digits = 2466
+    Estimated Number of Digits = 2466.000
+Estimated Number Digits Factor = 3.321979
+               Number Exponent = 2
+                        Number = 3.300000000000000000000000000000000000000000000000000000000000
+
+==================================================
+Function: PrecisionTest01()
+==================================================
+                     Precision = 16384
+        Number of Total Digits = 4933
+      Number of Integer Digits = 1
+   Number of Fractional Digits = 4932
+    Estimated Number of Digits = 4932.000
+Estimated Number Digits Factor = 3.32197891321978913219789132197890000
+               Number Exponent = 2
+                        Number = 3.30000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+
+==================================================
+Function: PrecisionTest01()
+==================================================
+                         Precision = 16384
+            Number of Total Digits = 4932
+  Estimated Total Number of Digits = 4933
+    Total Digits Estimate Accuracy = Below Accuracy
+          Number of Integer Digits = 12
+Estimated Number of Integer Digits = 12
+       Number of Fractional Digits = 4920
+   Estimated Number of Frac Digits = 4921
+    Estimated Number Digits Factor = 3.32197891321978913219789132197890000
+                   Number Exponent = 39
+                            Number = 333333333345.66666666666666666666666666666666666666666666666666666666666666666666666666666667

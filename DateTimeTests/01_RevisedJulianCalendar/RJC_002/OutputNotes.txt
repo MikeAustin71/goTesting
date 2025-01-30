@@ -1,0 +1,60 @@
+Appears to be correct in all respects.
+
+$ go run main.go
+revisedJulianDateToJulianDayNumber()
+=================================================================
+Computing Julian Day Number for
+Revised Julian Calendar Date: 1-1-1 12:0:0.0
+=================================================================
+ The following constant defined midnight at the start of Revised
+ Julian date Monday, 1 January 1 AD as the beginning of the first
+ ordinal day. This moment was Julian Day number 1721425.5.
+ RJepoch = 1
+ err = nil
+ https://www.liquisearch.com/revised_julian_calendar/revised_julian_calendrical_calculations/fixed_days
+=================================================================
+-----------------------------------------------------------------
+Computed Julian Day No: 1721425
+-----------------------------------------------------------------
+       Original Start Year: -4713
+      Original Start Month: 2
+        Original Start Day: 6
+       Original Start Hour: 12
+     Original Start Minute: 0
+     Original Start Second: 0
+ Original Start Nanosecond: 0
+-----------------------------------------------------------------
+        Adjusted Start Year: -4713
+       Adjusted Start Month: 2
+         Adjusted Start Day: 6
+        Adjusted Start Hour: 12
+      Adjusted Start Minute: 0
+      Adjusted Start Second: 0
+  Adjusted Start Nanosecond: 0
+    Start Year Ordinal Days: 37
+        First Complete Year: -4712
+-----------------------------------------------------------------
+                Target Year: 1
+               Target Month: 1
+                 Target Day: 1
+                Target Hour: 12
+              Target Minute: 0
+              Target Second: 0
+          Target Nanosecond: 0
+        Target Ordinal Days: 1
+-----------------------------------------------------------------
+          Final Target Year: 1
+         Final Target Month: 1
+           Final Target Day: 1
+         Final Target Hours: 0
+       Final Target Minutes: 0
+       Final Target Seconds: 0
+   Final Target Nanoseconds: 0
+Final Target Ordinal Day No: 1
+-----------------------------------------------------------------
+        * Returned Results *
+        Int64 Julian Day No:   1721425
+         Julian Day No/Time:   1721425.00000000000000000000
+     Julian Day No Fraction:         0.00000000000000000000
+=================================================================
+=================================================================

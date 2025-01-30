@@ -1,0 +1,9 @@
+
+The source code in this directory reflects on-going development
+and refinement of algorithms designed for use in calculations
+associated with the Revised Julian Calendar.
+
+For additional background information, reference:
+
+  https://en.wikipedia.org/wiki/Revised_Julian_calendar
+

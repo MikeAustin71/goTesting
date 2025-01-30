@@ -1,0 +1,88 @@
+// ----------------------------------------------------------------
+//
+//	Be advised that the capacity of a type 'float64' is
+//	approximately 15 to 17 digits including integer and
+//	fractional digits.
+//
+//	Source:
+//	https://en.wikipedia.org/wiki/Floating-point_arithmetic#IEEE_754:_floating_point_in_modern_computers
+//
+//	Type	Sign  Exponent	Significand	  Total   Exponent	 Bits	     Number of
+//							   field       bits     bias    precision	decimal digits
+//	         ----  --------	-----------   -----   --------  ---------	--------------
+//	Double	  1		 11			52			64	    1023	   53		   ~15.9
+//
+
+
+ParseFloat6403
+Found Max Limit float64
+    initialNumStr = 1.1234567891234567
+      finalNumStr = 1.1234567891234566
+----------------------
+   lastGoodNumStr = 1.123456789123456
+   Integer Digits = 1
+Fractional Digits = 15
+     Total Digits = 16
+
+
+==================================================
+ Successful Completion!
+Function: ParseFloat6403
+
+Function: ParseFloat6403
+==================================================
+
+
+ParseFloat6403
+Found Max Limit float64
+    initialNumStr = 234.123456789123456
+      finalNumStr = 234.12345678912345
+----------------------
+   lastGoodNumStr = 234.12345678912345
+   Integer Digits = 3
+Fractional Digits = 14
+     Total Digits = 17
+
+
+==================================================
+ Successful Completion!
+Function: ParseFloat6403
+
+
+Function: ParseFloat6403
+==================================================
+
+
+ParseFloat6403
+Found Max Limit float64
+    initialNumStr = -1.1234567891234567
+      finalNumStr = -1.1234567891234566
+----------------------
+   lastGoodNumStr = -1.123456789123456
+   Integer Digits = 1
+Fractional Digits = 15
+     Total Digits = 16
+
+
+==================================================
+ Successful Completion!
+Function: ParseFloat6403
+
+Function: ParseFloat6403
+==================================================
+
+
+ParseFloat6403
+Found Max Limit float64
+    initialNumStr = -234.123456789123456
+      finalNumStr = -234.12345678912345
+----------------------
+   lastGoodNumStr = -234.12345678912345
+   Integer Digits = 3
+Fractional Digits = 14
+     Total Digits = 17
+
+
+==================================================
+ Successful Completion!
+Function: ParseFloat6403

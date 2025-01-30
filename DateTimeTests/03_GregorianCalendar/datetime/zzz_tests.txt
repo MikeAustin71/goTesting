@@ -1,0 +1,22 @@
+=== RUN   TestConvertAnyYearToAstronomicalYear01
+--- PASS: TestConvertAnyYearToAstronomicalYear01 (0.00s)
+=== RUN   TestConvertAnyYearToAstronomicalYear02
+--- PASS: TestConvertAnyYearToAstronomicalYear02 (0.00s)
+=== RUN   TestConvertAnyYearToAstronomicalYear03
+--- PASS: TestConvertAnyYearToAstronomicalYear03 (0.00s)
+=== RUN   TestConvertAnyYearToAstronomicalYear04
+--- PASS: TestConvertAnyYearToAstronomicalYear04 (0.00s)
+=== RUN   TestConvertAnyYearToAstronomicalYear05
+--- PASS: TestConvertAnyYearToAstronomicalYear05 (0.00s)
+=== RUN   TestConvertAnyYearToAstronomicalYear06
+--- PASS: TestConvertAnyYearToAstronomicalYear06 (0.00s)
+=== RUN   TestConvertAnyYearToAstronomicalYear07
+--- PASS: TestConvertAnyYearToAstronomicalYear07 (0.00s)
+=== RUN   TestConvertAstronomicalYearToCommonEraYear01
+--- PASS: TestConvertAstronomicalYearToCommonEraYear01 (0.00s)
+=== RUN   TestConvertAstronomicalYearToCommonEraYear02
+--- PASS: TestConvertAstronomicalYearToCommonEraYear02 (0.00s)
+=== RUN   TestConvertAstronomicalYearToCommonEraYear03
+--- PASS: TestConvertAstronomicalYearToCommonEraYear03 (0.00s)
+PASS
+ok  	bitbucket.org/AmarilloMike/GolangMikeSamples/DateTimeTests/03_GregorianCalendar/datetime	0.987s
