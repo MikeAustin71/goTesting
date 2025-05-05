@@ -7,19 +7,18 @@ import (
 
 type TzError struct {
 	ePrefix string
-	errMsg string
-	err error
+	errMsg  string
+	err     error
 }
 
-func (e *TzError) Error() string{
-	return fmt.Sprintf(e.ePrefix +
+func (e *TzError) Error() string {
+	return fmt.Sprintf(e.ePrefix+
 		"\n%v\n", e.errMsg)
 }
 
 func (e *TzError) Unwrap() error {
 	return e.err
 }
-
 
 func (e *TzError) Is(target error) bool {
 
@@ -34,19 +33,18 @@ func (e *TzError) Is(target error) bool {
 
 type DirError struct {
 	ePrefix string
-	errMsg string
-	err error
+	errMsg  string
+	err     error
 }
 
-func (e *DirError) Error() string{
-	return fmt.Sprintf(e.ePrefix +
+func (e *DirError) Error() string {
+	return fmt.Sprintf(e.ePrefix+
 		"\n%v\n", e.errMsg)
 }
 
 func (e *DirError) Unwrap() error {
 	return e.err
 }
-
 
 func (e *DirError) Is(target error) bool {
 
@@ -59,16 +57,14 @@ func (e *DirError) Is(target error) bool {
 	return true
 }
 
-
-
 type FileError struct {
 	ePrefix string
-	errMsg string
-	err error
+	errMsg  string
+	err     error
 }
 
-func (e *FileError) Error() string{
-	return fmt.Sprintf(e.ePrefix +
+func (e *FileError) Error() string {
+	return fmt.Sprintf(e.ePrefix+
 		"\n%v\n", e.errMsg)
 }
 
@@ -76,10 +72,11 @@ func (e *FileError) Unwrap() error {
 	return e.err
 }
 
-
 func (e *FileError) Is(target error) bool {
 
-	_, ok := target.(*FileError)
+	var fileError *FileError
+
+	ok := errors.As(target, &fileError)
 
 	if !ok {
 		return false
@@ -88,15 +85,14 @@ func (e *FileError) Is(target error) bool {
 	return true
 }
 
-
 type TzAbbrvError struct {
 	ePrefix string
-	errMsg string
-	err error
+	errMsg  string
+	err     error
 }
 
-func (e *TzAbbrvError) Error() string{
-	return fmt.Sprintf(e.ePrefix +
+func (e *TzAbbrvError) Error() string {
+	return fmt.Sprintf(e.ePrefix+
 		"\n%v\n", e.errMsg)
 }
 
@@ -115,13 +111,9 @@ func (e *TzAbbrvError) Is(target error) bool {
 	return true
 }
 
-func (e *TzAbbrvError) As(err error) bool {
+func (e *TzAbbrvError) As(iErr interface{}) bool {
 
-	t, ok := err.(*TzAbbrvError)
-
-	if !ok {
-		return false
-	}
+	var t = iErr.(TzAbbrvError)
 
 	t.ePrefix = e.ePrefix
 	t.errMsg = e.errMsg
@@ -142,28 +134,26 @@ func test01() {
 		fmt.Println(err)
 	}
 
-
 	if errors.Is(err, &TzAbbrvError{}) {
 		fmt.Println("'Is' Result - This error type 'TzAbbrvError'\n")
 	}
 
 	currentError := err
-	
+
 	for currentError != nil {
 		fmt.Println(currentError)
 		currentError = errors.Unwrap(currentError)
 	}
 
-
 }
 
-func test02(ePrefix string){
+func test02(ePrefix string) {
 
 	ePrefix += "test02() "
 	err := tzAbbrvLookup02(ePrefix)
 
 	if err == nil {
-		fmt.Println("No error returned from ",ePrefix)
+		fmt.Println("No error returned from ", ePrefix)
 		return
 	}
 
@@ -184,7 +174,6 @@ func test02(ePrefix string){
 func tzAbbrvLookup02(ePrefix string) error {
 
 	ePrefix += "tzAbbrvLookup02() "
-
 
 	return &TzAbbrvError{
 		ePrefix: ePrefix,
@@ -219,7 +208,7 @@ func level2FileError(ePrefix string) error {
 }
 
 func level3DirError(ePrefix string) error {
-	
+
 	ePrefix += "level3DirError() "
 
 	err := level4TzError(ePrefix)
@@ -235,7 +224,6 @@ func level4TzError(ePrefix string) error {
 
 	ePrefix += "level4TzError() "
 
-
 	return &TzError{
 		ePrefix: ePrefix,
 		errMsg:  "This is a time zone error from Level #4",
@@ -243,4 +231,3 @@ func level4TzError(ePrefix string) error {
 	}
 
 }
-
