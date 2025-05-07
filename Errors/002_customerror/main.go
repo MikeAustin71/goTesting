@@ -22,7 +22,7 @@ func (e *ErrorReturnBasic) Error() string {
 	}
 
 	if e.ReturnFunc != "" {
-		errStr += e.ReturnFunc + "\n"
+		errStr += "Returned by:\n  " + e.ReturnFunc + "\n"
 		foundCnt++
 	}
 
@@ -38,6 +38,8 @@ func (e *ErrorReturnBasic) Error() string {
 
 	if foundCnt == 0 {
 		errStr = "No Error parameters provided!\n"
+	} else {
+		errStr += "\n"
 	}
 
 	return errStr
@@ -99,7 +101,6 @@ func test01(errPrefix string) (int, error) {
 			&ErrorReturnBasic{
 				ErrPrefix:  errPrefix,
 				ReturnFunc: "test01",
-				ErrContext: "",
 				ErrMessage: err.Error(),
 			}
 
