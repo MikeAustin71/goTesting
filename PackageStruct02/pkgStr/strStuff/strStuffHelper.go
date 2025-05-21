@@ -1,9 +1,9 @@
-package pkgStr
+package strStuff
 
 // D:\GoProjects\MikeAustin71\goTesting\PackageStruct02
 
 import (
-  mainRepo "golangmikesamples/PackageStruct02/pkgStr"
+  "fmt"
   custErr "golangmikesamples/PackageStruct02/pkgStr/customErr"
 )
 
@@ -11,8 +11,10 @@ import (
 
 type strStuffHelper struct{}
 
+type myStdError = custErr.StdBasicError
+
 func (sStuffHelper *strStuffHelper) SetStr(
-  mainStrStuff *mainRepo.StrStuff,
+  mainStrStuff *StrStuff,
   str string) error {
 
   ePrefix := "strStuffHelper.SetStr()"
@@ -33,6 +35,29 @@ func (sStuffHelper *strStuffHelper) SetStr(
   }
 
   mainStrStuff.MyStr = str
+
+  return nil
+}
+
+func (sStuffHelper *strStuffHelper) PrintStr(mainStrStuff *StrStuff) error {
+  ePrefix := "strStuffHelper.PrintStr()"
+
+  if mainStrStuff == nil {
+    return &myStdError{
+      ErrPrefix:  ePrefix,
+      ErrMessage: "Input Parameter 'mainStrStuff' is a 'nil' pointer!\n",
+    }
+  }
+
+  if len(mainStrStuff.MyStr) == 0 {
+    return &myStdError{
+      ErrPrefix:  ePrefix,
+      ErrMessage: "Error: Input Parameter 'mainStrStuff' is a empty string!",
+    }
+  }
+
+  fmt.Printf("\n\nPrinting a StrStuff String:\nmainStrStuff.MyStr: %s\n\n",
+    mainStrStuff.MyStr)
 
   return nil
 }

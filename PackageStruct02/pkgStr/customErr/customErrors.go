@@ -1,4 +1,4 @@
-package pkgStr
+package customErr
 
 import "fmt"
 

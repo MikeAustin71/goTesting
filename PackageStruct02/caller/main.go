@@ -1,7 +1,7 @@
 package main
 
 import (
-	myStuff "golangmikesamples/PackageStruct02/pkgStr"
+	myStuff "golangmikesamples/PackageStruct02/pkgStr/strStuffHelpers"
 )
 
 func main() {
