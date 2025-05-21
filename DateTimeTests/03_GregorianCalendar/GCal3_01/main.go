@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/DateTimeTests/03_GregorianCalendar/GCal3_01/TestMain"
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/DateTimeTests/03_GregorianCalendar/datetime"
 	"fmt"
+	"golangmikesamples/DateTimeTests/03_GregorianCalendar/GCal3_01/TestMain"
+	"golangmikesamples/DateTimeTests/03_GregorianCalendar/datetime"
 	"math/big"
 	"strconv"
 	"strings"
@@ -11,22 +11,22 @@ import (
 )
 
 type JDNConversionTestDto struct {
-	IsLeapYear bool
-	Year int64
-	Month int
-	Day int
-	DateStr string
-	Hour int
-	Minute int
-	Second int
-	Nanosecond int
-	TimeStr string
-	DateTimeStr string
-	JulianDayNoTimeStr string
-	JulianDayNoTimeFloat *big.Float
+	IsLeapYear                  bool
+	Year                        int64
+	Month                       int
+	Day                         int
+	DateStr                     string
+	Hour                        int
+	Minute                      int
+	Second                      int
+	Nanosecond                  int
+	TimeStr                     string
+	DateTimeStr                 string
+	JulianDayNoTimeStr          string
+	JulianDayNoTimeFloat        *big.Float
 	RoundedJulianDayNoTimeFloat *big.Float
-	RoundedJulianDayNoTimeStr string
-	DateTimeJdnNoTimeStr string
+	RoundedJulianDayNoTimeStr   string
+	DateTimeJdnNoTimeStr        string
 }
 
 func main() {
@@ -38,9 +38,9 @@ func main() {
 	err := tMain.TestTypeAssertion(ePrefix)
 
 	if err != nil {
-	fmt.Printf("%v\n", err.Error())
-	return
-}
+		fmt.Printf("%v\n", err.Error())
+		return
+	}
 
 }
 
@@ -49,7 +49,7 @@ func TestGetJDNTestData(ePrefix string) {
 	var tStr string
 
 	jdnDtos,
-	err := getGregorianJDNTestData(ePrefix)
+		err := getGregorianJDNTestData(ePrefix)
 
 	if err != nil {
 		fmt.Printf("%v\n", err.Error())
@@ -59,38 +59,38 @@ func TestGetJDNTestData(ePrefix string) {
 	fmt.Println(ePrefix)
 	separator := strings.Repeat("-", 84)
 	margin := " "
-	for i := 0; i < len(jdnDtos); i ++ {
+	for i := 0; i < len(jdnDtos); i++ {
 
 		fmt.Println(separator)
-		fmt.Printf(margin + "Item Number: %v\n", i+1)
-		fmt.Printf(margin + "Year: %v  Month: %v  Day: %v \n",
+		fmt.Printf(margin+"Item Number: %v\n", i+1)
+		fmt.Printf(margin+"Year: %v  Month: %v  Day: %v \n",
 			jdnDtos[i].Year,
 			jdnDtos[i].Month,
-			jdnDtos[i].Day )
+			jdnDtos[i].Day)
 
-		fmt.Printf(margin + "IsLeapYear: %v\n",
+		fmt.Printf(margin+"IsLeapYear: %v\n",
 			jdnDtos[i].IsLeapYear)
 
-		fmt.Printf(margin + "DateStr: %v\n",
+		fmt.Printf(margin+"DateStr: %v\n",
 			jdnDtos[i].DateStr)
 
-		fmt.Printf(margin + "Hour: %02d  Minute: %02d  Second: %02d  Nanosecond: %09d \n",
+		fmt.Printf(margin+"Hour: %02d  Minute: %02d  Second: %02d  Nanosecond: %09d \n",
 			jdnDtos[i].Hour,
 			jdnDtos[i].Minute,
 			jdnDtos[i].Second,
 			jdnDtos[i].Nanosecond)
 
-		fmt.Printf(margin + "TimeStr: %v\n",
+		fmt.Printf(margin+"TimeStr: %v\n",
 			jdnDtos[i].TimeStr)
 
-		fmt.Printf(margin + "DateTimeStr: %v\n",
+		fmt.Printf(margin+"DateTimeStr: %v\n",
 			jdnDtos[i].DateTimeStr)
 
 		spacerLen := 46 - len(jdnDtos[i].JulianDayNoTimeStr)
 
 		spacer := strings.Repeat(" ", spacerLen)
 
-		fmt.Printf("         JulianDayNoTimeStr: " + spacer + "%v\n",
+		fmt.Printf("         JulianDayNoTimeStr: "+spacer+"%v\n",
 			jdnDtos[i].JulianDayNoTimeStr)
 
 		tStr = fmt.Sprintf("%46.30f",
@@ -129,8 +129,8 @@ func testMultipleJdnGregorianJdnConversions(ePrefix string) error {
 	var expectedGregorianDateTime, actualGregorianDateTime datetime.ADateTimeDto
 	var julianDayNoDto datetime.JulianDayNoDto
 	var jdnConversionStartTime, jdnConversionEndTime,
-	dateConversionStartTime, dateConversionEndTime,
-	executionStartTime, executionEndTime time.Time
+		dateConversionStartTime, dateConversionEndTime,
+		executionStartTime, executionEndTime time.Time
 
 	executionStartTime = time.Now()
 
@@ -146,153 +146,153 @@ func testMultipleJdnGregorianJdnConversions(ePrefix string) error {
 
 	numOfTests = len(testData)
 
-	for i:=0; i < numOfTests; i++ {
+	for i := 0; i < numOfTests; i++ {
 
-	jdnConversionStartTime = time.Now()
+		jdnConversionStartTime = time.Now()
 
-	julianDayNoDto,
-		err2 = calGreg.GetJulianDayNumber(
-		testData[i].Year,
-		testData[i].Month,
-		testData[i].Day,
-		testData[i].Hour,
-		testData[i].Minute,
-		testData[i].Second,
-		testData[i].Nanosecond,
-		ePrefix)
-
-	jdnConversionEndTime = time.Now()
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n" +
-			"Error Returned from DateTimeStr: %v\n" +
-			"i=%v\n",
-			err2.Error(),
-			testData[i].DateTimeStr,
-			i)
-		return err
-	}
-
-	jdnConversionTotalTime +=
-		int64(jdnConversionEndTime.Sub(jdnConversionStartTime))
-
-	actualJulianDayNoTime, err2 =
-		julianDayNoDto.GetRoundedDayNoTimeBigFloat(roundToDecPlaces, ePrefix)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n" +
-			"Error Returned from GetRoundedDayNoTimeBigFloat\n" +
-			"testData[%v].DateTimeStr='%v'\n" +
-			err2.Error(),
-			i,
-			testData[i].DateTimeStr)
-		return err
-	}
-
-	actualJulianDayNoTimeStr =
-		fmt.Sprintf(floatFmtStr, actualJulianDayNoTime)
-
-	if actualJulianDayNoTimeStr != testData[i].RoundedJulianDayNoTimeStr {
-		outputStr = fmt.Sprintf(failureSep + "\n")
-		outputStr +=
-		fmt.Sprintf("Calc Error: Actual Julian Day No NOT EQUAL to Expected Julian Day No!\n" +
-			"  Expected Julian Day No: %v\n" +
-			"    Actual Julian Day No: %v\n" +
-			"testData[%v].DateTimeStr: '%v'\n",
-			testData[i].RoundedJulianDayNoTimeStr,
-			actualJulianDayNoTimeStr,
-			i,
-			testData[i].DateTimeStr)
-		outputStr += fmt.Sprintf(failureSep)
-		outputStr += fmt.Sprintln()
-
-		err = fmt.Errorf(ePrefix + "\n" +
-			"%v", outputStr)
-		return err
-	}
-
-	julianDayNoDto, err2 =
-		datetime.JulianDayNoDto{}.NewFromJulianDayNoTime(
-			actualJulianDayNoTime,
-			false,
-			ePrefix)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n" +
-			"Error Returned from NewFromJulianDayNoTime\n" +
-			"testData[%v].DateTimeStr='%v'\n" +
-			err2.Error(),
-			i,
-			testData[i].DateTimeStr)
-		return err
-	}
-
-	expectedGregorianDateTime, err2 =
-		datetime.ADateTimeDto{}.New(
-			datetime.CalSpec.Gregorian(),
+		julianDayNoDto,
+			err2 = calGreg.GetJulianDayNumber(
 			testData[i].Year,
-			datetime.CalYearType.Astronomical(),
 			testData[i].Month,
 			testData[i].Day,
-			false,
 			testData[i].Hour,
 			testData[i].Minute,
 			testData[i].Second,
 			testData[i].Nanosecond,
-			"UTC",
-			"",
-			"",
 			ePrefix)
 
-	if err2 != nil {
-		err = fmt.Errorf("%v\n" +
-			"Error Returned from ADateTimeDto{}.New()\n" +
-			"testData[%v].DateTimeStr='%v'\n" +
-			err2.Error(),
-			i,
-			testData[i].DateTimeStr)
-		return err
-	}
+		jdnConversionEndTime = time.Now()
 
-	dateConversionStartTime = time.Now()
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"Error Returned from DateTimeStr: %v\n"+
+				"i=%v\n",
+				err2.Error(),
+				testData[i].DateTimeStr,
+				i)
+			return err
+		}
 
-	actualGregorianDateTime,
-		err2 = calGreg.DateTimeFromJulianDateTime(
-		julianDayNoDto,
-		ePrefix)
+		jdnConversionTotalTime +=
+			int64(jdnConversionEndTime.Sub(jdnConversionStartTime))
 
-	dateConversionEndTime = time.Now()
+		actualJulianDayNoTime, err2 =
+			julianDayNoDto.GetRoundedDayNoTimeBigFloat(roundToDecPlaces, ePrefix)
 
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix + "\n" +
-			"Error Returned from calGreg.DateTimeFromJulianDateTime()\n" +
-			"testData[%v].DateTimeStr='%v'\n" +
-			err2.Error(),
-			i,
-			testData[i].DateTimeStr)
-		return err
-	}
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"Error Returned from GetRoundedDayNoTimeBigFloat\n"+
+				"testData[%v].DateTimeStr='%v'\n"+
+				err2.Error(),
+				i,
+				testData[i].DateTimeStr)
+			return err
+		}
 
-	err = actualGregorianDateTime.IsValidInstanceError(ePrefix +
-		"actualGregorianDateTime.IsValidInstanceError() ")
+		actualJulianDayNoTimeStr =
+			fmt.Sprintf(floatFmtStr, actualJulianDayNoTime)
 
-	if err != nil {
-		return err
-	}
+		if actualJulianDayNoTimeStr != testData[i].RoundedJulianDayNoTimeStr {
+			outputStr = fmt.Sprintf(failureSep + "\n")
+			outputStr +=
+				fmt.Sprintf("Calc Error: Actual Julian Day No NOT EQUAL to Expected Julian Day No!\n"+
+					"  Expected Julian Day No: %v\n"+
+					"    Actual Julian Day No: %v\n"+
+					"testData[%v].DateTimeStr: '%v'\n",
+					testData[i].RoundedJulianDayNoTimeStr,
+					actualJulianDayNoTimeStr,
+					i,
+					testData[i].DateTimeStr)
+			outputStr += fmt.Sprintf(failureSep)
+			outputStr += fmt.Sprintln()
 
-	dateConversionTotalTime +=
-	int64(dateConversionEndTime.Sub(dateConversionStartTime))
+			err = fmt.Errorf(ePrefix+"\n"+
+				"%v", outputStr)
+			return err
+		}
 
-	compareResult, err2 = expectedGregorianDateTime.Compare(&actualGregorianDateTime, ePrefix)
+		julianDayNoDto, err2 =
+			datetime.JulianDayNoDto{}.NewFromJulianDayNoTime(
+				actualJulianDayNoTime,
+				false,
+				ePrefix)
 
-	expectedGregorianDateTime.SetTag("expectedGregorianDateTime")
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"Error Returned from NewFromJulianDayNoTime\n"+
+				"testData[%v].DateTimeStr='%v'\n"+
+				err2.Error(),
+				i,
+				testData[i].DateTimeStr)
+			return err
+		}
 
-	actualGregorianDateTime.SetTag("actualGregorianDateTime")
+		expectedGregorianDateTime, err2 =
+			datetime.ADateTimeDto{}.New(
+				datetime.CalSpec.Gregorian(),
+				testData[i].Year,
+				datetime.CalYearType.Astronomical(),
+				testData[i].Month,
+				testData[i].Day,
+				false,
+				testData[i].Hour,
+				testData[i].Minute,
+				testData[i].Second,
+				testData[i].Nanosecond,
+				"UTC",
+				"",
+				"",
+				ePrefix)
 
-	expectedIsLeapYear = expectedGregorianDateTime.GetIsLeapYear()
+		if err2 != nil {
+			err = fmt.Errorf("%v\n"+
+				"Error Returned from ADateTimeDto{}.New()\n"+
+				"testData[%v].DateTimeStr='%v'\n"+
+				err2.Error(),
+				i,
+				testData[i].DateTimeStr)
+			return err
+		}
 
-	actualIsLeapYear =
-		actualGregorianDateTime.GetIsLeapYear()
+		dateConversionStartTime = time.Now()
+
+		actualGregorianDateTime,
+			err2 = calGreg.DateTimeFromJulianDateTime(
+			julianDayNoDto,
+			ePrefix)
+
+		dateConversionEndTime = time.Now()
+
+		if err2 != nil {
+			err = fmt.Errorf(ePrefix+"\n"+
+				"Error Returned from calGreg.DateTimeFromJulianDateTime()\n"+
+				"testData[%v].DateTimeStr='%v'\n"+
+				err2.Error(),
+				i,
+				testData[i].DateTimeStr)
+			return err
+		}
+
+		err = actualGregorianDateTime.IsValidInstanceError(ePrefix +
+			"actualGregorianDateTime.IsValidInstanceError() ")
+
+		if err != nil {
+			return err
+		}
+
+		dateConversionTotalTime +=
+			int64(dateConversionEndTime.Sub(dateConversionStartTime))
+
+		compareResult, err2 = expectedGregorianDateTime.Compare(&actualGregorianDateTime, ePrefix)
+
+		expectedGregorianDateTime.SetTag("expectedGregorianDateTime")
+
+		actualGregorianDateTime.SetTag("actualGregorianDateTime")
+
+		expectedIsLeapYear = expectedGregorianDateTime.GetIsLeapYear()
+
+		actualIsLeapYear =
+			actualGregorianDateTime.GetIsLeapYear()
 
 		if compareResult == 0 &&
 			expectedIsLeapYear != actualIsLeapYear {
@@ -311,9 +311,9 @@ func testMultipleJdnGregorianJdnConversions(ePrefix string) error {
 				"Actual",
 				actualGregorianDateTime)
 
-			outputStr +=fmt.Sprintln(failureSep)
+			outputStr += fmt.Sprintln(failureSep)
 
-			err = fmt.Errorf(ePrefix + "\n" +
+			err = fmt.Errorf(ePrefix+"\n"+
 				"%v\n", outputStr)
 
 			return err
@@ -342,7 +342,7 @@ func testMultipleJdnGregorianJdnConversions(ePrefix string) error {
 
 			jdnBigFloat, _ := julianDayNoDto.GetDayNoTimeBigFloat(ePrefix)
 
-			outputStr += fmt.Sprintf("Last Julian Day No Submitted= " + floatFmtStr + "\n",
+			outputStr += fmt.Sprintf("Last Julian Day No Submitted= "+floatFmtStr+"\n",
 				jdnBigFloat)
 
 			outputStr += CompareTwoDateTimeDtos(
@@ -351,7 +351,7 @@ func testMultipleJdnGregorianJdnConversions(ePrefix string) error {
 				"Actual",
 				actualGregorianDateTime)
 			outputStr += fmt.Sprintln(failureSep)
-			err = fmt.Errorf(ePrefix + "\n" +
+			err = fmt.Errorf(ePrefix+"\n"+
 				"%v\n", outputStr)
 
 			return err
@@ -362,7 +362,7 @@ func testMultipleJdnGregorianJdnConversions(ePrefix string) error {
 
 	jdnConversionTotalTime = jdnConversionTotalTime / int64(numOfTests)
 
-	elapsedTimeStr := GetElapsedTime( time.Duration(jdnConversionTotalTime))
+	elapsedTimeStr := GetElapsedTime(time.Duration(jdnConversionTotalTime))
 
 	fmt.Println(successSep)
 	fmt.Printf("       Average JDN Calculation Time: %v\n",
@@ -370,7 +370,7 @@ func testMultipleJdnGregorianJdnConversions(ePrefix string) error {
 
 	dateConversionTotalTime = dateConversionTotalTime / int64(numOfTests)
 
-	elapsedTimeStr = GetElapsedTime( time.Duration(dateConversionTotalTime))
+	elapsedTimeStr = GetElapsedTime(time.Duration(dateConversionTotalTime))
 
 	fmt.Printf("Average JDN To Date Conversion Time: %v\n",
 		elapsedTimeStr)
@@ -396,7 +396,7 @@ func getMonthDayFromGregorianOrdDayNo(ePrefix string) error {
 	var err error
 
 	isLeapYear,
-	err = gregCalData.IsLeapYear(
+		err = gregCalData.IsLeapYear(
 		yearNo,
 		datetime.CalYearType.Astronomical(),
 		ePrefix)
@@ -410,21 +410,21 @@ func getMonthDayFromGregorianOrdDayNo(ePrefix string) error {
 	var yearAdjustment, actualMonth, actualDay int
 
 	yearAdjustment,
-	actualMonth,
-	actualDay,
-	err = gregCalData.GetMonthDayFromOrdinalDayNo(
+		actualMonth,
+		actualDay,
+		err = gregCalData.GetMonthDayFromOrdinalDayNo(
 		ordinalDate,
 		isLeapYear,
 		ePrefix)
 
 	if err != nil {
-		return fmt.Errorf("ordinalDate='%v'\n" +
-			"isLeapYear='%v'\n" +
+		return fmt.Errorf("ordinalDate='%v'\n"+
+			"isLeapYear='%v'\n"+
 			"Error='%v'\n",
 			ordinalDate, isLeapYear, err.Error())
 	}
 
-	fmt.Println("    " + ePrefix )
+	fmt.Println("    " + ePrefix)
 	fmt.Printf("        Test Year: %v\n",
 		yearNo)
 	fmt.Printf("Test Ordinal Date: %v\n",
@@ -456,7 +456,7 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 
 	var err, err2 error
 
-	tData := make([]JDNConversionTestDto,0,0)
+	tData := make([]JDNConversionTestDto, 0, 0)
 
 	ePrefix += "getGregorianJDNTestData() \n"
 
@@ -465,7 +465,7 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 
 	// ** GOOD
 	// ********************************************************
-	inStr := []string {
+	inStr := []string{
 		" -4721-02-28    00:00:00.000000000 UTC      -3191.500000000000000000000000000000",
 		" -4721-02-28    06:00:00.000000000 UTC      -3191.250000000000000000000000000000",
 		" -4721-02-28    12:00:00.000000000 UTC      -3191.000000000000000000000000000000",
@@ -2099,7 +2099,6 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		"  2020-08-03    20:00:00.000000000 UTC    2459065.333333333333333333333333333333",
 	}
 
-
 	// "  2020-08-03    06:00:00.000000000 UTC    2459064.750000000000000000000000000000",
 	//  01234567890123456789012345678901234567890123456789012345678901234567890123456789
 	//            1         2         3         4         5         6         7
@@ -2110,9 +2109,9 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 	mathBFloatMech := datetime.MathBigFloatHelper{}
 	calBaseData := datetime.CalendarGregorianBaseData{}
 
-	for i:= 0; i < len(inStr); i++ {
+	for i := 0; i < len(inStr); i++ {
 
-		newDto :=JDNConversionTestDto{}
+		newDto := JDNConversionTestDto{}
 
 		newDto.DateTimeJdnNoTimeStr =
 			inStr[i][1:]
@@ -2120,15 +2119,15 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		// Year
 		tStr = inStr[i][0:6]
 
-		tStr = strings.TrimLeft(tStr," ")
+		tStr = strings.TrimLeft(tStr, " ")
 		tStr = strings.TrimRight(tStr, " ")
 
 		tInt, err2 = strconv.Atoi(tStr)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix +
-				"Error From strconv.Atoi(yearStr)\n" +
-				"yearStr='%v'\n" +
+			err = fmt.Errorf(ePrefix+
+				"Error From strconv.Atoi(yearStr)\n"+
+				"yearStr='%v'\n"+
 				"Error='%v'\n",
 				tStr, err2.Error())
 			return tData, err
@@ -2137,7 +2136,7 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		newDto.Year = int64(tInt)
 
 		newDto.IsLeapYear,
-		err = calBaseData.IsLeapYear(
+			err = calBaseData.IsLeapYear(
 			newDto.Year,
 			datetime.CalYearType.Astronomical(),
 			ePrefix)
@@ -2151,9 +2150,9 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		newDto.Month, err2 = strconv.Atoi(tStr)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix +
-				"Error From strconv.Atoi(monthStr)\n" +
-				"monthStr='%v'\n" +
+			err = fmt.Errorf(ePrefix+
+				"Error From strconv.Atoi(monthStr)\n"+
+				"monthStr='%v'\n"+
 				"Error='%v'\n",
 				tStr, err2.Error())
 			return tData, err
@@ -2165,9 +2164,9 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		newDto.Day, err2 = strconv.Atoi(tStr)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix +
-				"Error From strconv.Atoi(dayStr)\n" +
-				"dayStr='%v'\n" +
+			err = fmt.Errorf(ePrefix+
+				"Error From strconv.Atoi(dayStr)\n"+
+				"dayStr='%v'\n"+
 				"Error='%v'\n",
 				tStr, err2.Error())
 			return tData, err
@@ -2179,9 +2178,9 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		newDto.Hour, err2 = strconv.Atoi(tStr)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix +
-				"Error From strconv.Atoi(hourStr)\n" +
-				"hourStr='%v'\n" +
+			err = fmt.Errorf(ePrefix+
+				"Error From strconv.Atoi(hourStr)\n"+
+				"hourStr='%v'\n"+
 				"Error='%v'\n",
 				tStr, err2.Error())
 			return tData, err
@@ -2193,9 +2192,9 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		newDto.Minute, err2 = strconv.Atoi(tStr)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix +
-				"Error From strconv.Atoi(minuteStr)\n" +
-				"minuteStr='%v'\n" +
+			err = fmt.Errorf(ePrefix+
+				"Error From strconv.Atoi(minuteStr)\n"+
+				"minuteStr='%v'\n"+
 				"Error='%v'\n",
 				tStr, err2.Error())
 			return tData, err
@@ -2207,9 +2206,9 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		newDto.Second, err2 = strconv.Atoi(tStr)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix +
-				"Error From strconv.Atoi(secondStr)\n" +
-				"secondStr='%v'\n" +
+			err = fmt.Errorf(ePrefix+
+				"Error From strconv.Atoi(secondStr)\n"+
+				"secondStr='%v'\n"+
 				"Error='%v'\n",
 				tStr, err2.Error())
 			return tData, err
@@ -2221,9 +2220,9 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		newDto.Nanosecond, err2 = strconv.Atoi(tStr)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix +
-				"Error From strconv.Atoi(nanosecondStr)\n" +
-				"nanosecondStr='%v'\n" +
+			err = fmt.Errorf(ePrefix+
+				"Error From strconv.Atoi(nanosecondStr)\n"+
+				"nanosecondStr='%v'\n"+
 				"Error='%v'\n",
 				tStr, err2.Error())
 			return tData, err
@@ -2237,17 +2236,17 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 		newDto.JulianDayNoTimeStr = tStr
 
 		newDto.JulianDayNoTimeFloat,
-		_,
-		err2 =
+			_,
+			err2 =
 			big.NewFloat(0.0).
 				SetMode(big.ToNearestAway).
 				SetPrec(1024).
 				Parse(newDto.JulianDayNoTimeStr, 10)
 
 		if err2 != nil {
-			err = fmt.Errorf(ePrefix +
-				"Error From big.Float Parse(jdnNumTimeStr)\n" +
-				"jdnNumTimeStr='%v'\n" +
+			err = fmt.Errorf(ePrefix+
+				"Error From big.Float Parse(jdnNumTimeStr)\n"+
+				"jdnNumTimeStr='%v'\n"+
 				"Error='%v'\n",
 				newDto.JulianDayNoTimeStr, err2.Error())
 			return tData, err
@@ -2263,18 +2262,16 @@ func getGregorianJDNTestData(ePrefix string) ([]JDNConversionTestDto, error) {
 			fmt.Sprintf(floatFmtStr,
 				newDto.RoundedJulianDayNoTimeFloat)
 
-
 		newDto.DateStr = fmt.Sprintf("%04d-%02d-%02d",
 			newDto.Year, newDto.Month, newDto.Day)
 
-
 		newDto.TimeStr = fmt.Sprintf("%02d:%02d:%02d.%09d UTC",
-			newDto.Hour,newDto.Minute, newDto.Second, newDto.Nanosecond)
+			newDto.Hour, newDto.Minute, newDto.Second, newDto.Nanosecond)
 
 		newDto.DateTimeStr =
 			fmt.Sprintf("%04d-%02d-%02d %02d:%02d:%02d.%09d UTC",
 				newDto.Year, newDto.Month, newDto.Day,
-				newDto.Hour,newDto.Minute, newDto.Second, newDto.Nanosecond)
+				newDto.Hour, newDto.Minute, newDto.Second, newDto.Nanosecond)
 
 		tData = append(tData, newDto)
 
@@ -2295,7 +2292,6 @@ func testJDNGregorianConversions(
 
 	lineLength := 82
 	requestedPrecision := uint(1024)
-
 
 	var totalTimeNanoSeconds int64
 	var expectedTimeFraction *big.Float
@@ -2544,11 +2540,11 @@ func testJDNGregorianConversions(
 	startTime = time.Now()
 
 	hour,
-	minute,
-	second,
-	nanosecond,
-	julianDayNoAdjustment,
-	err =	timeMech.ComputeUTCTimeFromJulianDayNoFrac(
+		minute,
+		second,
+		nanosecond,
+		julianDayNoAdjustment,
+		err = timeMech.ComputeUTCTimeFromJulianDayNoFrac(
 		julianDayNoSign,
 		julianDayNoTimeFraction,
 		requestedPrecision,
@@ -2608,7 +2604,7 @@ func testJDNGregorianConversions(
 			fmt.Println("      Expected Time In Hours DOES NOT MATCH Calculated Time In Hours!      ")
 		}
 
-		if expectedTimeFracStr != roundedCalculatedTimeFracStr{
+		if expectedTimeFracStr != roundedCalculatedTimeFracStr {
 			fmt.Println("      Expected Time Fraction DOES NOT MATCH Calculated Time Fraction!      ")
 		}
 
@@ -2638,7 +2634,6 @@ func testJDNTimeFraction(
 	// 06:00:00.000000000  =  0.250000000000000000000000000000
 	// 12:00:00.000000000  =  0.000000000000000000000000000000
 
-
 	julianDayNoSign := -1
 	hour := 0
 	minute := 30
@@ -2655,8 +2650,8 @@ func testJDNTimeFraction(
 			SetMode(big.ToNearestAway).
 			SetPrec(1024).
 			Parse("0.479166666666666666666666666667", 10)
-//               123456789012345678901234567890
-//                        1         2         3
+	//               123456789012345678901234567890
+	//                        1         2         3
 
 	mathBFloatMech := datetime.MathBigFloatHelper{}
 
@@ -2668,20 +2663,20 @@ func testJDNTimeFraction(
 			1024,
 			roundToDecPlaces)
 
-		fmtStr := "%46.40f"
+	fmtStr := "%46.40f"
 
 	expectedTimeFractionStr := fmt.Sprintf(fmtStr,
 		roundedExpectedTimeFraction)
 
 	totalTimeNanoSeconds,
-	_,
-	err =
-	timeMech.ComputeTotalTimeNanoseconds(
-		hour,
-		minute,
-		second,
-		nanosecond,
-		ePrefix)
+		_,
+		err =
+		timeMech.ComputeTotalTimeNanoseconds(
+			hour,
+			minute,
+			second,
+			nanosecond,
+			ePrefix)
 
 	if err != nil {
 		return err
@@ -2694,8 +2689,8 @@ func testJDNTimeFraction(
 	startTime = time.Now()
 
 	julianDayNoTimeFraction,
-	julianDayNoAdjustment,
-	err =
+		julianDayNoAdjustment,
+		err =
 		timeMech.ComputeJulianDayNumberTimeFraction(
 			julianDayNoSign,
 			totalTimeNanoSeconds,
@@ -2765,13 +2760,13 @@ func testJDNTimeFraction(
 	fmt.Println(separator)
 
 	if expectedTimeFractionStr == roundedCalculatedTimeFractionStr {
-		tSep := strings.Replace(separator, "-", "!",-1)
+		tSep := strings.Replace(separator, "-", "!", -1)
 		fmt.Println(tSep)
 		fmt.Println("                               SUCCESS                                ")
 		fmt.Println("Expected Julian Day Number Time MATCHES Actual Julian Day Number Time!")
 		fmt.Println(tSep)
 	} else {
-		tSep := strings.Replace(separator, "-", "*",-1)
+		tSep := strings.Replace(separator, "-", "*", -1)
 		fmt.Println(tSep)
 		fmt.Println("                                   FAILURE                                   ")
 		fmt.Println("Expected Julian Day Number Time DOES NOT MATCH Actual Julian Day Number Time!")
@@ -2779,7 +2774,6 @@ func testJDNTimeFraction(
 	}
 
 	fmt.Println()
-
 
 	return err
 }
@@ -2791,7 +2785,6 @@ func testGregorianDateToJulianDayNo(
 	err = nil
 	// BASE
 	// -4713-11-24 12:00:00.000000000 UTC = JDN 0.0
-
 
 	// ** GOOD
 	// ********************************************************
@@ -2969,20 +2962,20 @@ func testGregorianDateToJulianDayNo(
 			SetMode(big.ToNearestAway).
 			SetPrec(1024).
 			Parse("2459065.000000000000000000000000000000", 10)
-//                     123456489012345678901234564890
-//                     0        1         2         3
+	//                     123456489012345678901234564890
+	//                     0        1         2         3
 
-		roundToDecPlaces := uint(10)
+	roundToDecPlaces := uint(10)
 
-// 	Really Good Julian Day No Calculator
-//  https://planetcalc.com/503/
-//  https://www.fourmilab.ch/documents/calendar/
-//  http://numerical.recipes/julian.html
+	// 	Really Good Julian Day No Calculator
+	//  https://planetcalc.com/503/
+	//  https://www.fourmilab.ch/documents/calendar/
+	//  http://numerical.recipes/julian.html
 
-// Gregorian base date
-// -4713-11-24 12:00:00.000000000 UTC = JDN 0.0
-///////////////////////////////////////////////
-//       ** VERIFIED **
+	// Gregorian base date
+	// -4713-11-24 12:00:00.000000000 UTC = JDN 0.0
+	///////////////////////////////////////////////
+	//       ** VERIFIED **
 
 	calGreg := datetime.CalendarGregorianUtility{}
 
@@ -3017,8 +3010,8 @@ func testGregorianDateToJulianDayNo(
 
 	roundedExpectedTotalDayNoTime =
 		mathBFloatMech.RoundHalfAwayFromZero(
-		expectedTotalDayNoTime,
-		1024,
+			expectedTotalDayNoTime,
+			1024,
 			roundToDecPlaces)
 
 	expectedJDNoStr := fmt.Sprintf("%46.30f",
@@ -3094,7 +3087,7 @@ func testGregorianDateToJulianDayNo(
 	var roundJDNTimeFrac *big.Float
 
 	roundJDNTimeFrac,
-	err = julianDayNoDto.GetRoundedDayNoTimeBigFloat(
+		err = julianDayNoDto.GetRoundedDayNoTimeBigFloat(
 		roundToDecPlaces,
 		ePrefix)
 
@@ -3134,13 +3127,13 @@ func testGregorianDateToJulianDayNo(
 		roundJDNTimeFrac)
 
 	if expectedJDNoStr == actualJDNoTimeStr {
-		tSep := strings.Replace(separator, "-", "!",-1)
+		tSep := strings.Replace(separator, "-", "!", -1)
 		fmt.Println(tSep)
 		fmt.Println("                               SUCCESS                                ")
 		fmt.Println("Expected Julian Day Number Time MATCHES Actual Julian Day Number Time!")
 		fmt.Println(tSep)
 	} else {
-		tSep := strings.Replace(separator, "-", "*",-1)
+		tSep := strings.Replace(separator, "-", "*", -1)
 		fmt.Println(tSep)
 		fmt.Println("                                   FAILURE                                   ")
 		fmt.Println("Expected Julian Day Number Time DOES NOT MATCH Actual Julian Day Number Time!")
@@ -3151,7 +3144,6 @@ func testGregorianDateToJulianDayNo(
 
 	return err
 }
-
 
 // Note: Base Start Date for Julian Day
 // Numbers under the Julian Calendar is:
@@ -3166,7 +3158,6 @@ func testJulianDateToJulianDayNo(
 	//  -4714-01-01   12:00:00.000000000 UTC      -731.000000000000000000000000000000
 	//  -4715-01-01   12:00:00.000000000 UTC     -1096.000000000000000000000000000000
 	//  -4716-01-01   12:00:00.000000000 UTC     -1462.000000000000000000000000000000
-
 
 	targetYear := int64(-4713)
 	targetMonth := 1
@@ -3186,13 +3177,13 @@ func testJulianDateToJulianDayNo(
 			SetPrec(1024).
 			Parse("-365.000000000000000000000000000000", 10)
 
-// 	Really Good Julian Day No Calculator
-//  https://www.fourmilab.ch/documents/calendar/
-//  https://planetcalc.com/503/
-//  http://numerical.recipes/julian.html
+	// 	Really Good Julian Day No Calculator
+	//  https://www.fourmilab.ch/documents/calendar/
+	//  https://planetcalc.com/503/
+	//  http://numerical.recipes/julian.html
 
-//	DateAlgorithmsV3.pdf
-// file:///D:/gowork/src/MikeAustin71/datetimeopsgo/zztechnotes/JulianDay/DateAlgorithmsV3.pdf
+	//	DateAlgorithmsV3.pdf
+	// file:///D:/gowork/src/MikeAustin71/datetimeopsgo/zztechnotes/JulianDay/DateAlgorithmsV3.pdf
 
 	//                Julian Calendar
 	//                VERIFIED
@@ -3236,7 +3227,6 @@ func testJulianDateToJulianDayNo(
 	//   2011-08-06   14:00:00.000000000 UTC   2455793.083333333333333333333333333333
 	//   2020-08-08   12:00:00.000000000 UTC   2459083.000000000000000000000000000000
 
-
 	calJulian := datetime.CalendarJulianUtility{}
 
 	var julianDayNoDto datetime.JulianDayNoDto
@@ -3274,9 +3264,9 @@ func testJulianDateToJulianDayNo(
 	fmt.Println(separator)
 
 	spacer := strings.Repeat(" ",
-		(sepLen - len(ePrefix))/ 2)
+		(sepLen-len(ePrefix))/2)
 
-	fmt.Printf(spacer + "%v\n", ePrefix)
+	fmt.Printf(spacer+"%v\n", ePrefix)
 	fmt.Println(separator)
 	fmt.Printf("   Expected Julian Day Number: %46.30f\n",
 		expectedTotalDayNoTime)
@@ -3307,7 +3297,7 @@ func testJulianDateToJulianDayNo(
 	var roundJDNTimeFrac *big.Float
 
 	roundJDNTimeFrac,
-	err = julianDayNoDto.GetRoundedDayNoTimeBigFloat(
+		err = julianDayNoDto.GetRoundedDayNoTimeBigFloat(
 		30,
 		ePrefix)
 
@@ -3344,13 +3334,13 @@ func testJulianDateToJulianDayNo(
 		roundJDNTimeFrac)
 
 	if expectedJDNoStr == actualJDNoTimeStr {
-		tSep := strings.Replace(separator, "-", "!",-1)
+		tSep := strings.Replace(separator, "-", "!", -1)
 		fmt.Println(tSep)
 		fmt.Println("                               SUCCESS                                ")
 		fmt.Println("Expected Julian Day Number Time MATCHES Actual Julian Day Number Time!")
 		fmt.Println(tSep)
 	} else {
-		tSep := strings.Replace(separator, "-", "*",-1)
+		tSep := strings.Replace(separator, "-", "*", -1)
 		fmt.Println(tSep)
 		fmt.Println("                                   FAILURE                                   ")
 		fmt.Println("Expected Julian Day Number Time DOES NOT MATCH Actual Julian Day Number Time!")
@@ -3517,36 +3507,36 @@ func testJulianDayNoToGregorianDate(
 
 	var expectedGregorianDateTime datetime.ADateTimeDto
 
-		year := int64(-4400)
-		month := 11
-		day := 23
-		hour := 12
-		minute := 0
-		second:= 0
-		nanosecond := 0
+	year := int64(-4400)
+	month := 11
+	day := 23
+	hour := 12
+	minute := 0
+	second := 0
+	nanosecond := 0
 
-		expectedGregorianDateTime, err =
-			datetime.ADateTimeDto{}.New(
-				datetime.CalSpec.Gregorian(),
-				year,
-				datetime.CalYearType.Astronomical(),
-				month,
-				day,
-				false,
-				hour,
-				minute,
-				second,
-				nanosecond,
-				"UTC",
-				"",
-				"",
-				ePrefix)
+	expectedGregorianDateTime, err =
+		datetime.ADateTimeDto{}.New(
+			datetime.CalSpec.Gregorian(),
+			year,
+			datetime.CalYearType.Astronomical(),
+			month,
+			day,
+			false,
+			hour,
+			minute,
+			second,
+			nanosecond,
+			"UTC",
+			"",
+			"",
+			ePrefix)
 
-		if err != nil {
-			return err
-		}
+	if err != nil {
+		return err
+	}
 
-		expectedGregorianDateTime.SetTag("Expected Gregorian Date Time")
+	expectedGregorianDateTime.SetTag("Expected Gregorian Date Time")
 
 	//  Calculator: Julian Day to Gregorian Date Time
 	//  https://www.fourmilab.ch/documents/calendar/
@@ -3562,7 +3552,7 @@ func testJulianDayNoToGregorianDate(
 		ePrefix)
 
 	if err != nil {
-		return fmt.Errorf(ePrefix + "\n" +
+		return fmt.Errorf(ePrefix+"\n"+
 			"NewFromJulianDayNoTime Error: %v", err.Error())
 	}
 
@@ -3578,7 +3568,7 @@ func testJulianDayNoToGregorianDate(
 		julianDayNoDto,
 		ePrefix)
 
-		endTime = time.Now()
+	endTime = time.Now()
 
 	if err != nil {
 		return err
@@ -3607,7 +3597,6 @@ func testJulianDayNoToGregorianDate(
 		"Actual",
 		actualGregorianDateTime))
 
-
 	fmt.Println(separator)
 
 	fmt.Printf("Execution Time: %v",
@@ -3633,7 +3622,7 @@ func testJulianDayNoToGregorianDate(
 
 	if compareResult == 0 &&
 		expectedIsLeapYear != actualIsLeapYear {
-		tSep := strings.Replace(separator, "-", "!",-1)
+		tSep := strings.Replace(separator, "-", "!", -1)
 		fmt.Println(tSep)
 		fmt.Println("                      ??PARTIAL SUCCESS??                             ")
 		fmt.Println("   Expected Gregorian Date Time MATCHES Actual Gregorian Date Time!   ")
@@ -3641,13 +3630,13 @@ func testJulianDayNoToGregorianDate(
 		fmt.Println(tSep)
 
 	} else if compareResult == 0 {
-			tSep := strings.Replace(separator, "-", "!",-1)
-			fmt.Println(tSep)
-			fmt.Println("                               SUCCESS                                ")
-			fmt.Println("   Expected Gregorian Date Time MATCHES Actual Gregorian Date Time!   ")
-			fmt.Println(tSep)
+		tSep := strings.Replace(separator, "-", "!", -1)
+		fmt.Println(tSep)
+		fmt.Println("                               SUCCESS                                ")
+		fmt.Println("   Expected Gregorian Date Time MATCHES Actual Gregorian Date Time!   ")
+		fmt.Println(tSep)
 	} else {
-		tSep := strings.Replace(separator, "-", "*",-1)
+		tSep := strings.Replace(separator, "-", "*", -1)
 		fmt.Println(tSep)
 		fmt.Println("                                   FAILURE                                   ")
 		fmt.Println("   Expected Gregorian Date Time DOES NOT MATCH Actual Gregorian Date Time!   ")
@@ -3680,7 +3669,7 @@ func CompareTwoDateTimeDtos(
 		spacerLen1 = 0
 		spacer1 = " "
 	} else {
-		spacer1 = strings.Repeat("-", spacerLen1 / 2)
+		spacer1 = strings.Repeat("-", spacerLen1/2)
 	}
 
 	spacerLen2 := 30 - len(actualLabel)
@@ -3691,9 +3680,8 @@ func CompareTwoDateTimeDtos(
 		spacerLen2 = 0
 		spacer2 = " "
 	} else {
-		spacer2 = strings.Repeat("-", spacerLen2 / 2)
+		spacer2 = strings.Repeat("-", spacerLen2/2)
 	}
-
 
 	expectedLabel = " " + expectedLabel + " "
 	actualLabel = " " + actualLabel + " "
@@ -3702,7 +3690,7 @@ func CompareTwoDateTimeDtos(
 	outputStr += strings.Repeat("-", 64)
 	outputStr += "\n"
 	outputStr +=
-	fmt.Sprintf(spacer1 + expectedLabel + spacer1 + spacer2 + actualLabel + spacer2 + "\n")
+		fmt.Sprintf(spacer1 + expectedLabel + spacer1 + spacer2 + actualLabel + spacer2 + "\n")
 
 	outputStr += " " + expectedDateTime.GetTag() + "           " + actualDateTime.GetTag() + "\n"
 

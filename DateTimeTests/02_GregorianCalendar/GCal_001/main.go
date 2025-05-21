@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/DateTimeTests/02_GregorianCalendar/GCal_Libs01"
 	"fmt"
+	"golangmikesamples/DateTimeTests/02_GregorianCalendar/GCal_Libs01"
 	"math/big"
 	"strings"
 )
@@ -23,7 +23,6 @@ func main() {
 func testJulianDayToGregorianDateTime(
 	ePrefix string) (err error) {
 
-
 	ePrefix += "testJulianDayToGregorianDateTime() "
 	err = nil
 
@@ -35,23 +34,23 @@ func testJulianDayToGregorianDateTime(
 	var err2 error
 
 	julianDayNoTime,
-	b,
-	err2 =
+		b,
+		err2 =
 		big.NewFloat(0.0).
 			SetMode(big.ToNearestAway).
 			SetPrec(1024).
 			Parse("2459064.530995370370370370370370370370", 10)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix + "\n" +
-			"Error returned by big.Float.Parse()\n" +
+		err = fmt.Errorf(ePrefix+"\n"+
+			"Error returned by big.Float.Parse()\n"+
 			"Error='%v'\n", err2.Error())
 		return err
 	}
 
 	if b != 10 {
-		err= fmt.Errorf(ePrefix + "\n" +
-			"Error: Value of base, 'b' returned by big.Float.Parse()\n" +
+		err = fmt.Errorf(ePrefix+"\n"+
+			"Error: Value of base, 'b' returned by big.Float.Parse()\n"+
 			"is incorrect! b=%v\n", b)
 		return err
 	}
@@ -99,7 +98,7 @@ func testJulianDayToGregorianDateTime(
 	//  2015-01-01 12:00:00.000000000 UTC  = 2,457,024.0000000000000000
 	//  2016-01-01 12:00:00.000000000 UTC  = 2,457,389.0000000000000000
 	//  2020-08-03 00:44:38.000000000 UTC  = 2,459,064.5310000000000000
-  //                                       2459064.530995370370370370370370370370
+	//                                       2459064.530995370370370370370370370370
 	expectedDateTime.SetTag("Expected Date Time")
 
 	calGreg := GCal_Libs01.CalendarGregorianUtility{}
@@ -107,10 +106,10 @@ func testJulianDayToGregorianDateTime(
 	var actualDateTime GCal_Libs01.DateTimeTransferDto
 
 	actualDateTime,
-	err =
-	calGreg.JulianDayNumberTimeToDateTime(
-		julianDayNoTime,
-		ePrefix)
+		err =
+		calGreg.JulianDayNumberTimeToDateTime(
+			julianDayNoTime,
+			ePrefix)
 
 	if err != nil {
 		return err
@@ -138,7 +137,7 @@ func testJulianDayToGregorianDateTime(
 	if err != nil {
 		return err
 	}
-	
+
 	if compareResult == 0 {
 		fmt.Println("!!!!!!!!!!!!!!!!!!!!!! SUCCESS !!!!!!!!!!!!!!!!!!!!!!")
 		fmt.Println("     Expected Date/Time MATCHES Actual Date Time")
@@ -147,9 +146,9 @@ func testJulianDayToGregorianDateTime(
 		fmt.Println("@@@@@@@@@@@@@@@@@@@@@@ FAILURE @@@@@@@@@@@@@@@@@@@@@@@")
 		fmt.Println("  Expected Date/Time DOES NOT MATCH Actual Date Time  ")
 		fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-		
+
 	}
-	
+
 	return err
 }
 
@@ -172,8 +171,8 @@ func testGregorianDateToJDN(
 	var expectedTotalDayNoTime *big.Float
 
 	expectedTotalDayNoTime,
-	_,
-	err =
+		_,
+		err =
 		big.NewFloat(0.0).
 			SetMode(big.ToNearestAway).
 			SetPrec(1024).

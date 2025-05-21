@@ -11,11 +11,11 @@ package main
 
 import (
 	"fmt"
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/Identifiers/ExportedIdentifiers/strUtilTest"
+	"golangmikesamples/Identifiers/ExportedIdentifiers/strUtilTest"
 )
 
 func main() {
-	v:= "Hello"
+	v := "Hello"
 	rv := strUtilTest.ReverseAString(v)
 	fmt.Println("This is base string", v)
 	fmt.Println("This is the reversed string", rv)

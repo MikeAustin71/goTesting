@@ -1,14 +1,13 @@
 package main
 
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/DateTimeTests/01_RevisedJulianCalendar/RJC_Libs02"
 	"fmt"
+	"golangmikesamples/DateTimeTests/01_RevisedJulianCalendar/RJC_Libs02"
 	"math/big"
 	"strings"
 )
 
-
-func main(){
+func main() {
 
 	ePrefix := "RJC_007/main() "
 
@@ -167,7 +166,6 @@ func rjMJulianDayTest(ePrefix string) (err error) {
 	targetSecond := 0
 	targetNanosecond := 0
 
-
 	// expectedInterval := 4713
 
 	// Using Revised Julian Calendar Base date/time:
@@ -221,11 +219,10 @@ func rjMJulianDayTest(ePrefix string) (err error) {
 	return err
 }
 
-func rjMOrdinalDayTest(ePrefix string)(err error) {
+func rjMOrdinalDayTest(ePrefix string) (err error) {
 
 	ePrefix += "rjMOrdinalDayTest() "
 	err = nil
-
 
 	// 730120.5 = Ordinal Day For:
 	// January 1, 2000 12:00:00.000000000 UTC
@@ -239,21 +236,21 @@ func rjMOrdinalDayTest(ePrefix string)(err error) {
 	targetYear := int64(1)
 	targetMonth := 1
 	targetDay := 2
-	targetHour:= 12
-	targetMinute:=0
-	targetSecond:=0
-	targetNanosecond:=0
+	targetHour := 12
+	targetMinute := 0
+	targetSecond := 0
+	targetNanosecond := 0
 
-	calRM :=  RJC_Libs02.CalendarRevisedJulianUtility{}
+	calRM := RJC_Libs02.CalendarRevisedJulianUtility{}
 
 	var ordinalDayNumber int64
 	var ordinalDayNumberTime,
-				ordinalDayNumberTimeFraction *big.Float
+		ordinalDayNumberTimeFraction *big.Float
 
 	ordinalDayNumber,
-	ordinalDayNumberTime,
-	ordinalDayNumberTimeFraction,
-	err = calRM.GetOrdinalDayNumberTime(
+		ordinalDayNumberTime,
+		ordinalDayNumberTimeFraction,
+		err = calRM.GetOrdinalDayNumberTime(
 		targetYear,
 		targetMonth,
 		targetDay,

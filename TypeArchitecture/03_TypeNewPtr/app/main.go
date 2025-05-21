@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/TypeArchitecture/03_TypeNewPtr/app/appTest"
 	"fmt"
+	"golangmikesamples/TypeArchitecture/03_TypeNewPtr/app/appTest"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func appTest01() {
 	num1 := 1
 	num2 := 2
 
-	sum := appTest.NumMgr{}.NewPtr().AddNums(num1,num2)
+	sum := appTest.NumMgr{}.NewPtr().AddNums(num1, num2)
 
 	fmt.Println("---- appTest01() ----")
 	fmt.Printf("Sum of %v + %v = %v\n",
@@ -33,7 +33,7 @@ func appTest02() {
 	num1 := 1
 	num2 := 2
 
-	sum := appTest.NumMgr{}.This().AddNums(num1,num2)
+	sum := appTest.NumMgr{}.This().AddNums(num1, num2)
 
 	fmt.Println("---- appTest02() ----")
 	fmt.Printf("Sum of %v + %v = %v\n",

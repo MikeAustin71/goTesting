@@ -1,12 +1,11 @@
 package main
 
-
 import (
-  "bitbucket.org/AmarilloMike/GolangMikeSamples/TypeArchitecture/01_TypeSetup/common"
 	"fmt"
+	"golangmikesamples/TypeArchitecture/01_TypeSetup/common"
 )
 
-func main()  {
+func main() {
 	n := common.NumMgr{}.New()
 	n.SetNum(92)
 

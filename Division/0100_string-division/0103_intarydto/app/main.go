@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/Division/0100_string-division/0103_intarydto/common"
 	"fmt"
+	"golangmikesamples/Division/0100_string-division/0103_intarydto/common"
 )
 
 /*
@@ -32,24 +32,24 @@ func t02_SetSigDigits() {
 	ePrecision := 6
 
 	/*
-	nStr := "082.7770"
-	eAryLen := 7
-	eNumStr := "082.7770"
-	eIntegerLen := 3
-	eSigIntegerLen := 2
-	eSigFractionLen := 3
-	eIsZeroValue := false
-	eIsIntegerZeroValue := false
-	eSignVal := 1
-	ePrecision := 4
-*/
+		nStr := "082.7770"
+		eAryLen := 7
+		eNumStr := "082.7770"
+		eIntegerLen := 3
+		eSigIntegerLen := 2
+		eSigFractionLen := 3
+		eIsZeroValue := false
+		eIsIntegerZeroValue := false
+		eSignVal := 1
+		ePrecision := 4
+	*/
 	ia := common.IntAry{}.New()
-	err:=ia.SetIntAryWithNumStr(nStr)
+	err := ia.SetIntAryWithNumStr(nStr)
 
 	if err != nil {
-		fmt.Printf("Error from ia.SetIntAryWithNumStr(nStr). Error= %v \n",err)
+		fmt.Printf("Error from ia.SetIntAryWithNumStr(nStr). Error= %v \n", err)
 	}
-	
+
 	fmt.Println("Expected Values")
 	fmt.Println("Expected NumStr: ", eNumStr)
 	fmt.Println("Expected IntAryLen: ", eAryLen)
@@ -77,11 +77,10 @@ func t02_SetSigDigits() {
 	fmt.Println("          Actual LastDigitIdx: ", ia.LastDigitIdx)
 	fmt.Println("            Actual Sign Value: ", ia.SignVal)
 	fmt.Println("             Actual Precision: ", ia.Precision)
-	
-	
+
 }
 
-func t01_SetWithInt64()  {
+func t01_SetWithInt64() {
 
 	ia := common.IntAry{}.New()
 
@@ -91,7 +90,7 @@ func t01_SetWithInt64()  {
 	ePrecision := uint(4)
 	eSignVal := 1
 
-	err:= ia.SetIntAryWithInt64(num, ePrecision, eSignVal)
+	err := ia.SetIntAryWithInt64(num, ePrecision, eSignVal)
 
 	if err != nil {
 		fmt.Printf("Error Received from ia.SetIntAryWithInt64(num, ePrecision, eSignVal) \n")

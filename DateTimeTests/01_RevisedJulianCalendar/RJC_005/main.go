@@ -1,10 +1,11 @@
 package main
 
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/DateTimeTests/01_RevisedJulianCalendar/RJC_005/libs"
 	"fmt"
+	"golangmikesamples/DateTimeTests/01_RevisedJulianCalendar/RJC_005/libs"
 	"strings"
 )
+
 // "D:/gowork/src/bitbucket.org\\AmarilloMike\\GolangMikeSamples"
 func main() {
 
@@ -74,7 +75,7 @@ func main() {
 	fmt.Printf("    Whole Year Days: %v\n", wholeYearDaysDays)
 	fmt.Printf("       Ordinal Days: %v\n", ordinalDays)
 	fmt.Printf("         Total Days: %v\n",
-		wholeYearDaysDays+ ordinalDays)
+		wholeYearDaysDays+ordinalDays)
 	fmt.Printf("Expected Total Days: %v\n",
 		expectedTotalDays)
 	fmt.Println(separator)

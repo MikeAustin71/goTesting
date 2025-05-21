@@ -9,17 +9,23 @@ package main
 
 import (
 	"fmt"
+	"golangmikesamples/PackageStruct/01Temp/tempconv"
 	"os"
 	"strconv"
-
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/PackageStruct/01Temp/tempconv"
 )
 
 func main() {
+	fmt.Printf("Starting cf\\main.go ...\n")
+
+	// Select the first argument
 	for _, arg := range os.Args[1:] {
 		t, err := strconv.ParseFloat(arg, 64)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "cf: %v\n", err)
+			_, err2 := fmt.Fprintf(os.Stderr, "cf: %v\n", err)
+			if err2 != nil {
+				fmt.Printf("Error #1: %v\n"+
+					"Error #2: %v", err.Error(), err2.Error())
+			}
 			os.Exit(1)
 		}
 		f := tempconv.Fahrenheit(t)

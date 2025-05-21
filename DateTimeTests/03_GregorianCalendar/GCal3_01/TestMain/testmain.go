@@ -1,8 +1,8 @@
 package TestMain
 
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/DateTimeTests/03_GregorianCalendar/datetime"
 	"fmt"
+	"golangmikesamples/DateTimeTests/03_GregorianCalendar/datetime"
 	"math"
 	"reflect"
 	"strings"
@@ -10,7 +10,7 @@ import (
 )
 
 type TestMain struct {
-	input string
+	input  string
 	output string
 }
 
@@ -30,9 +30,9 @@ func (testMain *TestMain) TestTypeAssertion(
 	_, ok = dayOfWeekNo.(datetime.ISO8601DayOfWeekNo)
 
 	if ok == true {
-		err = fmt.Errorf(ePrefix + "\n" +
-			"Error: Expected dayOfWeekNo.(datetime.ISO8601DayOfWeekNo)=false !\n" +
-			"Instead, dayOfWeekNo.(datetime.ISO8601DayOfWeekNo)=true.\n" +
+		err = fmt.Errorf(ePrefix+"\n"+
+			"Error: Expected dayOfWeekNo.(datetime.ISO8601DayOfWeekNo)=false !\n"+
+			"Instead, dayOfWeekNo.(datetime.ISO8601DayOfWeekNo)=true.\n"+
 			"dayOfWeekNo='%v'\n",
 			dayOfWeekNo.XDayOfWeekNumberingSystemType().String())
 		return err
@@ -41,9 +41,9 @@ func (testMain *TestMain) TestTypeAssertion(
 	_, ok = dayOfWeekNo.(datetime.UsDayOfWeekNo)
 
 	if ok == false {
-		err = fmt.Errorf(ePrefix + "\n" +
-			"Error: Expected dayOfWeekNo.(datetime.UsDayOfWeekNo)=true !\n" +
-			"Instead, dayOfWeekNo.(datetime.UsDayOfWeekNo)=false.\n" +
+		err = fmt.Errorf(ePrefix+"\n"+
+			"Error: Expected dayOfWeekNo.(datetime.UsDayOfWeekNo)=true !\n"+
+			"Instead, dayOfWeekNo.(datetime.UsDayOfWeekNo)=false.\n"+
 			"dayOfWeekNo='%v'\n",
 			dayOfWeekNo.XDayOfWeekNumberingSystemType().String())
 		return err
@@ -51,7 +51,7 @@ func (testMain *TestMain) TestTypeAssertion(
 
 	var usDayOfWeek datetime.UsDayOfWeekNo
 
-	usDayOfWeek =  dayOfWeekNo.(datetime.UsDayOfWeekNo)
+	usDayOfWeek = dayOfWeekNo.(datetime.UsDayOfWeekNo)
 
 	lineLength := 77
 	txtStr := "Testing Type Assertion"
@@ -59,10 +59,10 @@ func (testMain *TestMain) TestTypeAssertion(
 
 	separator1 := strings.Repeat("=", lineLength)
 	fmt.Println(separator1)
-	fmt.Println(testUtil.centerStrLeftSpace(lineLength,ePrefix))
-	fmt.Println(testUtil.centerStrLeftSpace(lineLength,txtStr))
+	fmt.Println(testUtil.centerStrLeftSpace(lineLength, ePrefix))
+	fmt.Println(testUtil.centerStrLeftSpace(lineLength, txtStr))
 	fmt.Println(separator1)
-	spacer:= strings.Repeat(" ", 5)
+	spacer := strings.Repeat(" ", 5)
 	txtStr = "usDayOfWeek.String()= " + usDayOfWeek.String()
 	fmt.Println(spacer + txtStr)
 	txtStr = "usDayOfWeek.XDayOfWeekName()= " + usDayOfWeek.XDayOfWeekName()
@@ -73,7 +73,7 @@ func (testMain *TestMain) TestTypeAssertion(
 	fmt.Println(spacer + txtStr)
 	fmt.Println(separator1)
 	txtStr = "*** SUCCESS! *** "
-	fmt.Println(testUtil.centerStrLeftSpace(lineLength,txtStr))
+	fmt.Println(testUtil.centerStrLeftSpace(lineLength, txtStr))
 	fmt.Println(separator1)
 	fmt.Println()
 	fmt.Println()
@@ -88,14 +88,14 @@ func (testMain *TestMain) TestEnumSwitch(
 	ePrefix += "TestMain.testEnumSwitch()"
 	txtStr := "Testing Enumerator in Switch Statement"
 
-	spacer := strings.Repeat(" ", (LineLength - len(ePrefix))/2)
+	spacer := strings.Repeat(" ", (LineLength-len(ePrefix))/2)
 
 	yearNumType := datetime.CalendarYearNumType(61).Astronomical()
 
 	separator1 := strings.Repeat("=", LineLength)
 
 	fmt.Println(separator1)
-	spacer = strings.Repeat(" ",(LineLength - len(txtStr))/2)
+	spacer = strings.Repeat(" ", (LineLength-len(txtStr))/2)
 	fmt.Println(spacer + ePrefix)
 	fmt.Println(spacer + txtStr)
 	fmt.Println(separator1)
@@ -119,9 +119,8 @@ func (testMain *TestMain) TestEnumSwitch(
 	return nil
 }
 
-
 func (testMain *TestMain) TestYearMonthDayFromOrdinalDayNo(
-	ePrefix string)(
+	ePrefix string) (
 	err error) {
 
 	ePrefix += "TestYearMonthDayFromOrdinalDayNo() "
@@ -168,30 +167,30 @@ func (testMain *TestMain) TestYearMonthDayFromOrdinalDayNo(
 	testUtil := testUtilities{}
 
 	fmt.Println(separator1)
-	fmt.Println(testUtil.centerStrLeftSpace(lineLength,ePrefix))
+	fmt.Println(testUtil.centerStrLeftSpace(lineLength, ePrefix))
 	fmt.Println(separator2)
-	fmt.Println(testUtil.centerStrLeftSpace(lineLength,"** Input Data **"))
+	fmt.Println(testUtil.centerStrLeftSpace(lineLength, "** Input Data **"))
 	fmt.Println(separator2)
 	fmt.Printf("     Ordinal Date: %v\n", ordinalDate)
 	fmt.Printf("             year: %v\n", year)
 	fmt.Printf("      yearNumType: %v\n", yearNumType.String())
 	fmt.Println(separator3)
-	fmt.Println(testUtil.centerStrLeftSpace(lineLength,"** Results **"))
+	fmt.Println(testUtil.centerStrLeftSpace(lineLength, "** Results **"))
 	fmt.Println(separator3)
 	fmt.Printf("Astronomical Year: %v\n", astronomicalYear)
 	fmt.Printf("            month: %v\n", month)
 	fmt.Printf("              day: %v\n", day)
 	fmt.Println(separator4)
-	fmt.Println(testUtil.centerStrLeftSpace(lineLength,"** Results Analysis **"))
+	fmt.Println(testUtil.centerStrLeftSpace(lineLength, "** Results Analysis **"))
 	fmt.Printf("         Expected: %v\n", expectedDate)
 	fmt.Printf("           Actual: %v\n", actualDate)
 	fmt.Println(separator4)
 	if expectedDate == actualDate {
-		fmt.Println(testUtil.centerStrLeftSpace(lineLength,"'Expected' MATCHES 'Actual'"))
-		fmt.Println(testUtil.centerStrLeftSpace(lineLength,"!!!! SUCCESS !!!!"))
+		fmt.Println(testUtil.centerStrLeftSpace(lineLength, "'Expected' MATCHES 'Actual'"))
+		fmt.Println(testUtil.centerStrLeftSpace(lineLength, "!!!! SUCCESS !!!!"))
 	} else {
-		fmt.Println(testUtil.centerStrLeftSpace(lineLength,"'Expected' DOES NOT MATCH 'Actual'."))
-		fmt.Println(testUtil.centerStrLeftSpace(lineLength,"&&&&&&&& FAILURE  &&&&&&&&"))
+		fmt.Println(testUtil.centerStrLeftSpace(lineLength, "'Expected' DOES NOT MATCH 'Actual'."))
+		fmt.Println(testUtil.centerStrLeftSpace(lineLength, "&&&&&&&& FAILURE  &&&&&&&&"))
 	}
 	fmt.Println(separator1)
 
@@ -229,7 +228,7 @@ func (testUtils *testUtilities) centerStrLeftSpace(
 
 	var quotient float64
 
-	quotient = dividend /  2.0
+	quotient = dividend / 2.0
 
 	quotient += 0.5
 

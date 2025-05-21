@@ -1,17 +1,13 @@
 package main
 
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/DateTimeTests/01_RevisedJulianCalendar/RJC_Libs"
 	"fmt"
+	"golangmikesamples/DateTimeTests/01_RevisedJulianCalendar/RJC_Libs"
 	"math/big"
 	"strings"
 )
 
-
-
-
-
-func main(){
+func main() {
 
 	// Julian Day Count 1721425.5
 	// Revised Julian Calendar ------
@@ -25,30 +21,28 @@ func main(){
 	ePrefix := "RJC_006/main() "
 	var err error
 
-
 	targetYear := int64(1)
 	targetMonth := 1
 	targetDay := 1
 	targetHour := 0
-	targetMinute:=0
-	targetSecond:=0
-	targetNanosecond:=0
-
+	targetMinute := 0
+	targetSecond := 0
+	targetNanosecond := 0
 
 	baseYear := int64(-4713)
 	baseMonth := 2
 	baseDay := 8
 	baseHour := 0
-	baseMinute:=0
-	baseSecond:=0
-	baseNanosecond:=0
+	baseMinute := 0
+	baseSecond := 0
+	baseNanosecond := 0
 
 	expectedInterval := 4713
 
 	// expectedTotalDays := 730120.5 for 2000/1/1/
 	expectedTotalDays := 1721425 // For -4713/2/9
 
-// 	testRJGYear1()
+	// 	testRJGYear1()
 
 	err = testRJGJulianDayNo(
 		baseYear,
@@ -68,7 +62,7 @@ func main(){
 		ePrefix)
 
 	if err != nil {
-		fmt.Printf("ERROR *****\n" +
+		fmt.Printf("ERROR *****\n"+
 			"%v\n", err.Error())
 		return
 	}
@@ -82,7 +76,7 @@ func main(){
 
 }
 
-func testRJGYear1 () {
+func testRJGYear1() {
 
 	// Julian Day Count 1721425.5
 	// Revised Julian Calendar ------
@@ -97,9 +91,9 @@ func testRJGYear1 () {
 	targetMonth := 1
 	targetDay := 1
 	targetHour := 0
-	targetMinute:=0
-	targetSecond:=0
-	targetNanosecond:=0
+	targetMinute := 0
+	targetSecond := 0
+	targetNanosecond := 0
 
 	ePrefix := "RJC_006/main() "
 
@@ -111,9 +105,9 @@ func testRJGYear1 () {
 	baseMonth := 2
 	baseDay := 8
 	baseHour := 12
-	baseMinute:=0
-	baseSecond:=0
-	baseNanosecond:=0
+	baseMinute := 0
+	baseSecond := 0
+	baseNanosecond := 0
 
 	expectedInterval := 4713
 
@@ -135,7 +129,6 @@ func testRJGYear1 () {
 		fmt.Printf("%v", err.Error())
 		return
 	}
-
 
 	separator := strings.Repeat("=", 65)
 	fmt.Println(separator)
@@ -165,27 +158,26 @@ func testRJGYear1 () {
 
 	completeYearsInterval, err =
 		calMech.GetCompleteYearInterval(
-		baseYear,
-		baseMonth,
-		baseDay,
-		baseHour,
-		baseMinute,
-		baseSecond,
-		baseNanosecond,
-		targetYear,
-		targetMonth,
-		targetDay,
-		targetHour,
-		targetMinute,
-		targetSecond,
-		targetNanosecond,
-		ePrefix)
+			baseYear,
+			baseMonth,
+			baseDay,
+			baseHour,
+			baseMinute,
+			baseSecond,
+			baseNanosecond,
+			targetYear,
+			targetMonth,
+			targetDay,
+			targetHour,
+			targetMinute,
+			targetSecond,
+			targetNanosecond,
+			ePrefix)
 
 	if err != nil {
 		fmt.Printf("%v", err.Error())
 		return
 	}
-
 
 	calRJM := RJC_Libs.CalendarRevisedJulianMechanics{}
 
@@ -219,7 +211,7 @@ func testRJGYear1 () {
 		return
 	}
 
-	grandTotalDays := wholeYearDaysDays+ int64(targetYearElapsedWholeOrdinalDays) + int64(baseYearElapsedWholeOrdinalDays)
+	grandTotalDays := wholeYearDaysDays + int64(targetYearElapsedWholeOrdinalDays) + int64(baseYearElapsedWholeOrdinalDays)
 
 	fmt.Println(separator)
 	fmt.Printf("    Whole Year Days: %v\n", wholeYearDaysDays)
@@ -284,8 +276,6 @@ func testRJGJulianDayNo(
 	targetNanosecond int,
 	ePrefix string) error {
 
-
-
 	// Julian Day Count 1721425.5
 	// Revised Julian Calendar ------
 	// JDN 0 = -4713/02/08 12:00 (12-Noon) Revised Julian Calendar
@@ -294,7 +284,6 @@ func testRJGJulianDayNo(
 	//
 	// Gregorian Calendar -----------
 	// JDN 0 = -4712/01/01 12:00:00 (Noon) Gregorian Calendar
-
 
 	ePrefix += "testRJGJulianDayNo() "
 
@@ -318,7 +307,6 @@ func testRJGJulianDayNo(
 	//	return err
 	//}
 
-
 	separator := strings.Repeat("=", 65)
 	fmt.Println(separator)
 	fmt.Println("              " + ePrefix)
@@ -339,7 +327,7 @@ func testRJGJulianDayNo(
 	fmt.Printf("             targetSecond: %v\n", targetSecond)
 	fmt.Printf("         targetNanosecond: %v\n", targetNanosecond)
 	fmt.Println(separator)
-//	fmt.Printf("Last Complete Target Year: %v\n", lastCompleteTargetYear)
+	//	fmt.Printf("Last Complete Target Year: %v\n", lastCompleteTargetYear)
 	fmt.Println(separator)
 
 	var completeYearsInterval int64
@@ -396,7 +384,7 @@ func testRJGJulianDayNo(
 		return err
 	}
 
-	grandTotalDays := wholeYearDaysDays+ int64(targetYearOrdinalNumber) + int64(baseYearElapsedWholeOrdinalDays)
+	grandTotalDays := wholeYearDaysDays + int64(targetYearOrdinalNumber) + int64(baseYearElapsedWholeOrdinalDays)
 
 	fmt.Println(separator)
 	fmt.Printf("    Whole Year Days: %v\n", wholeYearDaysDays)

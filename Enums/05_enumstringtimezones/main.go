@@ -1,8 +1,9 @@
 package main
 
+// D:\GoProjects\MikeAustin71\goTesting\Enums\05_enumstringtimezones\timezones\ianatimezones.go
 import (
-	"./timezones"
 	"fmt"
+	"golangmikesamples/Enums/05_enumstringtimezones/timezones"
 )
 
 func main() {
@@ -11,7 +12,7 @@ func main() {
 
 	str := timezones.IanaTz.America.Chicago()
 
-	fmt.Println("US-Central: ", str )
+	fmt.Println("US-Central: ", str)
 
 	str = timezones.IanaTz.US.Mountain()
 
@@ -20,4 +21,3 @@ func main() {
 	fmt.Println("Cuba: ", timezones.IanaTz.Cuba())
 
 }
-

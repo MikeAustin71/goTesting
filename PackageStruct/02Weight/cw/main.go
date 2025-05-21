@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"golangmikesamples/PackageStruct/02Weight/weightconv"
 	"os"
 	"strconv"
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/PackageStruct/02Weight/weightconv"
 )
 
 func main() {

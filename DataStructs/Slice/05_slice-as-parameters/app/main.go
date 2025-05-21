@@ -1,8 +1,10 @@
 package main
 
+//"bitbucket.org/AmarilloMike/GolangMikeSamples/DataStructs/Slice/05_slice-as-parameters/common"
+
 import (
-	"bitbucket.org/AmarilloMike/GolangMikeSamples/DataStructs/Slice/05_slice-as-parameters/common"
 	"fmt"
+	"golangmikesamples/DataStructs/Slice/05_slice-as-parameters/common"
 )
 
 func main() {
