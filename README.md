@@ -24,3 +24,6 @@ go run main.go
 ### These tests include both **Good and Bad Ideas**!
 
 ### These solutions May or May NOT Work for You!
+
+
+## Uses Go 1.24
