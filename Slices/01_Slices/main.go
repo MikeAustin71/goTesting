@@ -16,6 +16,14 @@ func main() {
 
 	printSlice("Changed Slice", mSlice1)
 
+	newSlice := getRangeOneToThree(mSlice1)
+
+	printSlice("range1To3", newSlice)
+
+	newSlice = getRangeTwoToAll(mSlice1)
+
+	printSlice("range2ToAll", newSlice)
+
 }
 
 func printSlice(title string, xSlice []string) {
@@ -52,4 +60,18 @@ func changeASliceElement(xSlice []string) []string {
 	xSlice[lastElement] = "Miguel"
 
 	return xSlice
+}
+
+func getRangeOneToThree(xSlice []string) []string {
+
+	newSlice1 := xSlice[1:3]
+
+	return newSlice1
+}
+
+func getRangeTwoToAll(xSlice []string) []string {
+
+	newSlice1 := xSlice[2:]
+
+	return newSlice1
 }
