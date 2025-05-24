@@ -48,6 +48,16 @@ func main() {
 
 	printSlice("Original Basic Slice #2", mSlice2)
 
+	mSlice4 := createBaseSlice()
+
+	printSlice("Original Basic Slice #4", mSlice4)
+
+	newSlice4 := modifySliceDontChangeOriginal(mSlice4, "Mike", 6)
+
+	printSlice("Modified Slice #4", newSlice4)
+
+	printSlice("Original Basic Slice #4", mSlice4)
+
 }
 
 func printSlice(title string, xSlice []string) {
