@@ -6,20 +6,24 @@ func main() {
 
 	mSlice1 := createBaseSlice()
 
-	printSlice(mSlice1)
+	printSlice("Basic Slice", mSlice1)
+
+	mSlice1 = appendASliceElement(mSlice1)
+
+	printSlice("Appended Slice", mSlice1)
 
 	changeASliceElement(mSlice1)
 
-	printSlice(mSlice1)
+	printSlice("Changed Slice", mSlice1)
 
 }
 
-func printSlice(xSlice []string) {
+func printSlice(title string, xSlice []string) {
 
 	fmt.Printf("\n\n%v\n"+
 		"XSlice = \n%v\n"+
 		"Length of XSlice = %v\n\n",
-		"Printing Slice xSlice",
+		title,
 		xSlice, len(xSlice))
 
 	return
@@ -29,9 +33,14 @@ func createBaseSlice() []string {
 
 	mSlice1 := []string{"Sam", "Adrian", "James", "Roy", "Adam"}
 
-	mSlice1 = append(mSlice1, "Mike")
-
 	return mSlice1
+}
+
+func appendASliceElement(xSlice []string) []string {
+
+	xSlice = append(xSlice, "Mike")
+
+	return xSlice
 }
 
 func changeASliceElement(xSlice []string) []string {
