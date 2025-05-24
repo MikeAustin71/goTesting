@@ -25,7 +25,7 @@ func (bird *Bird) IsEmpty() bool {
 	return bird.Name == nil
 }
 
-func (bird Bird) New() (newBird *Bird) {
+func (bird *Bird) New() (newBird *Bird) {
 
 	newBird = &Bird{}
 	newBird.SetName()
@@ -56,7 +56,7 @@ func (cat *Cat) IsEmpty() bool {
 	return cat.Name == nil
 }
 
-func (cat Cat) New() (newCat *Cat) {
+func (cat *Cat) New() (newCat *Cat) {
 
 	newCat = &Cat{}
 	newCat.SetName()
@@ -85,7 +85,7 @@ func (dog *Dog) IsEmpty() bool {
 	return dog.Name == nil
 }
 
-func (dog Dog) New() (newDog *Dog) {
+func (dog *Dog) New() (newDog *Dog) {
 
 	newDog = &Dog{}
 	newDog.SetName()
@@ -115,7 +115,7 @@ func (human *Human) IsEmpty() bool {
 	return human.Name == nil
 }
 
-func (human Human) New() (newHuman *Human) {
+func (human *Human) New() (newHuman *Human) {
 
 	newHuman = &Human{}
 	newHuman.SetName()
@@ -145,7 +145,7 @@ func (robot *Robot) IsEmpty() bool {
 	return robot.Name == nil
 }
 
-func (robot Robot) New() (newRobot *Robot) {
+func (robot *Robot) New() (newRobot *Robot) {
 
 	newRobot = &Robot{}
 	newRobot.SetName()
@@ -160,17 +160,17 @@ func (robot *Robot) SetName() {
 
 func main() {
 
-	runTestEmptyArray()
+	runTestArray()
 }
 
 func runTestEmptyArray() {
 
 	things := make([]IThing, 5)
-	things[0] = Dog{}.New()
-	things[1] = Cat{}.New()
-	things[2] = Bird{}.New()
-	things[3] = Human{}.New()
-	things[4] = Robot{}.New()
+	things[0] = (&Dog{}).New()
+	things[1] = (&Cat{}).New()
+	things[2] = new(Bird).New()
+	things[3] = new(Human).New()
+	things[4] = new(Robot).New()
 
 	ptrThing := &things
 
@@ -218,11 +218,11 @@ func runTestEmptyArray() {
 func runPtrTestArray() {
 
 	things := make([]IThing, 5)
-	things[0] = Dog{}.New()
-	things[1] = Cat{}.New()
-	things[2] = Bird{}.New()
-	things[3] = Human{}.New()
-	things[4] = Robot{}.New()
+	things[0] = new(Dog).New()
+	things[1] = new(Cat).New()
+	things[2] = new(Bird).New()
+	things[3] = new(Human).New()
+	things[4] = (&Robot{}).New()
 
 	testPtrArray(&things)
 }
