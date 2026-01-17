@@ -8,8 +8,9 @@ import (
 
 func main() {
 
-	baseNumStr := "91.35743"
+	//baseNumStr := "91.35743"
 
+	baseNumStr := "1234567890.1234567890"
 	MantissaExponent04(baseNumStr)
 
 }
