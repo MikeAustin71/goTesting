@@ -11,7 +11,7 @@ func main() {
 	//baseNumStr := "91.35743"
 
 	baseNumStr := "1234567890.1234567890"
-	MantissaExponent04(baseNumStr)
+	MantissaExponent05(baseNumStr)
 
 }
 
@@ -505,6 +505,137 @@ func MantissaExponent04(
 	mantissa := big.NewFloat(0)
 
 	exponent := tFloat02.MantExp(mantissa)
+
+	fmt.Printf("\n%v\n"+
+		"\tExtraction Test #1-a\n"+
+		"            tFloat2 = %v\n"+
+		"           mantissa = %v\n"+
+		" mantissa precision = %v\n"+
+		"           exponent = %v\n"+
+		"%v\n\n",
+		breakStr2,
+		tFloat02.Text('f', -1),
+		mantissa.Text('f', -1),
+		mantissa.Prec(),
+		exponent,
+		breakStr2)
+
+	fracDigitsMantissaStr :=
+		mantissa.Text('f', -1)
+
+	startIndex := 2
+
+	if fracDigitsMantissaStr[0] == '-' {
+		startIndex = 3
+	}
+
+	fracDigitsMantissaStr = fracDigitsMantissaStr[startIndex:]
+
+	lenMantissaFracDigits := len(fracDigitsMantissaStr)
+
+	bIntMantissa,
+		ok := big.NewInt(0).SetString(
+		fracDigitsMantissaStr, 10)
+
+	if !ok {
+
+		fmt.Printf("\n%v\n"+
+			"Error: bIntMantissa=SetString(fracDigitsMantissaStr)\n"+
+			"SetString Failed!\n"+
+			"fracDigitsMantissaStr = %v\n",
+			funcName,
+			fracDigitsMantissaStr)
+
+		return
+	}
+
+	bIntExponent := big.NewInt(int64(exponent))
+
+	bIntExponentVal := big.NewInt(2)
+
+	bIntExponentVal.Exp(
+		bIntExponentVal,
+		bIntExponent,
+		nil)
+
+	bIntNumberVal := big.NewInt(0).Mul(
+		bIntMantissa,
+		bIntExponentVal)
+
+	bIntNumValStr :=
+		bIntNumberVal.Text(10)
+
+	bIntNumValStrTotalLen := len(bIntNumValStr)
+
+	intDigitsLen := bIntNumValStrTotalLen -
+		lenMantissaFracDigits
+
+	floatingPointStr :=
+		bIntNumValStr[0:intDigitsLen] +
+			"." +
+			bIntNumValStr[intDigitsLen:]
+
+	fmt.Printf("\nMantissa-1\n%v\n"+
+		"         bIntMantissa = %v\n"+
+		"      bIntExponentVal = %v\n"+
+		"        bIntNumberVal = %v\n"+
+		"bIntNumValStrTotalLen = %v\n"+
+		" Mantissa Frac Digits = %v\n"+
+		"Calculated Float Str  = %v\n"+
+		"%v\n\n",
+		breakStr2,
+		bIntMantissa.Text(10),
+		bIntExponentVal.Text(10),
+		bIntNumberVal.Text(10),
+		bIntNumValStrTotalLen,
+		lenMantissaFracDigits,
+		floatingPointStr,
+		breakStr2)
+
+	return
+}
+
+func MantissaExponent05(
+	baseNumStr string) {
+
+	funcName := "MantissaExponent05()"
+
+	breakStr := strings.Repeat("=", 70)
+
+	breakStr2 := strings.Repeat("-", 60)
+
+	fmt.Printf("\n\nFunction: %v\n",
+		funcName)
+
+	fmt.Printf(breakStr + "\n\n")
+
+	var ok bool
+
+	tFloat02 := big.NewFloat(0.0)
+
+	_,
+		ok = tFloat02.
+		SetString(baseNumStr)
+
+	if !ok {
+
+		fmt.Printf("\n%v\n"+
+			"Error: tFloat01=SetString(baseNumStr)\n"+
+			"SetString Failed!\n"+
+			"baseNumStr = %v\n",
+			funcName,
+			baseNumStr)
+
+		return
+	}
+
+	tFloat02.SetPrec(tFloat02.MinPrec())
+
+	mantissa := big.NewFloat(0)
+
+	exponent := tFloat02.MantExp(mantissa)
+
+	mantissa.SetPrec(mantissa.MinPrec())
 
 	fmt.Printf("\n%v\n"+
 		"\tExtraction Test #1-a\n"+
