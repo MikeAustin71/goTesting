@@ -1,973 +1,1221 @@
 package main
 
 import (
-  "fmt"
-  "math"
-  "math/big"
-  "strings"
+	"fmt"
+	"math"
+	"math/big"
+	"strings"
 )
 
 // This is a backup of 01_NewtonExample
 func main() {
 
-  /*
-  	GolanSqrtExample()
-  	fmt.Println("Verification")
-  	GolangSqrtExampleVerify()
+	/*
+		GolanSqrtExample()
+		fmt.Println("Verification")
+		GolangSqrtExampleVerify()
 
-  */
+	*/
 
-  Newton03()
+	radicandNumStr := "8"
+	nthRootInt64 := int64(23)
+	maxInternalPrecisionUint := uint(16384)
+	targetResultPrecisionUint := uint(50)
+	firstGuessAccuracyThresholdStr := "0.000015"
+	extraStepsCushionInt := 100
+	expectedResultNumStr := "1.0946235364347187301608050894219178703121159477156"
 
-  // Newton01()
-  //Newton02()
-  //TestNewtonInitialGuess()
-  // TestBigFloatPower()
+	err := Newton04(
+		radicandNumStr,
+		nthRootInt64,
+		maxInternalPrecisionUint,
+		targetResultPrecisionUint,
+		firstGuessAccuracyThresholdStr,
+		extraStepsCushionInt,
+		expectedResultNumStr)
+
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+	}
+
+	return
+
+	// Newton01()
+	// Newton02()
+	// Newton03()
+	// TestNewtonInitialGuess()
+	// TestBigFloatPower()
 }
 
 func GolanSqrtExample() {
-  // We'll do computations with 200 bits of precision in the mantissa.
-  const prec = 200
+	// We'll do computations with 200 bits of precision in the mantissa.
+	const prec = 200
 
-  // Compute the square root of 2 using Newton's Method. We start with
-  // an initial estimate for sqrt(2), and then iterate:
-  //     x_{n+1} = 1/2 * ( x_n + (2.0 / x_n) )
+	// Compute the square root of 2 using Newton's Method. We start with
+	// an initial estimate for sqrt(2), and then iterate:
+	//     x_{n+1} = 1/2 * ( x_n + (2.0 / x_n) )
 
-  // Since Newton's Method doubles the number of correct digits at each
-  // iteration, we need at least log_2(prec) steps.
-  steps := int(math.Log2(prec))
+	// Since Newton's Method doubles the number of correct digits at each
+	// iteration, we need at least log_2(prec) steps.
+	steps := int(math.Log2(prec))
 
-  // Initialize values we need for the computation.
-  two := new(big.Float).SetPrec(prec).SetInt64(2)
-  half := new(big.Float).SetPrec(prec).SetFloat64(0.5)
+	// Initialize values we need for the computation.
+	two := new(big.Float).SetPrec(prec).SetInt64(2)
+	half := new(big.Float).SetPrec(prec).SetFloat64(0.5)
 
-  // Use 1 as the initial estimate.
-  x := new(big.Float).SetPrec(prec).SetInt64(1)
+	// Use 1 as the initial estimate.
+	x := new(big.Float).SetPrec(prec).SetInt64(1)
 
-  // We use t as a temporary variable. There's no need to set its precision
-  // since big.Float values with unset (== 0) precision automatically assume
-  // the largest precision of the arguments when used as the result (receiver)
-  // of a big.Float operation.
-  t := new(big.Float)
+	// We use t as a temporary variable. There's no need to set its precision
+	// since big.Float values with unset (== 0) precision automatically assume
+	// the largest precision of the arguments when used as the result (receiver)
+	// of a big.Float operation.
+	t := new(big.Float)
 
-  // Iterate.
-  for i := 0; i <= steps; i++ {
-    t.Quo(two, x)  // t = 2.0 / x_n
-    t.Add(x, t)    // t = x_n + (2.0 / x_n)
-    x.Mul(half, t) // x_{n+1} = 0.5 * t
-  }
+	// Iterate.
+	for i := 0; i <= steps; i++ {
+		t.Quo(two, x)  // t = 2.0 / x_n
+		t.Add(x, t)    // t = x_n + (2.0 / x_n)
+		x.Mul(half, t) // x_{n+1} = 0.5 * t
+	}
 
-  // We can use the usual fmt.Printf verbs since big.Float implements fmt.Formatter
-  fmt.Printf("sqrt(2) = %.50f\n", x)
+	// We can use the usual fmt.Printf verbs since big.Float implements fmt.Formatter
+	fmt.Printf("sqrt(2) = %.50f\n", x)
 
-  // Print the error between 2 and x*x.
-  t.Mul(x, x) // t = x*x
-  fmt.Printf("error = %e\n", t.Sub(two, t))
+	// Print the error between 2 and x*x.
+	t.Mul(x, x) // t = x*x
+	fmt.Printf("error = %e\n", t.Sub(two, t))
 
-  //Output:
-  //
-  //	sqrt(2) = 1.41421356237309504880168872420969807856967187537695
-  //	error = 0.000000e+00
+	//Output:
+	//
+	//	sqrt(2) = 1.41421356237309504880168872420969807856967187537695
+	//	error = 0.000000e+00
 
 }
 
 func GolangSqrtExampleVerify() {
 
-  testStr := "1.41421356237309504880168872420969807856967187537695"
+	testStr := "1.41421356237309504880168872420969807856967187537695"
 
-  answer,
-    ok := new(big.Float).SetString(testStr)
+	answer,
+		ok := new(big.Float).SetString(testStr)
 
-  if !ok {
-    fmt.Printf("Error SetString(testStr) FAILED!\n"+
-      "testStr = %v\n",
-      testStr)
-    return
-  }
+	if !ok {
+		fmt.Printf("Error SetString(testStr) FAILED!\n"+
+			"testStr = %v\n",
+			testStr)
+		return
+	}
 
-  t := big.NewFloat(0)
-  t.Set(answer)
+	t := big.NewFloat(0)
+	t.Set(answer)
 
-  result := t.Mul(t, answer)
+	result := t.Mul(t, answer)
 
-  fmt.Printf("Result = '%v'\n",
-    result.Text('f', -1))
+	fmt.Printf("Result = '%v'\n",
+		result.Text('f', -1))
 
 }
 
 func TestBigFloatPower() {
 
-  funcName := "TestBigFloatPower"
+	funcName := "TestBigFloatPower"
 
-  breakStr := strings.Repeat("=", 50)
+	breakStr := strings.Repeat("=", 50)
 
-  fmt.Printf("\n\nFunction: %v\n",
-    funcName)
+	fmt.Printf("\n\nFunction: %v\n",
+		funcName)
 
-  fmt.Printf(breakStr + "\n\n")
+	fmt.Printf(breakStr + "\n\n")
 
-  const prec = 4096
-  power := int64(50)
+	const prec = 4096
+	power := int64(50)
 
-  var ok bool
+	var ok bool
 
-  base := new(big.Float).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
-  _,
-    ok = base.SetString("1.5")
+	base := new(big.Float).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
+	_,
+		ok = base.SetString("1.5")
 
-  if !ok {
-    panic("base.SetString(\"1.5\") FAILED!\n")
-  }
+	if !ok {
+		panic("base.SetString(\"1.5\") FAILED!\n")
+	}
 
-  expectedResult := new(big.Float).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	expectedResult := new(big.Float).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  _,
-    ok = expectedResult.SetString("637621500.21404958690340780691486")
+	_,
+		ok = expectedResult.SetString("637621500.21404958690340780691486")
 
-  if !ok {
-    panic("expectedResult.SetString(\"637621500.21404958690340780691486\") FAILED!\n")
-  }
+	if !ok {
+		panic("expectedResult.SetString(\"637621500.21404958690340780691486\") FAILED!\n")
+	}
 
-  raisedToPower := BigFloatPower(
-    base,
-    power,
-    prec)
+	raisedToPower := BigFloatPower(
+		base,
+		power,
+		prec)
 
-  fmt.Printf("BigFloatPower Results\n"+
-    "      precision = %v\n"+
-    "           base = %v\n"+
-    "          power = %v\n"+
-    "expected result = %v\n"+
-    "  raisedToPower = \n%v\n\n",
-    prec,
-    base.Text('f', -1),
-    power,
-    expectedResult.Text('f', -1),
-    raisedToPower.Text('f', -1))
+	fmt.Printf("BigFloatPower Results\n"+
+		"      precision = %v\n"+
+		"           base = %v\n"+
+		"          power = %v\n"+
+		"expected result = %v\n"+
+		"  raisedToPower = \n%v\n\n",
+		prec,
+		base.Text('f', -1),
+		power,
+		expectedResult.Text('f', -1),
+		raisedToPower.Text('f', -1))
 
-  fmt.Printf("\n\n" + breakStr + "\n")
+	fmt.Printf("\n\n" + breakStr + "\n")
 
-  fmt.Printf("  Successful Completion!\n" +
-    "Function: " +
-    funcName + "\n")
+	fmt.Printf("  Successful Completion!\n" +
+		"Function: " +
+		funcName + "\n")
 
-  fmt.Printf(breakStr + "\n")
+	fmt.Printf(breakStr + "\n")
 }
 
 func TestNewtonInitialGuess() {
 
-  funcName := "TestNewtonInitialGuess"
+	funcName := "TestNewtonInitialGuess"
 
-  breakStr := strings.Repeat("=", 50)
+	breakStr := strings.Repeat("=", 50)
 
-  fmt.Printf("\n\nFunction: %v\n",
-    funcName)
+	fmt.Printf("\n\nFunction: %v\n",
+		funcName)
 
-  fmt.Printf(breakStr + "\n\n")
+	fmt.Printf(breakStr + "\n\n")
 
-  const prec = 16384
+	const prec = 16384
 
-  nthRoot := int64(4)
-  alphaInt64 := int64(6000000)
+	nthRoot := int64(4)
+	alphaInt64 := int64(6000000)
 
-  alpha := new(big.Float).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero).
-    SetInt64(alphaInt64)
+	alpha := new(big.Float).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero).
+		SetInt64(alphaInt64)
 
-  accuracyThreashold := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	accuracyThreashold := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  accuracyThreashold.SetString("0.015")
+	accuracyThreashold.SetString("0.015")
 
-  guess,
-    raisedToPower,
-    absAlphaDelta,
-    compareResult,
-    cycleCount := NewtonInitialGuess(
-    nthRoot,
-    alpha,
-    accuracyThreashold,
-    prec)
+	guess,
+		raisedToPower,
+		absAlphaDelta,
+		compareResult,
+		cycleCount := NewtonInitialGuess(
+		nthRoot,
+		alpha,
+		accuracyThreashold,
+		prec)
 
-  fmt.Printf("Initial Guess Results\n"+
-    "    precision = %v\n"+
-    "      nthRoot = %v\n"+
-    "compareResult = %v\n"+
-    "   cycleCount = %v\n"+
-    "        alpha = %v\n"+
-    "raisedToPower = \n%v\n\n"+
-    "absAlphaDelta = \n%v\n\n"+
-    "        guess =\n%v\n\n",
-    prec,
-    nthRoot,
-    compareResult,
-    cycleCount,
-    alpha.Text('f', -1),
-    raisedToPower.Text('f', -1),
-    absAlphaDelta.Text('f', -1),
-    guess.Text('f', -1))
+	fmt.Printf("Initial Guess Results\n"+
+		"    precision = %v\n"+
+		"      nthRoot = %v\n"+
+		"compareResult = %v\n"+
+		"   cycleCount = %v\n"+
+		"        alpha = %v\n"+
+		"raisedToPower = \n%v\n\n"+
+		"absAlphaDelta = \n%v\n\n"+
+		"        guess =\n%v\n\n",
+		prec,
+		nthRoot,
+		compareResult,
+		cycleCount,
+		alpha.Text('f', -1),
+		raisedToPower.Text('f', -1),
+		absAlphaDelta.Text('f', -1),
+		guess.Text('f', -1))
 
-  fmt.Printf("\n\n" + breakStr + "\n")
+	fmt.Printf("\n\n" + breakStr + "\n")
 
-  fmt.Printf("  Successful Completion!\n" +
-    "Function: " +
-    funcName + "\n")
+	fmt.Printf("  Successful Completion!\n" +
+		"Function: " +
+		funcName + "\n")
 
-  fmt.Printf(breakStr + "\n")
+	fmt.Printf(breakStr + "\n")
 }
 
 func Newton01() {
 
-  funcName := "Newton01"
+	funcName := "Newton01"
 
-  breakStr := strings.Repeat("=", 50)
+	breakStr := strings.Repeat("=", 50)
 
-  defOfTerms := fmt.Sprintf("%v\n"+
-    "DEFINITION OF TERMS:\n"+
-    "Alpha = Base = Radicand\n"+
-    "n = nth Root = Degree\n"+
-    "xK = Guess And Final Result\n", funcName)
+	defOfTerms := fmt.Sprintf("%v\n"+
+		"DEFINITION OF TERMS:\n"+
+		"Alpha = Base = Radicand\n"+
+		"n = nth Root = Degree\n"+
+		"xK = Guess And Final Result\n", funcName)
 
-  fmt.Printf(breakStr + "\n")
-  fmt.Printf("%v\n", funcName)
-  fmt.Printf(breakStr + "\n")
-  fmt.Printf("%v", defOfTerms)
-  fmt.Printf(breakStr + "\n\n")
+	fmt.Printf(breakStr + "\n")
+	fmt.Printf("%v\n", funcName)
+	fmt.Printf(breakStr + "\n")
+	fmt.Printf("%v", defOfTerms)
+	fmt.Printf(breakStr + "\n\n")
 
-  const prec = 16384
+	const prec = 16384
 
-  // Since Newton's Method doubles the number of correct digits at each
-  // iteration, we need at least log_2(prec) steps.
-  steps := int(math.Log2(prec))
+	// Since Newton's Method doubles the number of correct digits at each
+	// iteration, we need at least log_2(prec) steps.
+	steps := int(math.Log2(prec))
 
-  // Extra Cushion
-  steps += 100
+	// Extra Cushion
+	steps += 100
 
-  // Alpha = 8
-  alpha := new(big.Float).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	// Alpha = 8
+	alpha := new(big.Float).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  alpha.SetString("8")
+	alpha.SetString("8")
 
-  // n = 23
-  n_int64 := int64(23)
-  // n_float := new(big.Float).SetPrec(prec).SetInt64(n_int64)
+	// n = 23
+	n_int64 := int64(23)
+	// n_float := new(big.Float).SetPrec(prec).SetInt64(n_int64)
 
-  // The first guess!
-  //xK := new(big.Float).SetPrec(prec).SetFloat64(1.0)
+	// The first guess!
+	//xK := new(big.Float).SetPrec(prec).SetFloat64(1.0)
 
-  accuracyThresholdNumStr := "0.000015"
+	accuracyThresholdNumStr := "0.000015"
 
-  accuracyThreshold := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	accuracyThreshold := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  accuracyThreshold.SetString(accuracyThresholdNumStr)
+	accuracyThreshold.SetString(accuracyThresholdNumStr)
 
-  xK,
-    raisedToPower,
-    absAlphaDelta,
-    compareResult,
-    cycleCount := NewtonInitialGuess(
-    n_int64,
-    alpha,
-    accuracyThreshold,
-    prec)
+	xK,
+		raisedToPower,
+		absAlphaDelta,
+		compareResult,
+		cycleCount := NewtonInitialGuess(
+		n_int64,
+		alpha,
+		accuracyThreshold,
+		prec)
 
-  fmt.Printf("First Guess Data\n"+
-    "xK (Guess)    = %v\n"+
-    "precision     = %v\n"+
-    "raisedToPower = %v\n"+
-    "absAlphaDelta = %v\n"+
-    "compareResult = %v\n"+
-    "  Cycle Count = %v\n\n",
-    xK.Text('f', 20),
-    prec,
-    raisedToPower.Text('f', 20),
-    absAlphaDelta.Text('f', 20),
-    compareResult,
-    cycleCount)
+	fmt.Printf("First Guess Data\n"+
+		"xK (Guess)    = %v\n"+
+		"precision     = %v\n"+
+		"raisedToPower = %v\n"+
+		"absAlphaDelta = %v\n"+
+		"compareResult = %v\n"+
+		"  Cycle Count = %v\n\n",
+		xK.Text('f', 20),
+		prec,
+		raisedToPower.Text('f', 20),
+		absAlphaDelta.Text('f', 20),
+		compareResult,
+		cycleCount)
 
-  n_minus_1_int64 := n_int64 - 1
+	n_minus_1_int64 := n_int64 - 1
 
-  n_minus_1 := new(big.Float).SetPrec(prec).SetInt64(n_minus_1_int64)
+	n_minus_1 := new(big.Float).SetPrec(prec).SetInt64(n_minus_1_int64)
 
-  one_over_n_rat := big.NewRat(1, n_int64)
+	one_over_n_rat := big.NewRat(1, n_int64)
 
-  one_over_n_float := new(big.Float).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero).SetRat(one_over_n_rat)
+	one_over_n_float := new(big.Float).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero).SetRat(one_over_n_rat)
 
-  xK1 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac1 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac2 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac3 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac4 := new(big.Float).SetPrec(prec).SetInt64(0)
+	xK1 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac1 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac2 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac3 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac4 := new(big.Float).SetPrec(prec).SetInt64(0)
 
-  fmt.Printf("The number of steps = '%v'\n",
-    steps)
+	fmt.Printf("The number of steps = '%v'\n",
+		steps)
 
-  for i := 0; i <= steps; i++ {
-    fac1 = BigFloatPower(xK, n_minus_1_int64, prec)
-    fac2.Quo(alpha, fac1)
-    fac3.Mul(n_minus_1, xK)
-    fac4.Add(fac3, fac2)
-    xK1.Mul(one_over_n_float, fac4)
-    xK.Set(xK1)
-  }
+	for i := 0; i <= steps; i++ {
+		fac1 = BigFloatPower(xK, n_minus_1_int64, prec)
+		fac2.Quo(alpha, fac1)
+		fac3.Mul(n_minus_1, xK)
+		fac4.Add(fac3, fac2)
+		xK1.Mul(one_over_n_float, fac4)
+		xK.Set(xK1)
+	}
 
-  fmt.Printf("Calculation Factors\n"+
-    "Alpha = '%v'\n"+
-    "N = '%v'\n"+
-    "Result: %v\n",
-    alpha.Text('f', -1),
-    n_int64,
-    xK.Text('f', -1))
+	fmt.Printf("Calculation Factors\n"+
+		"Alpha = '%v'\n"+
+		"N = '%v'\n"+
+		"Result: %v\n",
+		alpha.Text('f', -1),
+		n_int64,
+		xK.Text('f', -1))
 
-  calcAlpha := BigFloatPower(
-    xK,
-    n_int64,
-    prec)
+	calcAlpha := BigFloatPower(
+		xK,
+		n_int64,
+		prec)
 
-  fmt.Printf("Results Verification\n"+
-    "Expected Alpha = '%v'\n"+
-    "Verified Alpha = '%v'\n",
-    alpha.Text('f', -1),
-    calcAlpha.Text('f', -1))
+	fmt.Printf("Results Verification\n"+
+		"Expected Alpha = '%v'\n"+
+		"Verified Alpha = '%v'\n",
+		alpha.Text('f', -1),
+		calcAlpha.Text('f', -1))
 
-  fmt.Printf("\n\n" + breakStr + "\n")
+	fmt.Printf("\n\n" + breakStr + "\n")
 
-  fmt.Printf("  Successful Completion!\n" +
-    "Function: " +
-    funcName + "\n")
+	fmt.Printf("  Successful Completion!\n" +
+		"Function: " +
+		funcName + "\n")
 
-  fmt.Printf(breakStr + "\n")
+	fmt.Printf(breakStr + "\n")
 
-  /*
-  		Output:
+	/*
+			Output:
 
-  	Calculation Factors
-  	Alpha = '8'
-  	N = '3'
-  	Result:
-  	1.999999999999999999999999999999999999999999999999980000000000000000000000000000000000000003501118365183835461631804637785
-  */
+		Calculation Factors
+		Alpha = '8'
+		N = '3'
+		Result:
+		1.999999999999999999999999999999999999999999999999980000000000000000000000000000000000000003501118365183835461631804637785
+	*/
 
 }
 
 func Newton02() {
 
-  funcName := "Newton02"
+	funcName := "Newton02"
 
-  /*
-  	Alpha = Base = Radicand
-  	n = nth Root = Degree
-  */
+	/*
+		Alpha = Base = Radicand
+		n = nth Root = Degree
+	*/
 
-  breakStr := strings.Repeat("=", 50)
+	breakStr := strings.Repeat("=", 50)
 
-  defOfTerms := fmt.Sprintf("%v\n"+
-    "DEFINITION OF TERMS:\n"+
-    "Alpha = Base = Radicand\n"+
-    "n = nth Root = Degree\n", funcName)
+	defOfTerms := fmt.Sprintf("%v\n"+
+		"DEFINITION OF TERMS:\n"+
+		"Alpha = Base = Radicand\n"+
+		"n = nth Root = Degree\n", funcName)
 
-  fmt.Printf("%v", defOfTerms)
+	fmt.Printf("%v", defOfTerms)
 
-  fmt.Printf(breakStr + "\n")
-  fmt.Printf("\n")
-  fmt.Printf(breakStr + "\n\n")
+	fmt.Printf(breakStr + "\n")
+	fmt.Printf("\n")
+	fmt.Printf(breakStr + "\n\n")
 
-  const prec = 800
+	const prec = 800
 
-  // Since Newton's Method doubles the number of correct digits at each
-  // iteration, we need at least log_2(prec) steps.
-  steps := int(math.Log2(prec))
+	// Since Newton's Method doubles the number of correct digits at each
+	// iteration, we need at least log_2(prec) steps.
+	steps := int(math.Log2(prec))
 
-  // Alpha = 8
-  alpha_int64 := int64(592)
-  alpha := new(big.Float).SetPrec(prec).SetInt64(alpha_int64)
+	// Alpha = 8
+	alpha_int64 := int64(592)
+	alpha := new(big.Float).SetPrec(prec).SetInt64(alpha_int64)
 
-  // n = 5
-  n_int64 := int64(5)
-  //n := new(big.Float).SetPrec(prec).SetInt64(n_int64)
+	// n = 5
+	n_int64 := int64(5)
+	//n := new(big.Float).SetPrec(prec).SetInt64(n_int64)
 
-  n_minus_1_int64 := n_int64 - 1
+	n_minus_1_int64 := n_int64 - 1
 
-  n_minus_1 := new(big.Float).SetPrec(prec).SetInt64(n_minus_1_int64)
+	n_minus_1 := new(big.Float).SetPrec(prec).SetInt64(n_minus_1_int64)
 
-  one_over_n_rat := big.NewRat(1, n_int64)
+	one_over_n_rat := big.NewRat(1, n_int64)
 
-  numStr := one_over_n_rat.FloatString(400)
+	numStr := one_over_n_rat.FloatString(400)
 
-  one_over_n_float,
-    ok := new(big.Float).SetPrec(prec).SetString(numStr)
+	one_over_n_float,
+		ok := new(big.Float).SetPrec(prec).SetString(numStr)
 
-  if !ok {
-    fmt.Printf("Error: big.Float.SetString(%v)\n",
-      numStr)
-    return
-  }
+	if !ok {
+		fmt.Printf("Error: big.Float.SetString(%v)\n",
+			numStr)
+		return
+	}
 
-  x_k := new(big.Float).SetPrec(prec).SetInt64(1)
+	x_k := new(big.Float).SetPrec(prec).SetInt64(1)
 
-  x_k1 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac_1 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac_2 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac_3 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac_4 := new(big.Float).SetPrec(prec).SetInt64(0)
+	x_k1 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac_1 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac_2 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac_3 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac_4 := new(big.Float).SetPrec(prec).SetInt64(0)
 
-  for i := 0; i <= steps; i++ {
-    fac_1 = BigFloatPower(x_k, n_minus_1_int64, prec)
-    fac_2.Quo(alpha, fac_1)
-    fac_3.Mul(n_minus_1, x_k)
-    fac_4.Add(fac_3, fac_2)
-    x_k1.Mul(one_over_n_float, fac_4)
-    x_k.Set(x_k1)
-  }
+	for i := 0; i <= steps; i++ {
+		fac_1 = BigFloatPower(x_k, n_minus_1_int64, prec)
+		fac_2.Quo(alpha, fac_1)
+		fac_3.Mul(n_minus_1, x_k)
+		fac_4.Add(fac_3, fac_2)
+		x_k1.Mul(one_over_n_float, fac_4)
+		x_k.Set(x_k1)
+	}
 
-  fmt.Printf("Calculation Factors\n"+
-    "Alpha = '%v'\n"+
-    "N = '%v'\n"+
-    "Result: %v\n",
-    alpha_int64,
-    n_int64,
-    x_k.Text('f', -1))
+	fmt.Printf("Calculation Factors\n"+
+		"Alpha = '%v'\n"+
+		"N = '%v'\n"+
+		"Result: %v\n",
+		alpha_int64,
+		n_int64,
+		x_k.Text('f', -1))
 
-  calcAlpha := BigFloatPower(
-    x_k,
-    n_int64,
-    prec)
+	calcAlpha := BigFloatPower(
+		x_k,
+		n_int64,
+		prec)
 
-  fmt.Printf("Results Verification\n"+
-    "Expected Alpha = '%v'\n"+
-    "Verified Alpha = '%v'\n",
-    alpha_int64,
-    calcAlpha.Text('f', -1))
+	fmt.Printf("Results Verification\n"+
+		"Expected Alpha = '%v'\n"+
+		"Verified Alpha = '%v'\n",
+		alpha_int64,
+		calcAlpha.Text('f', -1))
 
-  fmt.Printf("\n\n" + breakStr + "\n")
+	fmt.Printf("\n\n" + breakStr + "\n")
 
-  fmt.Printf("  Successful Completion!\n" +
-    "Function: " +
-    funcName + "\n")
+	fmt.Printf("  Successful Completion!\n" +
+		"Function: " +
+		funcName + "\n")
 
-  fmt.Printf(breakStr + "\n")
+	fmt.Printf(breakStr + "\n")
 
-  /*
-  		Output:
+	/*
+			Output:
 
-  	Calculation Factors
-  	Alpha = '8'
-  	N = '3'
-  	Result:
-  	1.999999999999999999999999999999999999999999999999980000000000000000000000000000000000000003501118365183835461631804637785
-  */
+		Calculation Factors
+		Alpha = '8'
+		N = '3'
+		Result:
+		1.999999999999999999999999999999999999999999999999980000000000000000000000000000000000000003501118365183835461631804637785
+	*/
 
 }
 
 func Newton03() {
 
-  // IMPORTANT
-  // On Qalculate, the function is:
-  // root(8,23)
-  // 8 = Value = Alpha = Base = Radicand
-  // 23 = Degree = n = N = nth Root
+	// IMPORTANT
+	// On Qalculate, the function is:
+	// root(8,23)
+	// 8 = Value = Alpha = Base = Radicand
+	// 23 = Degree = n = N = nth Root
 
-  funcName := "Newton03"
+	funcName := "Newton03"
 
-  breakStr := strings.Repeat("=", 50)
+	breakStr := strings.Repeat("=", 50)
 
-  subBreakStr := strings.Repeat("-", 50)
+	subBreakStr := strings.Repeat("-", 50)
 
-  radicandNumStr := "8"
+	radicandNumStr := "8"
 
-  degreeInt64 := int64(23)
+	degreeInt64 := int64(23)
 
-  accuracyThresholdNumStr := "0.000015"
+	accuracyThresholdNumStr := "0.000015"
 
-  expectedResultNumStr := "1.0946235364347187301608050894219178703121159477156"
+	expectedResultNumStr := "1.0946235364347187301608050894219178703121159477156"
 
-  const prec = 16384
+	const prec = 16384
 
-  defOfTerms := fmt.Sprintf("%v\n"+
-    "DEFINITION OF TERMS:\n"+
-    "Alpha = Base = Radicand\n"+
-    "n = nth Root = Degree\n"+
-    "xK = Guess And Final Result\n", funcName)
+	defOfTerms := fmt.Sprintf("%v\n"+
+		"DEFINITION OF TERMS:\n"+
+		"Alpha = Base = Radicand\n"+
+		"n = nth Root = Degree\n"+
+		"xK = Guess And Final Result\n", funcName)
 
-  fmt.Printf(breakStr + "\n")
-  fmt.Printf("%v\n", funcName)
-  fmt.Printf(breakStr + "\n")
-  fmt.Printf("%v", defOfTerms)
-  fmt.Printf(subBreakStr + "\n")
-  fmt.Printf(
-    "Radicand: %v\n"+
-      "Degree:   %v\n"+
-      "Guess Accuracy Threshold: %v\n"+
-      "prec:     %v\n\n\n",
-    radicandNumStr, degreeInt64, accuracyThresholdNumStr, prec)
+	fmt.Printf(breakStr + "\n")
+	fmt.Printf("%v\n", funcName)
+	fmt.Printf(breakStr + "\n")
+	fmt.Printf("%v", defOfTerms)
+	fmt.Printf(subBreakStr + "\n")
+	fmt.Printf(
+		"Radicand: %v\n"+
+			"Degree:   %v\n"+
+			"Guess Accuracy Threshold: %v\n"+
+			"prec:     %v\n\n\n",
+		radicandNumStr, degreeInt64, accuracyThresholdNumStr, prec)
 
-  // Since Newton's Method doubles the number of correct digits at each
-  // iteration, we need at least log_2(prec) steps.
-  steps := int(math.Log2(prec))
+	// Since Newton's Method doubles the number of correct digits at each
+	// iteration, we need at least log_2(prec) steps.
+	steps := int(math.Log2(prec))
 
-  // Extra Cushion
-  steps += 100
+	// Extra Cushion
+	steps += 100
 
-  // Alpha = Setup
-  alpha := new(big.Float).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	// Alpha = Setup
+	alpha := new(big.Float).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  alpha.SetString(radicandNumStr)
+	alpha.SetString(radicandNumStr)
 
-  n_int64 := degreeInt64
+	n_int64 := degreeInt64
 
-  accuracyThreshold := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	accuracyThreshold := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  accuracyThreshold.SetString(accuracyThresholdNumStr)
+	accuracyThreshold.SetString(accuracyThresholdNumStr)
 
-  xK,
-    raisedToPower,
-    absAlphaDelta,
-    compareResult,
-    cycleCount := NewtonInitialGuess(
-    n_int64,
-    alpha,
-    accuracyThreshold,
-    prec)
+	xK,
+		raisedToPower,
+		absAlphaDelta,
+		compareResult,
+		cycleCount := NewtonInitialGuess(
+		n_int64,
+		alpha,
+		accuracyThreshold,
+		prec)
 
-  fmt.Printf("First Guess Data\n"+
-    "%v\n"+
-    "xK (Guess)    = %v\n"+
-    "precision     = %v\n"+
-    "raisedToPower = %v\n"+
-    "absAlphaDelta = %v\n"+
-    "compareResult = %v\n"+
-    "  Cycle Count = %v\n"+
-    "%v\n\n",
-    subBreakStr,
-    xK.Text('f', 20),
-    prec,
-    raisedToPower.Text('f', 20),
-    absAlphaDelta.Text('f', 20),
-    compareResult,
-    cycleCount,
-    subBreakStr)
+	fmt.Printf("First Guess Data\n"+
+		"%v\n"+
+		"xK (Guess)    = %v\n"+
+		"precision     = %v\n"+
+		"raisedToPower = %v\n"+
+		"absAlphaDelta = %v\n"+
+		"compareResult = %v\n"+
+		"  Cycle Count = %v\n"+
+		"%v\n\n",
+		subBreakStr,
+		xK.Text('f', 20),
+		prec,
+		raisedToPower.Text('f', 20),
+		absAlphaDelta.Text('f', 20),
+		compareResult,
+		cycleCount,
+		subBreakStr)
 
-  n_minus_1_int64 := n_int64 - 1
+	n_minus_1_int64 := n_int64 - 1
 
-  n_minus_1 := new(big.Float).SetPrec(prec).SetInt64(n_minus_1_int64)
+	n_minus_1 := new(big.Float).SetPrec(prec).SetInt64(n_minus_1_int64)
 
-  one_over_n_rat := big.NewRat(1, n_int64)
+	one_over_n_rat := big.NewRat(1, n_int64)
 
-  one_over_n_float := new(big.Float).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero).SetRat(one_over_n_rat)
+	one_over_n_float := new(big.Float).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero).SetRat(one_over_n_rat)
 
-  xK1 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac1 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac2 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac3 := new(big.Float).SetPrec(prec).SetInt64(0)
-  fac4 := new(big.Float).SetPrec(prec).SetInt64(0)
+	xK1 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac1 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac2 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac3 := new(big.Float).SetPrec(prec).SetInt64(0)
+	fac4 := new(big.Float).SetPrec(prec).SetInt64(0)
 
-  fmt.Printf("The number of steps = '%v'\n\n",
-    steps)
+	fmt.Printf("The number of steps = '%v'\n\n",
+		steps)
 
-  for i := 0; i <= steps; i++ {
-    fac1 = BigFloatPower(xK, n_minus_1_int64, prec)
-    fac2.Quo(alpha, fac1)
-    fac3.Mul(n_minus_1, xK)
-    fac4.Add(fac3, fac2)
-    xK1.Mul(one_over_n_float, fac4)
-    xK.Set(xK1)
-  }
+	for i := 0; i <= steps; i++ {
+		fac1 = BigFloatPower(xK, n_minus_1_int64, prec)
+		fac2.Quo(alpha, fac1)
+		fac3.Mul(n_minus_1, xK)
+		fac4.Add(fac3, fac2)
+		xK1.Mul(one_over_n_float, fac4)
+		xK.Set(xK1)
+	}
 
-  actualResultNumStr := xK.Text('f', -1)
+	actualResultNumStr := xK.Text('f', -1)
 
-  lenOfActualResultNumStr := len(actualResultNumStr)
+	lenOfActualResultNumStr := len(actualResultNumStr)
 
-  fmt.Printf("Calculation Results\n"+
-    "%v\n"+
-    "               Alpha:  %v \n"+
-    "                   n:  %v \n"+
-    "Length Actual Result:  %v \n"+
-    "     Expected Result:  %v \n"+
-    "       Actual Result:  %v \n"+
-    "%v\n\n",
-    breakStr,
-    alpha.Text('f', -1),
-    n_int64,
-    lenOfActualResultNumStr,
-    expectedResultNumStr,
-    actualResultNumStr,
-    breakStr)
+	fmt.Printf("Calculation Results\n"+
+		"%v\n"+
+		"               Alpha:  %v \n"+
+		"                   n:  %v \n"+
+		"Length Actual Result:  %v \n"+
+		"     Expected Result:  %v \n"+
+		"       Actual Result:  %v \n"+
+		"%v\n\n",
+		breakStr,
+		alpha.Text('f', -1),
+		n_int64,
+		lenOfActualResultNumStr,
+		expectedResultNumStr,
+		actualResultNumStr,
+		breakStr)
 
-  calcAlpha := BigFloatPower(
-    xK,
-    n_int64,
-    prec)
+	calcAlpha := BigFloatPower(
+		xK,
+		n_int64,
+		prec)
 
-  calculatedAlphaStr := calcAlpha.Text('f', -1)
+	calculatedAlphaStr := calcAlpha.Text('f', -1)
 
-  lenOfCalculatedAlphaStr := len(calculatedAlphaStr)
+	lenOfCalculatedAlphaStr := len(calculatedAlphaStr)
 
-  fmt.Printf("Results Verification\n"+
-    "%v\n"+
-    "   Expected Alpha = '%v'\n"+
-    "Length Calc Alpha = '%v'\n"+
-    " Calculated Alpha = '%v'\n",
-    breakStr,
-    alpha.Text('f', -1),
-    lenOfCalculatedAlphaStr,
-    calculatedAlphaStr)
+	fmt.Printf("Results Verification\n"+
+		"%v\n"+
+		"   Expected Alpha = '%v'\n"+
+		"Length Calc Alpha = '%v'\n"+
+		" Calculated Alpha = '%v'\n",
+		breakStr,
+		alpha.Text('f', -1),
+		lenOfCalculatedAlphaStr,
+		calculatedAlphaStr)
 
-  fmt.Printf("\n\n" + breakStr + "\n")
+	fmt.Printf("\n\n" + breakStr + "\n")
 
-  fmt.Printf("  Successful Completion!\n" +
-    "Function: " +
-    funcName + "\n")
+	fmt.Printf("  Successful Completion!\n" +
+		"Function: " +
+		funcName + "\n")
 
-  fmt.Printf(breakStr + "\n")
+	fmt.Printf(breakStr + "\n")
 
+}
+
+func Newton04(
+	radicandNumStr string,
+	nthRootInt64 int64,
+	maxInternalPrecisionUint uint,
+	targetResultPrecisionUint uint,
+	firstGuessAccuracyThresholdStr string,
+	extraStepsCushionInt int,
+	expectedResultNumStr string) error {
+
+	funcName := "Newton04"
+
+	// IMPORTANT
+	// On Qalculate, the function is:
+	// root(8,23)
+	// 8 = Value = Alpha = Base = Radicand
+	// 23 = Degree = n = N = nth Root
+
+	breakStr := strings.Repeat("=", 50)
+
+	subBreakStr := strings.Repeat("-", 50)
+
+	if radicandNumStr == "" {
+		return fmt.Errorf("Function: %v\n"+
+			"Input paramter 'radicandNumStr' cannot be empty!\n\n",
+			funcName)
+	}
+
+	if firstGuessAccuracyThresholdStr == "" {
+		return fmt.Errorf("Function: %v\n"+
+			"Input paramter 'firstGuessAccuracyThresholdStr' cannot be empty!\n\n",
+			funcName)
+	}
+
+	if extraStepsCushionInt < 0 {
+
+		return fmt.Errorf("Function: %v\n"+
+			"Input paramter 'extraStepsCushionInt' cannot be negative!\n"+
+			"extraStepsCushionInt= '%v'\n\n",
+			funcName, extraStepsCushionInt)
+	}
+
+	if expectedResultNumStr == "" {
+		expectedResultNumStr = "NON PROVIDED"
+	}
+
+	defOfTerms := fmt.Sprintf("%v\n"+
+		"DEFINITION OF TERMS:\n"+
+		"Alpha = Base = Radicand\n"+
+		"n = nth Root = Degree\n"+
+		"xK = Guess And Final Result\n", funcName)
+
+	fmt.Printf(breakStr + "\n")
+	fmt.Printf("%v\n", funcName)
+	fmt.Printf(breakStr + "\n")
+	fmt.Printf("%v", defOfTerms)
+	fmt.Printf(subBreakStr + "\n")
+	fmt.Printf(
+		"          Radicand: %v\n"+
+			"               nth Root: %v\n"+
+			"         Guess Accuracy: %v\n"+
+			" Max Internal Precision: %v\n"+
+			"Target Result Precision: %v\n"+
+			"            Extra Steps: %v\n"+
+			"        Expected Result: %v \n",
+		radicandNumStr,
+		nthRootInt64,
+		firstGuessAccuracyThresholdStr,
+		maxInternalPrecisionUint,
+		targetResultPrecisionUint,
+		extraStepsCushionInt,
+		expectedResultNumStr)
+
+	fmt.Printf(subBreakStr + "\n\n")
+
+	// Since Newton's Method doubles the number of correct digits at each
+	// iteration, we need at least log_2(prec) steps.
+	steps := int(math.Log2(float64(maxInternalPrecisionUint)))
+
+	// Extra Steps Cushion
+	steps += extraStepsCushionInt
+
+	// Alpha = Setup
+	alpha := new(big.Float).
+		SetPrec(maxInternalPrecisionUint).
+		SetMode(big.AwayFromZero)
+
+	alpha.SetString(radicandNumStr)
+
+	alpha.SetPrec(alpha.MinPrec())
+
+	// nth Root Target
+	n_int64 := nthRootInt64
+
+	accuracyThreshold := new(big.Float).
+		SetInt64(0).
+		SetPrec(maxInternalPrecisionUint).
+		SetMode(big.AwayFromZero)
+
+	accuracyThreshold.SetPrec(accuracyThreshold.MinPrec())
+
+	xK,
+		raisedToPower,
+		absAlphaDelta,
+		compareResult,
+		cycleCount := NewtonInitialGuess(
+		n_int64,
+		alpha,
+		accuracyThreshold,
+		maxInternalPrecisionUint)
+
+	fmt.Printf("First Guess Data\n"+
+		"%v\n"+
+		"xK (Guess)    = %v\n"+
+		"precision     = %v\n"+
+		"raisedToPower = %v\n"+
+		"absAlphaDelta = %v\n"+
+		"compareResult = %v\n"+
+		"  Cycle Count = %v\n"+
+		"%v\n\n",
+		subBreakStr,
+		xK.Text('f', 20),
+		maxInternalPrecisionUint,
+		raisedToPower.Text('f', 20),
+		absAlphaDelta.Text('f', 20),
+		compareResult,
+		cycleCount,
+		subBreakStr)
+
+	n_minus_1_int64 := n_int64 - 1
+
+	n_minus_1 := new(big.Float).SetPrec(maxInternalPrecisionUint).SetInt64(n_minus_1_int64)
+
+	one_over_n_rat := big.NewRat(1, n_int64)
+
+	one_over_n_float := new(big.Float).
+		SetPrec(maxInternalPrecisionUint).
+		SetMode(big.AwayFromZero).SetRat(one_over_n_rat)
+
+	xK1 := new(big.Float).SetPrec(maxInternalPrecisionUint).SetInt64(0)
+	fac1 := new(big.Float).SetPrec(maxInternalPrecisionUint).SetInt64(0)
+	fac2 := new(big.Float).SetPrec(maxInternalPrecisionUint).SetInt64(0)
+	fac3 := new(big.Float).SetPrec(maxInternalPrecisionUint).SetInt64(0)
+	fac4 := new(big.Float).SetPrec(maxInternalPrecisionUint).SetInt64(0)
+
+	fmt.Printf("The number of steps = '%v'\n\n",
+		steps)
+
+	for i := 0; i <= steps; i++ {
+		fac1 = BigFloatPower(xK, n_minus_1_int64, maxInternalPrecisionUint)
+		fac2.Quo(alpha, fac1)
+		fac3.Mul(n_minus_1, xK)
+		fac4.Add(fac3, fac2)
+		xK1.Mul(one_over_n_float, fac4)
+		xK.Set(xK1)
+	}
+
+	xK.SetPrec(xK.MinPrec())
+
+	fmtActualResultBigFloat := new(big.Float).
+		Set(xK).
+		SetPrec(targetResultPrecisionUint).
+		SetMode(big.AwayFromZero)
+
+	/*
+	   fmtActualResultBigFloat.
+	   SetPrec(fmtActualResultBigFloat.MinPrec())
+
+	*/
+
+	actualResultNumStr := xK.Text('f', -1)
+
+	formattedActualResultNumStr := fmtActualResultBigFloat.Text('f', int(targetResultPrecisionUint))
+
+	lenOfActualResultNumStr := len(actualResultNumStr)
+
+	fmt.Printf("Calculation Results\n"+
+		"%v\n"+
+		"                  Alpha:  %v \n"+
+		"                      n:  %v \n"+
+		"   Length Actual Result:  %v \n"+
+		"        Expected Result:  %v \n"+
+		"Formatted Actual Result:  %v \n"+
+		"          Actual Result:\n"+
+		"                          %v \n\n"+
+		"%v\n\n",
+		breakStr,
+		alpha.Text('f', -1),
+		n_int64,
+		lenOfActualResultNumStr,
+		expectedResultNumStr,
+		formattedActualResultNumStr,
+		actualResultNumStr,
+		breakStr)
+
+	calcAlpha := BigFloatPower(
+		xK,
+		n_int64,
+		maxInternalPrecisionUint)
+
+	calcAlpha.SetPrec(calcAlpha.MinPrec())
+
+	calculatedAlphaStr := calcAlpha.Text('f', -1)
+
+	lenOfCalculatedAlphaStr := len(calculatedAlphaStr)
+
+	fmt.Printf("Results Verification\n"+
+		"%v\n"+
+		"Length Calc Radicand = '%v'\n"+
+		"     Target Radicand = '%v'\n"+
+		" Calculated Radicand = '%v'\n",
+		breakStr,
+		lenOfCalculatedAlphaStr,
+		alpha.Text('f', -1),
+		calculatedAlphaStr)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("  Successful Completion!\n" +
+		"Function: " +
+		funcName + "\n")
+
+	fmt.Printf(breakStr + "\n")
+
+	return nil
 }
 
 func NewtonInitialGuess(
-  nthRoot int64,    // 18
-  alpha *big.Float, // 592
-  accuracyThreshold *big.Float,
-  prec uint) (
-  guess *big.Float,
-  raisedToPower *big.Float,
-  absAlphaDelta *big.Float,
-  compareResult int,
-  cycleCount uint64) {
+	nthRoot int64, // 18
+	alpha *big.Float, // 592
+	accuracyThreshold *big.Float,
+	prec uint) (
+	guess *big.Float,
+	raisedToPower *big.Float,
+	absAlphaDelta *big.Float,
+	compareResult int,
+	cycleCount uint64) {
 
-  // SetMode sets z's rounding mode to mode and returns an exact z.
-  // z remains unchanged otherwise.
-  // z.SetMode(z.Mode()) is a cheap way to set z's accuracy to Exact.
+	// SetMode sets z's rounding mode to mode and returns an exact z.
+	// z remains unchanged otherwise.
+	// z.SetMode(z.Mode()) is a cheap way to set z's accuracy to Exact.
 
-  numOfLowGuesses := uint64(0)
-  numOfHighGuesses := uint64(0)
+	numOfLowGuesses := uint64(0)
+	numOfHighGuesses := uint64(0)
 
-  absAlphaDelta = new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	absAlphaDelta = new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  absPercentAlphaDelta := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	absPercentAlphaDelta := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  absGuessDelta := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	absGuessDelta := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  half := new(big.Float).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	half := new(big.Float).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  half.SetString("0.5")
+	half.SetString("0.5")
 
-  guess = new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	guess = new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  guess.SetString("1.015")
+	guess.SetString("1.015")
 
-  lastLowGuess := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	lastLowGuess := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  lastLowGuess.SetString("0.0")
+	lastLowGuess.SetString("0.0")
 
-  lastLowRaisedToPower := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	lastLowRaisedToPower := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  lastLowRaisedToPower.SetString("0.0")
+	lastLowRaisedToPower.SetString("0.0")
 
-  lastLowAbsAlphaDelta := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	lastLowAbsAlphaDelta := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  lastLowAbsAlphaDelta.SetString("0.0")
+	lastLowAbsAlphaDelta.SetString("0.0")
 
-  lastHighGuess := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	lastHighGuess := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  lastHighGuess.SetString("1.5")
+	lastHighGuess.SetString("1.5")
 
-  lastHighRaisedToPower := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	lastHighRaisedToPower := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  lastHighRaisedToPower.SetString("1.5")
+	lastHighRaisedToPower.SetString("1.5")
 
-  lastHighAbsAlphaDelta := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	lastHighAbsAlphaDelta := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  lastHighAbsAlphaDelta.SetString("1.5")
+	lastHighAbsAlphaDelta.SetString("1.5")
 
-  numberOne := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	numberOne := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  numberOne.SetString("1.0")
+	numberOne.SetString("1.0")
 
-  numberTwo := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	numberTwo := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  numberTwo.SetString("2.0")
+	numberTwo.SetString("2.0")
 
-  deltaIncrement := new(big.Float).
-    SetInt64(0).
-    SetPrec(prec).
-    SetMode(big.AwayFromZero)
+	deltaIncrement := new(big.Float).
+		SetInt64(0).
+		SetPrec(prec).
+		SetMode(big.AwayFromZero)
 
-  deltaIncrement.SetString("0.0")
+	deltaIncrement.SetString("0.0")
 
-  tempCompare := 0
+	tempCompare := 0
 
-  cycleCount = uint64(0)
+	cycleCount = uint64(0)
 
-  closeEnough := false
+	closeEnough := false
 
-  for closeEnough == false {
+	for closeEnough == false {
 
-    raisedToPower = BigFloatPower(
-      guess,
-      nthRoot,
-      prec)
+		raisedToPower = BigFloatPower(
+			guess,
+			nthRoot,
+			prec)
 
-    compareResult = raisedToPower.Cmp(alpha)
+		compareResult = raisedToPower.Cmp(alpha)
 
-    if compareResult == 0 {
+		if compareResult == 0 {
 
-      absAlphaDelta.Sub(alpha, raisedToPower)
+			absAlphaDelta.Sub(alpha, raisedToPower)
 
-      // On target
-      return guess,
-        raisedToPower,
-        absAlphaDelta,
-        compareResult,
-        cycleCount
+			// On target
+			return guess,
+				raisedToPower,
+				absAlphaDelta,
+				compareResult,
+				cycleCount
 
-    } else if compareResult == -1 {
-      // Guess is low. Alpha is higher than
-      // raisedToPower
+		} else if compareResult == -1 {
+			// Guess is low. Alpha is higher than
+			// raisedToPower
 
-      lastLowGuess.Set(guess)
+			lastLowGuess.Set(guess)
 
-      lastLowRaisedToPower.Set(raisedToPower)
+			lastLowRaisedToPower.Set(raisedToPower)
 
-      absAlphaDelta.Sub(alpha, lastLowRaisedToPower)
+			absAlphaDelta.Sub(alpha, lastLowRaisedToPower)
 
-      absPercentAlphaDelta.Quo(absAlphaDelta, alpha)
+			absPercentAlphaDelta.Quo(absAlphaDelta, alpha)
 
-      //fmt.Printf("lastLowGuess  = %v\n"+
-      //	"lastLowRaisedToPower = %v\n"+
-      //	"       absAlphaDelta = %v\n"+
-      //	"absPercentAlphaDelta = %v\n",
-      //	lastLowGuess.Text('f', 20),
-      //	lastLowRaisedToPower.Text('f', 20),
-      //	absAlphaDelta.Text('f', 20),
-      //	absPercentAlphaDelta.Text('f', 20))
+			//fmt.Printf("lastLowGuess  = %v\n"+
+			//	"lastLowRaisedToPower = %v\n"+
+			//	"       absAlphaDelta = %v\n"+
+			//	"absPercentAlphaDelta = %v\n",
+			//	lastLowGuess.Text('f', 20),
+			//	lastLowRaisedToPower.Text('f', 20),
+			//	absAlphaDelta.Text('f', 20),
+			//	absPercentAlphaDelta.Text('f', 20))
 
-      deltaIncrement.Set(half)
+			deltaIncrement.Set(half)
 
-      if numOfLowGuesses > 2 {
+			if numOfLowGuesses > 2 {
 
-        if absPercentAlphaDelta.Cmp(half) == 1 {
+				if absPercentAlphaDelta.Cmp(half) == 1 {
 
-          deltaIncrement.Set(numberTwo)
+					deltaIncrement.Set(numberTwo)
 
-        }
+				}
 
-      }
+			}
 
-      lastLowAbsAlphaDelta.Set(absAlphaDelta)
+			lastLowAbsAlphaDelta.Set(absAlphaDelta)
 
-      tempCompare = lastLowGuess.Cmp(lastHighGuess)
+			tempCompare = lastLowGuess.Cmp(lastHighGuess)
 
-      if tempCompare == 1 {
-        // Last Low Guess is higher than
-        // Last High Guess
-        absGuessDelta.Mul(guess, deltaIncrement)
+			if tempCompare == 1 {
+				// Last Low Guess is higher than
+				// Last High Guess
+				absGuessDelta.Mul(guess, deltaIncrement)
 
-      } else if tempCompare == 0 {
-        // Last Low Guess is Equal To
-        // Last High Guess
-        absGuessDelta.Mul(guess, deltaIncrement)
+			} else if tempCompare == 0 {
+				// Last Low Guess is Equal To
+				// Last High Guess
+				absGuessDelta.Mul(guess, deltaIncrement)
 
-      } else {
-        // Last High Guess is higher than
-        //	Last Low Guess
-        absGuessDelta.Sub(lastHighGuess, lastLowGuess)
+			} else {
+				// Last High Guess is higher than
+				//	Last Low Guess
+				absGuessDelta.Sub(lastHighGuess, lastLowGuess)
 
-        absGuessDelta.Mul(absGuessDelta, deltaIncrement)
+				absGuessDelta.Mul(absGuessDelta, deltaIncrement)
 
-      }
+			}
 
-      //fmt.Printf("Old Guess = %v\n",
-      //	guess.Text('f', -1))
-      //
-      //fmt.Printf("absGuessDelta = %v\n",
-      //	absGuessDelta.Text('f', -1))
+			//fmt.Printf("Old Guess = %v\n",
+			//	guess.Text('f', -1))
+			//
+			//fmt.Printf("absGuessDelta = %v\n",
+			//	absGuessDelta.Text('f', -1))
 
-      guess.Add(guess, absGuessDelta)
+			guess.Add(guess, absGuessDelta)
 
-      //fmt.Printf("New Guess = %v\n",
-      //	guess.Text('f', -1))
+			//fmt.Printf("New Guess = %v\n",
+			//	guess.Text('f', -1))
 
-      numOfLowGuesses++
+			numOfLowGuesses++
 
-    } else {
-      // MUST BE -
-      //	Guess is high. raisedToPower is higher
-      //	than Alpha
+		} else {
+			// MUST BE -
+			//	Guess is high. raisedToPower is higher
+			//	than Alpha
 
-      lastHighGuess.Set(guess)
+			lastHighGuess.Set(guess)
 
-      lastHighRaisedToPower.Set(raisedToPower)
+			lastHighRaisedToPower.Set(raisedToPower)
 
-      absAlphaDelta.Sub(lastHighRaisedToPower, alpha)
+			absAlphaDelta.Sub(lastHighRaisedToPower, alpha)
 
-      absPercentAlphaDelta.Quo(absAlphaDelta, alpha)
+			absPercentAlphaDelta.Quo(absAlphaDelta, alpha)
 
-      deltaIncrement.Set(half)
+			deltaIncrement.Set(half)
 
-      if numOfHighGuesses > 2 {
+			if numOfHighGuesses > 2 {
 
-        if absPercentAlphaDelta.Cmp(half) == 1 {
+				if absPercentAlphaDelta.Cmp(half) == 1 {
 
-          deltaIncrement.Set(numberTwo)
+					deltaIncrement.Set(numberTwo)
 
-        }
+				}
 
-      }
+			}
 
-      //fmt.Printf("lastHighGuess  = %v\n"+
-      //	"lastHighRaisedToPower = %v\n",
-      //	lastHighGuess.Text('f', 10),
-      //	lastHighRaisedToPower.Text('f', 10))
+			//fmt.Printf("lastHighGuess  = %v\n"+
+			//	"lastHighRaisedToPower = %v\n",
+			//	lastHighGuess.Text('f', 10),
+			//	lastHighRaisedToPower.Text('f', 10))
 
-      lastHighAbsAlphaDelta.Set(absAlphaDelta)
+			lastHighAbsAlphaDelta.Set(absAlphaDelta)
 
-      tempCompare = lastLowGuess.Cmp(lastHighGuess)
+			tempCompare = lastLowGuess.Cmp(lastHighGuess)
 
-      if tempCompare == 1 {
-        // Low Guess is higher than High Guess
-        absGuessDelta.Mul(lastHighGuess, half)
-        guess.Sub(guess, absGuessDelta)
+			if tempCompare == 1 {
+				// Low Guess is higher than High Guess
+				absGuessDelta.Mul(lastHighGuess, half)
+				guess.Sub(guess, absGuessDelta)
 
-      } else if tempCompare == 0 {
-        absGuessDelta.Mul(lastHighGuess, half)
-        guess.Sub(guess, absGuessDelta)
+			} else if tempCompare == 0 {
+				absGuessDelta.Mul(lastHighGuess, half)
+				guess.Sub(guess, absGuessDelta)
 
-      } else {
-        // High Guess is higher than Low Guess
-        absGuessDelta.Sub(lastHighGuess, lastLowGuess)
-        absGuessDelta.Mul(absGuessDelta, half)
-      }
+			} else {
+				// High Guess is higher than Low Guess
+				absGuessDelta.Sub(lastHighGuess, lastLowGuess)
+				absGuessDelta.Mul(absGuessDelta, half)
+			}
 
-      guess.Sub(guess, absGuessDelta)
+			guess.Sub(guess, absGuessDelta)
 
-      //fmt.Printf("New Guess = %v\n",
-      //	guess.Text('f', -1))
+			//fmt.Printf("New Guess = %v\n",
+			//	guess.Text('f', -1))
 
-      numOfHighGuesses++
-    }
+			numOfHighGuesses++
+		}
 
-    cycleCount++
+		cycleCount++
 
-    if compareResult == -1 &&
-      absAlphaDelta.Cmp(accuracyThreshold) < 1 {
+		if compareResult == -1 &&
+			absAlphaDelta.Cmp(accuracyThreshold) < 1 {
 
-      guess.Set(lastLowGuess)
-      raisedToPower.Set(lastLowRaisedToPower)
+			guess.Set(lastLowGuess)
+			raisedToPower.Set(lastLowRaisedToPower)
 
-      closeEnough = true
-    }
+			closeEnough = true
+		}
 
-    if cycleCount > 10000 {
+		if cycleCount > 10000 {
 
-      if compareResult == 1 {
-        guess.Set(lastLowGuess)
-        raisedToPower.Set(lastLowRaisedToPower)
-        absAlphaDelta.Sub(alpha, raisedToPower)
+			if compareResult == 1 {
+				guess.Set(lastLowGuess)
+				raisedToPower.Set(lastLowRaisedToPower)
+				absAlphaDelta.Sub(alpha, raisedToPower)
 
-      }
+			}
 
-      closeEnough = true
+			closeEnough = true
 
-    }
+		}
 
-  }
+	}
 
-  compareResult = raisedToPower.Cmp(alpha)
+	compareResult = raisedToPower.Cmp(alpha)
 
-  absAlphaDelta.Sub(raisedToPower, alpha)
+	absAlphaDelta.Sub(raisedToPower, alpha)
 
-  if absAlphaDelta.Sign() == -1 {
-    absAlphaDelta.Neg(absAlphaDelta)
-  }
+	if absAlphaDelta.Sign() == -1 {
+		absAlphaDelta.Neg(absAlphaDelta)
+	}
 
-  return guess,
-    raisedToPower,
-    absAlphaDelta,
-    compareResult,
-    cycleCount
+	return guess,
+		raisedToPower,
+		absAlphaDelta,
+		compareResult,
+		cycleCount
 }
 
 func BigFloatPower(
-  base *big.Float,
-  power int64,
-  prec uint) (
-  raisedToPower *big.Float) {
+	base *big.Float,
+	power int64,
+	prec uint) (
+	raisedToPower *big.Float) {
 
-  raisedToPower =
-    new(big.Float).
-      SetPrec(prec).
-      SetMode(big.AwayFromZero)
+	raisedToPower =
+		new(big.Float).
+			SetPrec(prec).
+			SetMode(big.AwayFromZero)
 
-  var ok bool
-  _,
-    ok = raisedToPower.SetString("1.0")
+	var ok bool
+	_,
+		ok = raisedToPower.SetString("1.0")
 
-  if !ok {
-    panic("raisedToPower.SetString(\"1.0\") Failed!")
-  }
+	if !ok {
+		panic("raisedToPower.SetString(\"1.0\") Failed!")
+	}
 
-  for i := int64(0); i < power; i++ {
+	for i := int64(0); i < power; i++ {
 
-    raisedToPower.Mul(raisedToPower, base)
-  }
+		raisedToPower.Mul(raisedToPower, base)
+	}
 
-  return raisedToPower
+	return raisedToPower
 }
