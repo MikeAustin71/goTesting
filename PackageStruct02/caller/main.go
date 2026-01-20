@@ -1,11 +1,12 @@
 package main
 
 import (
-	myStuff "golangmikesamples/PackageStruct02/pkgStr/strStuffHelpers"
+	// Combined: [Module Name] / [Folder Path]
+	"github.com/mikeaustin71/PackageStruct02/pkgStr/strStuff"
 )
 
 func main() {
 
-	var myStrStuff myStuff.StrStuff
-
+	myStrStuffer := new(strStuff.StrStuff)
+	_ = myStrStuffer
 }

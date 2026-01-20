@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/TypeArchitecture/03_TypeNewPtr/app/appTest"
+
+	"github.com/mikeaustin71/TypeArchitecture/03_TypeNewPtr/app/appTest"
 )
 
 func main() {

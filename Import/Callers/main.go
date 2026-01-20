@@ -1,7 +1,7 @@
 package main
 
 import (
-	sUtil "golangmikesamples/Import/03_util-example/strutil"
+	sUtil "github.com/mikeaustin71/Import/03_util-example/strutil"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package strStuff
 
 import (
-	custErr "golangmikesamples/PackageStruct02/pkgStr/customErr"
-	emp "golangmikesamples/PackageStruct02/pkgStr/employee"
+	custErr "github.com/mikeaustin71/PackageStruct02/pkgStr/customErr"
+	emp "github.com/mikeaustin71/PackageStruct02/pkgStr/employee"
 )
 
 type myStdErr = custErr.StdBasicError
@@ -30,7 +30,7 @@ func (s *StrStuff) SetTheString(str string) error {
 
 		return &myStdError{
 			ErrPrefix:  ePrefix,
-			ErrMessage: err.Error(),
+			ErrMessage: "Used to be err.Error()",
 		}
 
 	}

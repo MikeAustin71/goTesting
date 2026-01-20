@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/TypeArchitecture/02_TypeStruct/common"
+
+	"github.com/mikeaustin71/TypeArchitecture/02_TypeStruct/common"
 )
 
 func main() {

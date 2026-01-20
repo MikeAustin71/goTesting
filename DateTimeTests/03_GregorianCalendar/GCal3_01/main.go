@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/DateTimeTests/03_GregorianCalendar/GCal3_01/TestMain"
-	"golangmikesamples/DateTimeTests/03_GregorianCalendar/datetime"
 	"math/big"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/mikeaustin71/DateTimeTests/03_GregorianCalendar/GCal3_01/TestMain"
+	"github.com/mikeaustin71/DateTimeTests/03_GregorianCalendar/datetime"
 )
 
 type JDNConversionTestDto struct {

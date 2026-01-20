@@ -1,6 +1,9 @@
 package employee
 
-import "fmt"
+import (
+	"fmt"
+	//"github.com/mikeaustin71/PackageStruct02/pkgStr/customErr"
+)
 
 type employeeHelper struct{}
 

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/MathHelper/01_SquareRootOp/SquareRoot/common"
+	"github.com/mikeaustin71/MathHelper/01_SquareRootOp/SquareRoot/common"
 )
 
 func main() {

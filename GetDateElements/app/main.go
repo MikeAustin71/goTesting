@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/GetDateElements/common"
 	"time"
+
+	"github.com/mikeaustin71/GetDateElements/common"
 )
 
 /*

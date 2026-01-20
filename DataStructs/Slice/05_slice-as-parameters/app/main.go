@@ -4,7 +4,8 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/DataStructs/Slice/05_slice-as-parameters/common"
+
+	"github.com/mikeaustin71/DataStructs/Slice/05_slice-as-parameters/common"
 )
 
 func main() {

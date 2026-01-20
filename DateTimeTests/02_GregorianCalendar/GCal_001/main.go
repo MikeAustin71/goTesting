@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/DateTimeTests/02_GregorianCalendar/GCal_Libs01"
 	"math/big"
 	"strings"
+
+	"github.com/mikeaustin71/DateTimeTests/02_GregorianCalendar/GCal_Libs01"
 )
 
 func main() {

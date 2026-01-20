@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/Division/0100_string-division/0103_intarydto/common"
+
+	"github.com/mikeaustin71/Division/0100_string-division/0103_intarydto/common"
 )
 
 /*

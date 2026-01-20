@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/DateTimeTests/01_RevisedJulianCalendar/RJC_005/libs"
 	"strings"
+
+	"github.com/mikeaustin71/DateTimeTests/01_RevisedJulianCalendar/RJC_005/libs"
 )
 
 // "D:/gowork/src/bitbucket.org\\AmarilloMike\\GolangMikeSamples"

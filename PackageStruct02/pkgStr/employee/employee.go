@@ -2,10 +2,11 @@ package employee
 
 import (
 	"fmt"
-	custErr "golangmikesamples/PackageStruct02/pkgStr/customErr"
+
+	"github.com/mikeaustin71/PackageStruct02/pkgStr/customErr"
 )
 
-type myStdErr = custErr.StdBasicError
+type myStdErr = customErr.StdBasicError
 
 type Employee struct {
 	Name string

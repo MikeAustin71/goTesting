@@ -3,7 +3,8 @@ package main
 // D:\GoProjects\MikeAustin71\goTesting\Enums\05_enumstringtimezones\timezones\ianatimezones.go
 import (
 	"fmt"
-	"golangmikesamples/Enums/05_enumstringtimezones/timezones"
+
+	"github.com/mikeaustin71/Enums/05_enumstringtimezones/timezones"
 )
 
 func main() {

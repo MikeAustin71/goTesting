@@ -11,7 +11,8 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/Identifiers/ExportedIdentifiers/strUtilTest"
+
+	"github.com/mikeaustin71/Identifiers/ExportedIdentifiers/strUtilTest"
 )
 
 func main() {

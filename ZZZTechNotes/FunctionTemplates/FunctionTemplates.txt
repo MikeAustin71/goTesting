@@ -17,6 +17,18 @@ Main Error Prefix
 	}
 
 -------------------------------------------------------------------
+ Low-Level Method Signature
+-------------------------------------------------------------------
+func (bigFloatPwr *bigFloatRaiseToPower) raiseToPowerMul(
+  base *big.Float,
+  power int64,
+  mode big.RoundingMode,
+  errPrefDto *ePref.ErrPrefixDto) (*big.Float, error) {
+
+    ...
+}
+
+-------------------------------------------------------------------
  Low-Level Lock Code
 -------------------------------------------------------------------
 
@@ -48,30 +60,6 @@ Low-Level Error Prefix
 	}
 
 
-
-
- *******************************************************
-  Convert Number String to Big Int
-  May have to search for:
-    expectedResultBigInt := big.NewInt(int64(
-    expectedBigInt := big.NewInt(int64(
- *******************************************************
-
-	expectedNumStr := "705432"
-
-	expectedBigInt, isOk := big.NewInt(0).SetString(expectedNumStr, 10)
-
-	if !isOk {
-		t.Errorf("%v\n" +
-			"Error returned by:\n"+
-			"expectedBigInt, isOk := big.NewInt(0).SetString(expectedNumStr, 10)\n"+
-			"expectedNumStr= '%v'\n" +
-			"Error: isOk == false\n\n",
-			ePrefix,
-			expectedNumStr)
-
-		return
-	}
 
 
  *******************************************************

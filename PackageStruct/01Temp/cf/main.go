@@ -9,9 +9,10 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/PackageStruct/01Temp/tempconv"
 	"os"
 	"strconv"
+
+	"github.com/mikeaustin71/PackageStruct/01Temp/tempconv"
 )
 
 func main() {

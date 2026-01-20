@@ -2,7 +2,7 @@ package main
 
 // D:\GoProjects\MikeAustin71\goTesting\DateTimeFormatsUtility\app\main.go
 import (
-	"golangmikesamples/DateTimeFormatsUtility/common"
+	"github.com/mikeaustin71/DateTimeFormatsUtility/common"
 	//"time"
 	//"fmt"
 )

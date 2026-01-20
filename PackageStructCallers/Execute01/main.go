@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/PackageStruct02/pkgStr/strStuff"
+
+	"github.com/mikeaustin71/PackageStruct02/pkgStr/strStuff"
 )
 
 func main() {

@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"golangmikesamples/DateTimeTests/01_RevisedJulianCalendar/RJC_Libs02"
 	"math/big"
 	"strings"
+
+	"github.com/mikeaustin71/DateTimeTests/01_RevisedJulianCalendar/RJC_Libs02"
 )
 
 func main() {

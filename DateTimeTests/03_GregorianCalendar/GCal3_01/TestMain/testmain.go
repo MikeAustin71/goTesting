@@ -2,11 +2,12 @@ package TestMain
 
 import (
 	"fmt"
-	"golangmikesamples/DateTimeTests/03_GregorianCalendar/datetime"
 	"math"
 	"reflect"
 	"strings"
 	"sync"
+
+	"github.com/mikeaustin71/DateTimeTests/03_GregorianCalendar/datetime"
 )
 
 type TestMain struct {
