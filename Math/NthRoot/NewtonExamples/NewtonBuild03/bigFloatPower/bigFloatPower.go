@@ -1,4 +1,4 @@
-package NewtonBuild03
+package bigFloatPower
 
 import (
 	"math/big"
@@ -12,9 +12,10 @@ type BigFloatPower struct {
 }
 
 func (bigFloatPwr *BigFloatPower) RaiseToPower(
-	base *big.Float,
-	power int64,
-	mode big.RoundingMode) (*big.Float, error) {
+	baseBigFloat *big.Float,
+	powerInt64 int64,
+	maxInternalPrecisionUint uint,
+	roundingMode big.RoundingMode) (*big.Float, error) {
 
 	if bigFloatPwr.lock == nil {
 		bigFloatPwr.lock = new(sync.Mutex)
@@ -37,14 +38,19 @@ func (bigFloatPwr *BigFloatPower) RaiseToPower(
 		return new(big.Float), err
 	}
 
-	if base == nil {
+	if baseBigFloat == nil {
 
 		return new(big.Float),
 			&InputPtrNilError{
 				ErrPrefix:     ePrefix.String(),
-				ParameterName: "'bNum'",
+				ParameterName: "'baseBigFloat'",
 			}
 	}
 
-	return new(big.Float), nil
+	return new(bigFloatRaiseToPower).raiseToPowerIntBySquaring(
+		baseBigFloat,
+		powerInt64,
+		maxInternalPrecisionUint,
+		roundingMode,
+		ePrefix)
 }

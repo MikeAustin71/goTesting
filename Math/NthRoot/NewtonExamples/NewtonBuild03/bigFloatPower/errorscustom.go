@@ -1,4 +1,4 @@
-package NewtonBuild03
+package bigFloatPower
 
 import (
 	"fmt"
@@ -16,7 +16,7 @@ type FuncReturnError struct {
 }
 
 // Error
-// The following format is used to intialize
+// The following format is used to initialize
 // this type of error:
 //
 // EXAMPLE #1:
@@ -101,8 +101,8 @@ func (e *FuncReturnError) Unwrap() error {
 }
 
 // InputPtrNilError
-// Custom error message used to format error message
-// in the case of a nil input parmeter pointer
+// Custom error message used to format an error message
+// in the case of a nil input parameter pointer.
 //
 // Example Usage:
 //
