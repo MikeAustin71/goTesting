@@ -47,7 +47,7 @@ func (bigFloatPwr *BigFloatPower) RaiseToPower(
 			}
 	}
 
-	return new(bigFloatRaiseToPower).raiseToPowerIntBySquaring(
+	return new(bigFloatRaiseToPower).mikeRaiseToPowerIntBySquaring(
 		baseBigFloat,
 		powerInt64,
 		maxInternalPrecisionUint,

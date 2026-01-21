@@ -121,7 +121,7 @@ func (bigFloatPwr *bigFloatRaiseToPower) raiseToPowerIntBySquaring(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errPrefDto,
 		"bigFloatRaiseToPower.raiseToPowerIntBySquaring",
 		"")
 
@@ -184,6 +184,232 @@ func (bigFloatPwr *bigFloatRaiseToPower) raiseToPowerIntBySquaring(
 		base.Mul(base, base)
 		n >>= 1
 	}
+
+	return result, nil
+}
+
+// mikeRaiseToPowerIntBySquaring
+//
+//		Raises a *big.Float value to a power using the exponentiation by
+//		squaring algorithm. This method is generally more efficient than
+//		the standard multiplication method for large exponents.
+//
+//		The returned *big.Float value is raised to the power specified by
+//		the 'powerInt64' parameter. The internal precision of the
+//		calculation and the precision of the returned value are determined
+//		by the 'maxInternalPrecisionUint' parameter.
+//
+//		Negative exponents are supported using the identity:
+//		x^(-n) = 1 / (x^n).
+//
+//		No rounding is performed on the final result, but the calculation
+//		accuracy is limited by the 'maxInternalPrecisionUint' value, and
+//		the big.Float rounding mode is set to 'roundingMode'.
+//
+//	 Input parameter 'maxInternalPrecisionUint' describes the number of
+//	 bits of mantissa precision that can be used in the calculation.
+func (bigFloatPwr *bigFloatRaiseToPower) mikeRaiseToPowerIntBySquaring(
+	baseBigFloat *big.Float,
+	powerInt64 int64,
+	maxInternalPrecisionUint uint,
+	roundingMode big.RoundingMode,
+	errPrefDto *ePref.ErrPrefixDto) (*big.Float, error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errPrefDto,
+		"bigFloatRaiseToPower.mikeRaiseToPowerIntBySquaring",
+		"")
+
+	if err != nil {
+		return new(big.Float).
+				SetPrec(maxInternalPrecisionUint).
+				SetMode(roundingMode).
+				SetInt64(0),
+			err
+	}
+
+	if baseBigFloat == nil {
+
+		return new(big.Float).
+				SetPrec(maxInternalPrecisionUint).
+				SetMode(roundingMode).
+				SetInt64(0),
+			&InputPtrNilError{
+				ErrPrefix:     ePrefix.String(),
+				ParameterName: "'baseBigFloat'",
+			}
+	}
+
+	// x^0 = 1
+	if powerInt64 == 0 {
+		return new(big.Float).
+			SetPrec(maxInternalPrecisionUint).
+			SetMode(roundingMode).
+			SetInt64(1), nil
+	}
+
+	// Prepare result and base
+	result := new(big.Float).
+		SetPrec(maxInternalPrecisionUint).
+		SetMode(roundingMode).
+		SetInt64(1)
+
+	base := new(big.Float).
+		SetPrec(maxInternalPrecisionUint).
+		SetMode(roundingMode).
+		Copy(baseBigFloat)
+
+	n := powerInt64
+
+	// Negative exponent: x^(-n) = 1 / x^n
+	if n < 0 {
+
+		n = -n
+
+		one := new(big.Float).
+			SetPrec(maxInternalPrecisionUint).
+			SetMode(roundingMode).
+			SetInt64(1)
+
+		_ = base.Quo(one, base) // base = 1/x
+
+		base.SetPrec(base.MinPrec())
+	}
+
+	// Exponentiation by squaring
+	for n > 1 {
+
+		if n%2 != 0 {
+			// n is odd
+			result.Mul(result, base)
+		}
+
+		base.Mul(base, base)
+
+		n = n / 2
+
+	}
+
+	result.Mul(result, base)
+
+	result.SetPrec(result.MinPrec())
+
+	return result, nil
+}
+
+// mike2RaiseToPowerIntBySquaring
+//
+//		Raises a *big.Float value to a power using the exponentiation by
+//		squaring algorithm. This method is generally more efficient than
+//		the standard multiplication method for large exponents.
+//
+//		The returned *big.Float value is raised to the power specified by
+//		the 'powerInt64' parameter. The internal precision of the
+//		calculation and the precision of the returned value are determined
+//		by the 'maxInternalPrecisionUint' parameter.
+//
+//		Negative exponents are supported using the identity:
+//		x^(-n) = 1 / (x^n).
+//
+//		No rounding is performed on the final result, but the calculation
+//		accuracy is limited by the 'maxInternalPrecisionUint' value, and
+//		the big.Float rounding mode is set to 'roundingMode'.
+//
+//	 Input parameter 'maxInternalPrecisionUint' describes the number of
+//	 bits of mantissa precision that can be used in the calculation.
+func (bigFloatPwr *bigFloatRaiseToPower) mike2RaiseToPowerIntBySquaring(
+	baseBigFloat *big.Float,
+	powerInt64 int64,
+	maxInternalPrecisionUint uint,
+	roundingMode big.RoundingMode,
+	errPrefDto *ePref.ErrPrefixDto) (*big.Float, error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errPrefDto,
+		"bigFloatRaiseToPower.mikeRaiseToPowerIntBySquaring",
+		"")
+
+	if err != nil {
+		return new(big.Float).
+				SetPrec(maxInternalPrecisionUint).
+				SetMode(roundingMode).
+				SetInt64(0),
+			err
+	}
+
+	if baseBigFloat == nil {
+
+		return new(big.Float).
+				SetPrec(maxInternalPrecisionUint).
+				SetMode(roundingMode).
+				SetInt64(0),
+			&InputPtrNilError{
+				ErrPrefix:     ePrefix.String(),
+				ParameterName: "'baseBigFloat'",
+			}
+	}
+
+	// x^0 = 1
+	if powerInt64 == 0 {
+		return new(big.Float).
+			SetPrec(maxInternalPrecisionUint).
+			SetMode(roundingMode).
+			SetInt64(1), nil
+	}
+
+	// Prepare result and base
+	result := new(big.Float).
+		SetPrec(maxInternalPrecisionUint).
+		SetMode(roundingMode).
+		SetInt64(1)
+
+	base := new(big.Float).
+		SetPrec(maxInternalPrecisionUint).
+		SetMode(roundingMode).
+		Copy(baseBigFloat)
+
+	n := powerInt64
+
+	// Negative exponent: x^(-n) = 1 / x^n
+	if n < 0 {
+
+		n = -n
+
+		one := new(big.Float).
+			SetPrec(maxInternalPrecisionUint).
+			SetMode(roundingMode).
+			SetInt64(1)
+
+		_ = base.Quo(one, base) // base = 1/x
+
+		//base.SetPrec(base.MinPrec())
+	}
+
+	// Exponentiation by squaring
+	for n > 1 {
+
+		if n%2 != 0 {
+			// n is odd
+			result.Mul(result, base)
+		}
+
+		base.Mul(base, base)
+
+		n = n / 2
+
+	}
+
+	result.Mul(result, base)
+
+	// result.SetPrec(result.MinPrec())
 
 	return result, nil
 }

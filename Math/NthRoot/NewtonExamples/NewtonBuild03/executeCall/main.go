@@ -24,14 +24,23 @@ func main() {
 		return
 	}
 
+	//            1         2         3         4         5
+	// 0.1234567890123456789012345678901234567890123456789012345678901234567890
 	// 0.37885748409213036900649240796424989244463341114874
-	expectedNumStr := "0.3788574840921303690064"
+	// 0.381092243252215736754799834645158054396255083282423348
+
+	//1.382^-3 = 0.37885748409213036900649240796424989244463341114874
+
+	subFunctionName := "mikeRaiseToPowerBySquaring()"
+
+	// 1.382^3
+	expectedNumStr := "0.37885748409213036900649240796424989244463341114874"
 
 	base := big.NewFloat(1.382)
 
-	powerInt64 := int64(-3)
+	powerInt64 := int64(3)
 
-	maxInternalPrecisionUint := uint(4096)
+	maxInternalPrecisionUint := uint(12288)
 
 	roundingMode := big.AwayFromZero
 
@@ -39,7 +48,7 @@ func main() {
 
 	subBreakStr := strings.Repeat("-", 65)
 
-	setupStr := "Preparing to call: raiseToPowerBySquaring()"
+	setupStr := fmt.Sprintf("Preparing to call: %v()", subFunctionName)
 
 	fmt.Printf("\n\n %v\n"+
 		" Function: %v\n"+
@@ -89,7 +98,7 @@ func main() {
 
 	}
 
-	setupStr = "Successful Return from: raiseToPowerBySquaring()"
+	setupStr = fmt.Sprintf("Successful Return from: %v", subFunctionName)
 
 	resultRoundingMode := result.Mode()
 
@@ -97,10 +106,15 @@ func main() {
 
 	resultPrecisionUint := result.Prec()
 
+	count1 := "           1         2         3         4         5         6         7"
+	count2 := "0.1234567890123456789012345678901234567890123456789012345678901234567890"
+
 	fmt.Printf(" %v\n"+
-		" Function: %v\n"+
+		"     Function: %v\n"+
 		" %v\n"+
-		" Results: raiseToPowerBySquaring()\n"+
+		" Results: %v\n"+
+		"                       %v\n"+
+		"                       %v\n"+
 		"      Expected Result: %v\n"+
 		"        Actual Result: %v\n"+
 		" Actual Rounding Mode: %v\n"+
@@ -115,6 +129,9 @@ func main() {
 		breakStr,
 		ePrefix.String(),
 		subBreakStr,
+		subFunctionName,
+		count1,
+		count2,
 		expectedNumStr,
 		result.Text('f', -1),
 		resultRoundingMode.String(),

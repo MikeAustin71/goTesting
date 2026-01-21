@@ -17,13 +17,20 @@ func main() {
 
 	*/
 
-	radicandNumStr := "8"
-	nthRootInt64 := int64(23)
-	maxInternalPrecisionUint := uint(16384)
-	targetResultPrecisionUint := uint(50)
-	firstGuessAccuracyThresholdStr := "0.000015"
-	extraStepsCushionInt := 100
-	expectedResultNumStr := "1.0946235364347187301608050894219178703121159477156"
+	/*
+			nthRoot = 3
+			Radicand = 2.639514968
+		  1.382^3 = 2.639514968
+
+	*/
+
+	radicandNumStr := "2.639514968"
+	nthRootInt64 := int64(3)
+	maxInternalPrecisionUint := uint(12288)
+	targetResultPrecisionUint := uint(12288)
+	firstGuessAccuracyThresholdStr := "0.0000000000000000001"
+	extraStepsCushionInt := 5
+	expectedResultNumStr := "1.382"
 
 	err := Newton04(
 		radicandNumStr,
