@@ -64,7 +64,7 @@ func main() {
 
 	// TestModulo()
 
-	TestNewtonNthRoot01()
+	TestNewtonNthRoot03()
 
 	// TestNewtonNthRoot02()
 }
@@ -979,7 +979,7 @@ func TestNewtonNthRoot02() {
 // on the order of + or - 0.5.
 func TestNewtonNthRoot03() {
 
-	funcName := "TestNewtonNthRoot02()"
+	funcName := "TestNewtonNthRoot03()"
 	var alphaStr string
 
 	breakStr := strings.Repeat("-", 40)

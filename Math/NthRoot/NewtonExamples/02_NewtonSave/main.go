@@ -5,10 +5,18 @@ import (
 	"math"
 	"math/big"
 	"strings"
+	"time"
 )
 
 // This is a backup of 01_NewtonExample
 func main() {
+
+	mainTest02()
+
+	return
+}
+
+func mainTest01() {
 
 	/*
 		GolanSqrtExample()
@@ -24,11 +32,16 @@ func main() {
 
 	*/
 
+	fmt.Printf("Running mainTest01()\n\n")
+
 	radicandNumStr := "2.639514968"
 	nthRootInt64 := int64(3)
+
 	maxInternalPrecisionUint := uint(12288)
 	targetResultPrecisionUint := uint(12288)
-	firstGuessAccuracyThresholdStr := "0.0000000000000000001"
+
+	// Previous: "0.0000000000000000001"
+	firstGuessAccuracyThresholdStr := "0.5"
 	extraStepsCushionInt := 5
 	expectedResultNumStr := "1.382"
 
@@ -52,6 +65,37 @@ func main() {
 	// Newton03()
 	// TestNewtonInitialGuess()
 	// TestBigFloatPower()
+
+}
+
+func mainTest02() {
+
+	fmt.Printf("Running mainTest02()\n\n")
+
+	radicandNumStr := "2.639514968"
+	nthRootInt64 := int64(3)
+
+	maxInternalPrecisionUint := uint(2048)
+	targetResultPrecisionUint := uint(2048)
+
+	firstGuessAccuracyThresholdStr := "25.0"
+	extraStepsCushionInt := 0
+	expectedResultNumStr := "1.382"
+
+	err := Newton04(
+		radicandNumStr,
+		nthRootInt64,
+		maxInternalPrecisionUint,
+		targetResultPrecisionUint,
+		firstGuessAccuracyThresholdStr,
+		extraStepsCushionInt,
+		expectedResultNumStr)
+
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+	}
+
+	return
 }
 
 func GolanSqrtExample() {
@@ -772,6 +816,8 @@ func Newton04(
 
 	accuracyThreshold.SetPrec(accuracyThreshold.MinPrec())
 
+	startTime := time.Now()
+
 	xK,
 		raisedToPower,
 		absAlphaDelta,
@@ -782,6 +828,10 @@ func Newton04(
 		accuracyThreshold,
 		maxInternalPrecisionUint)
 
+	endTime := time.Now()
+
+	operationDurationStr := DurationBreakdown(startTime, endTime)
+
 	fmt.Printf("First Guess Data\n"+
 		"%v\n"+
 		"xK (Guess)    = %v\n"+
@@ -789,6 +839,7 @@ func Newton04(
 		"raisedToPower = %v\n"+
 		"absAlphaDelta = %v\n"+
 		"compareResult = %v\n"+
+		"Operation Duration: %v\n"+
 		"  Cycle Count = %v\n"+
 		"%v\n\n",
 		subBreakStr,
@@ -797,6 +848,7 @@ func Newton04(
 		raisedToPower.Text('f', 20),
 		absAlphaDelta.Text('f', 20),
 		compareResult,
+		operationDurationStr,
 		cycleCount,
 		subBreakStr)
 
@@ -818,6 +870,8 @@ func Newton04(
 
 	fmt.Printf("The number of steps = '%v'\n\n",
 		steps)
+
+	startTime = time.Now()
 
 	for i := 0; i <= steps; i++ {
 		fac1 = BigFloatPower(xK, n_minus_1_int64, maxInternalPrecisionUint)
@@ -847,19 +901,25 @@ func Newton04(
 
 	lenOfActualResultNumStr := len(actualResultNumStr)
 
+	endTime = time.Now()
+
+	operationDurationStr = DurationBreakdown(startTime, endTime)
+
 	fmt.Printf("Calculation Results\n"+
 		"%v\n"+
 		"                  Alpha:  %v \n"+
 		"                      n:  %v \n"+
+		"     Operation Duration:  %v \n"+
 		"   Length Actual Result:  %v \n"+
 		"        Expected Result:  %v \n"+
 		"Formatted Actual Result:  %v \n"+
-		"          Actual Result:\n"+
+		"  Actual Rounded Result:\n"+
 		"                          %v \n\n"+
 		"%v\n\n",
 		breakStr,
 		alpha.Text('f', -1),
 		n_int64,
+		operationDurationStr,
 		lenOfActualResultNumStr,
 		expectedResultNumStr,
 		formattedActualResultNumStr,
@@ -896,6 +956,33 @@ func Newton04(
 	fmt.Printf(breakStr + "\n")
 
 	return nil
+}
+
+// DurationBreakdown returns a formatted string describing the
+// elapsed time between start and end in minutes, seconds,
+// milliseconds, microseconds, and nanoseconds.
+func DurationBreakdown(start, end time.Time) string {
+	d := end.Sub(start)
+
+	// Extract components
+	minutes := d / time.Minute
+	d -= minutes * time.Minute
+
+	seconds := d / time.Second
+	d -= seconds * time.Second
+
+	milliseconds := d / time.Millisecond
+	d -= milliseconds * time.Millisecond
+
+	microseconds := d / time.Microsecond
+	d -= microseconds * time.Microsecond
+
+	nanoseconds := d // remaining
+
+	return fmt.Sprintf(
+		"%d min, %d sec, %d milliseconds, %d microseconds, %d nanoseconds",
+		minutes, seconds, milliseconds, microseconds, nanoseconds,
+	)
 }
 
 func NewtonInitialGuess(
