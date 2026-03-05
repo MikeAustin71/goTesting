@@ -1,0 +1,16 @@
+
+
+TestNumDecDigitsFromPrecisionBits()
+Successful Completion
+nRoot = 5
+radicandString = 5065.42
+accuracyThresholdStr = 0.000000000000000000000005
+maxInternalNumOfDecDigits = 128
+cycleCount = 83
+compareResult = -1
+guess          = 5.50710164237813796128
+expected guess = 5.507101642378137961
+raisedToPower = 5065.42000000000000037262
+absRadicandDelta = 0.00000000000000000042
+Elapsed Time: 0 min, 0 sec, 0 milliseconds, 0 microseconds, 0 nanoseconds
+

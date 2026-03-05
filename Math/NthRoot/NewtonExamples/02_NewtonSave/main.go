@@ -823,8 +823,8 @@ func Newton04(
 		absAlphaDelta,
 		compareResult,
 		cycleCount := NewtonInitialGuess(
-		n_int64,
-		alpha,
+		n_int64, // nthRootInt64
+		alpha,   // radicandNumStr
 		accuracyThreshold,
 		maxInternalPrecisionUint)
 
