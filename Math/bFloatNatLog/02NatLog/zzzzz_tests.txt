@@ -1,5 +1,23 @@
+=== RUN   Test_Natural_Logarithm_Dispatcher_Range
+    xt_naturalLogDispatcher_01_test.go:55: 
+        ln(1.0001) mismatch
+        Expected: 0.000099995000333308335416654166250
+        Actual:   0.000099995000333308380778377230
+    xt_naturalLogDispatcher_01_test.go:55: 
+        ln(0.125) mismatch
+        Expected: -2.079441541679835928251696364374
+        Actual:   -2.079441541679835928251696364375
+    xt_naturalLogDispatcher_01_test.go:55: 
+        ln(8) mismatch
+        Expected: 2.079441541679835928251696364374
+        Actual:   2.079441541679835928251696364375
+    xt_naturalLogDispatcher_01_test.go:55: 
+        ln(17.5) mismatch
+        Expected: 2.862200880929468980535438056161
+        Actual:   2.862200880929468370288879955211
+--- FAIL: Test_Natural_Logarithm_Dispatcher_Range (0.02s)
 === RUN   Test_Natural_Logarithm_Taylor_01
 --- PASS: Test_Natural_Logarithm_Taylor_01 (0.01s)
-PASS
-
-Process finished with the exit code 0
+FAIL
+exit status 1
+FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	0.214s
