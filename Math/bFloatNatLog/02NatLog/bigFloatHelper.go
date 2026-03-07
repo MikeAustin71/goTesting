@@ -49,6 +49,38 @@ func (bFloatHlpr *BigFloatHelper) ComputeBigFloatDecimalDigits(
 	return uint(uint64NumOfDigits)
 }
 
+func (bFloatHlpr *BigFloatHelper) CountDigits(numStr string, decimalSeparator rune) (intDigits int, decDigits int) {
+
+	intDigits = 0
+	decDigits = 0
+
+	var isInt bool
+
+	isInt = true
+
+	for _, v := range numStr {
+
+		if v == decimalSeparator {
+			isInt = false
+			continue
+		}
+
+		if v >= '0' && v <= '9' {
+
+			if isInt {
+				// Integer digit to left of decimal point
+				intDigits++
+			} else {
+				// Decimal digit to right of decimal point
+				decDigits++
+			}
+		}
+
+	}
+
+	return intDigits, decDigits
+}
+
 // DurationBreakdown ...
 func (bFloatHlpr *BigFloatHelper) DurationBreakdown(start, end time.Time) string {
 	d := end.Sub(start)
