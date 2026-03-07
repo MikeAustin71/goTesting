@@ -90,6 +90,7 @@ func init() {
 //	Returns the full-precision cached value of π.
 //	Internal algorithms should always use this value directly.
 func (nlSharedMech *naturalLogSharedMechanics) getPi(prec uint) *big.Float {
+	// 'prec' is currently ignored for internal use; we always return piFull.
 	return piFull
 }
 
@@ -98,5 +99,6 @@ func (nlSharedMech *naturalLogSharedMechanics) getPi(prec uint) *big.Float {
 //	Returns the full-precision cached value of ln(2).
 //	Internal algorithms should always use this value directly.
 func (nlSharedMech *naturalLogSharedMechanics) getLn2(prec uint) *big.Float {
+	// 'prec' is currently ignored for internal use; we always return ln2Full.
 	return ln2Full
 }

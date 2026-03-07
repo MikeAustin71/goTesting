@@ -1,0 +1,5 @@
+=== RUN   Test_Natural_Logarithm_Taylor_01
+--- PASS: Test_Natural_Logarithm_Taylor_01 (0.01s)
+PASS
+
+Process finished with the exit code 0

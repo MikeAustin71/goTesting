@@ -9,6 +9,7 @@ type naturalLogAGMMechanics struct{}
 func (nlAgmMech *naturalLogAGMMechanics) agm(a0, b0 *big.Float, workPrec uint) *big.Float {
 
 	a := new(big.Float).SetPrec(workPrec)
+
 	b := new(big.Float).SetPrec(workPrec)
 
 	a.Set(a0)

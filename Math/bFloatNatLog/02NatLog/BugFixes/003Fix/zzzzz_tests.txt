@@ -1,0 +1,17 @@
+=== RUN   Test_Natural_Logarithm_AGM_Direct_01
+    xt_naturalLogAGM_01_test.go:55: Test_Natural_Logarithm_Direct_AGM_01()
+        Error: Unexpected Result!
+        Because expectedResult != actualResultStr
+        Expected actualResultStr = '8.082402253926244350924204901779'
+          Actual actualResultStr = '-271.161743850566280484209826728158'
+
+--- FAIL: Test_Natural_Logarithm_AGM_Direct_01 (0.00s)
+
+=== RUN   Test_Natural_Logarithm_AGM_Mantissa_01
+    xt_naturalLogAGM_01_test.go:113: Test_Natural_Logarithm_AGM_Mantissa_01()
+        Error: Unexpected Result!
+        Because expectedResult != actualResultStr
+        Expected actualResultStr = '8.082402253926244350924204901779'
+          Actual actualResultStr = '7.852526100847009792737300146587'
+
+--- FAIL: Test_Natural_Logarithm_AGM_Mantissa_01 (0.00s)
