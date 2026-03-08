@@ -10,4 +10,4 @@
 --- PASS: Test_Natural_Logarithm_Taylor_02 (0.01s)
 FAIL
 exit status 1
-FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	0.209s
+FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	0.125s
