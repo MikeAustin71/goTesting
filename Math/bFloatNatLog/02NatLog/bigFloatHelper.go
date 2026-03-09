@@ -9,6 +9,33 @@ import (
 
 type BigFloatHelper struct{}
 
+// TODO: Unfinished. FIX THIS!
+func (bFloatHlpr *BigFloatHelper) EulersNoToPower(exponent uint) *big.Float {
+
+	nlSharedMech := new(naturalLogSharedMechanics)
+
+	eulersNumber := nlSharedMech.getEulersNum(0)
+
+	basePrec := eulersNumber.Prec()
+
+	bFloatResult := new(big.Float).
+		SetMode(big.AwayFromZero).
+		SetPrec(basePrec + 1024).
+		Set(eulersNumber)
+
+	bigFloatExponent := new(big.Float).
+		SetMode(big.AwayFromZero).
+		SetPrec(basePrec).
+		SetUint64(uint64(exponent))
+
+	for i := uint(1); i < exponent; i++ {
+
+		bFloatResult.Mul(bFloatResult, bigFloatExponent)
+	}
+
+	return bFloatResult
+}
+
 // ComputeBigFloatPrecisionBits ...
 func (bFloatHlpr *BigFloatHelper) ComputeBigFloatPrecisionBits(resultDecDigits uint, multiplyCount uint) uint {
 
