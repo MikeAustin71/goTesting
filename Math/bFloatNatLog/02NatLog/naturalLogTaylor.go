@@ -12,6 +12,11 @@ type naturalLogTaylor struct{}
 //
 //	x = m * 2^k, m in [1,2)
 //	ln(x) = ln(m) + k * ln(2)
+//
+// Special-case: If x is extremely close to 1, skip normalization
+// to avoid rounding error amplification.
+//
+// 007Fix
 func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float, error) {
 
 	if x.Sign() <= 0 {
@@ -24,9 +29,34 @@ func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float,
 	xWork := nlShared.newFloat(workPrec)
 	xWork.Set(x)
 
-	// Normalize mantissa into [1,2) and get exponent k.
-	nlAGMMech := new(naturalLogAGMMechanics)
-	m, k := nlAGMMech.normalizeMantissa(xWork, workPrec)
+	// ------------------------------------------------------------
+	// Near-1 bypass
+	// ------------------------------------------------------------
+	one := nlShared.newFloat(workPrec)
+	one.SetFloat64(1.0)
+
+	delta := nlShared.newFloat(workPrec)
+	delta.Sub(xWork, one)
+
+	absDelta := nlShared.newFloat(workPrec)
+	absDelta.Abs(delta)
+
+	threshold := nlShared.newFloat(workPrec)
+	threshold.SetFloat64(1e-3) // safe for all near-1 values
+
+	var m *big.Float
+	var k int
+
+	if absDelta.Cmp(threshold) < 0 {
+		// Skip normalization entirely
+		m = nlShared.newFloat(workPrec)
+		m.Set(xWork)
+		k = 0
+	} else {
+		// Normal path
+		nlAGMMech := new(naturalLogAGMMechanics)
+		m, k = nlAGMMech.normalizeMantissa(xWork, workPrec)
+	}
 
 	// ln(m) via Taylor core.
 	nlTaylorMech := new(naturalLogTaylorMechanics)
