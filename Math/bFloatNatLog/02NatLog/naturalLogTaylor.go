@@ -16,13 +16,14 @@ type naturalLogTaylor struct{}
 // Special-case: If x is extremely close to 1, skip normalization
 // to avoid rounding error amplification.
 //
-// 007Fix
+// 007Fix (near-1 bypass) retained.
 func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float, error) {
 
 	if x.Sign() <= 0 {
 		return nil, fmt.Errorf("lnTaylorDirect: x must be > 0")
 	}
 
+	// Working precision with safety margin.
 	workPrec := prec + 64
 	nlShared := new(naturalLogShared)
 
@@ -30,7 +31,7 @@ func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float,
 	xWork.Set(x)
 
 	// ------------------------------------------------------------
-	// Near-1 bypass
+	// Near-1 bypass (007Fix)
 	// ------------------------------------------------------------
 	one := nlShared.newFloat(workPrec)
 	one.SetFloat64(1.0)
@@ -41,24 +42,26 @@ func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float,
 	absDelta := nlShared.newFloat(workPrec)
 	absDelta.Abs(delta)
 
+	// Threshold for "near 1" — values with |x - 1| < 1e-3
+	// are handled without mantissa normalization.
 	threshold := nlShared.newFloat(workPrec)
-	threshold.SetFloat64(1e-3) // safe for all near-1 values
+	threshold.SetFloat64(1e-3)
 
 	var m *big.Float
 	var k int
 
 	if absDelta.Cmp(threshold) < 0 {
-		// Skip normalization entirely
+		// Skip normalization entirely for near-1 values.
 		m = nlShared.newFloat(workPrec)
 		m.Set(xWork)
 		k = 0
 	} else {
-		// Normal path
+		// Normal path: mantissa/exponent normalization.
 		nlAGMMech := new(naturalLogAGMMechanics)
 		m, k = nlAGMMech.normalizeMantissa(xWork, workPrec)
 	}
 
-	// ln(m) via Taylor core.
+	// ln(m) via Taylor core (now decimal-aware stopping rule).
 	nlTaylorMech := new(naturalLogTaylorMechanics)
 	lnmWork := nlTaylorMech.lnTaylorCore(m, workPrec)
 

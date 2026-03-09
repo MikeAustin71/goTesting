@@ -1,5 +1,5 @@
 === RUN   Test_Natural_Logarithm_Dispatcher_Range
-    xt_naturalLogDispatcher_01_test.go:66: 
+    xt_naturalLogDispatcher_01_test.go:66:
         ln(1.0001) mismatch
         Expected: 0.000099995000333308335333166680951
         Actual:   0.000099995000333308380778377230489
@@ -7,43 +7,43 @@
 === RUN   Test_Natural_Logarithm_Taylor_01
 --- PASS: Test_Natural_Logarithm_Taylor_01 (0.01s)
 === RUN   Test_Natural_Logarithm_Taylor_02
---- PASS: Test_Natural_Logarithm_Taylor_02 (0.02s)
+--- PASS: Test_Natural_Logarithm_Taylor_02 (0.01s)
 === RUN   Test_Natural_Logarithm_Taylor_NearOne
-    xt_naturalLogTaylor_03_test.go:48: 
+    xt_naturalLogTaylor_03_test.go:48:
         ln(1.0000001) mismatch
         Expected: 0.000000099999995000000333333341666666708
         Actual:   0.000000099999995000056974130803067509659
-    xt_naturalLogTaylor_03_test.go:48: 
+    xt_naturalLogTaylor_03_test.go:48:
         ln(1.000001) mismatch
         Expected: 0.000000999999500000333333416666708333208
         Actual:   0.000000999999500000357640004371999315707
-    xt_naturalLogTaylor_03_test.go:48: 
+    xt_naturalLogTaylor_03_test.go:48:
         ln(1.00001) mismatch
         Expected: 0.000009999950000333341666708333208333208
         Actual:   0.000009999950000333357062110002369299336
-    xt_naturalLogTaylor_03_test.go:48: 
+    xt_naturalLogTaylor_03_test.go:48:
         ln(1.0001) mismatch
         Expected: 0.000099995000333308335333166680951
         Actual:   0.000099995000333308380778377230489
-    xt_naturalLogTaylor_03_test.go:48: 
+    xt_naturalLogTaylor_03_test.go:48:
         ln(1.001) mismatch
         Expected: 0.000999500333083423333416708333208
         Actual:   0.000999500333083533187605284746431
 --- FAIL: Test_Natural_Logarithm_Taylor_NearOne (0.01s)
 === RUN   Test_Natural_Logarithm_Taylor_NearMinusOne
-    xt_naturalLogTaylor_04_test.go:45: 
+    xt_naturalLogTaylor_04_test.go:45:
         ln(0.9999) mismatch
         Expected: -0.000100005000333416708416708333208
         Actual:   -0.000100005000333358326572270337636
-    xt_naturalLogTaylor_04_test.go:45: 
+    xt_naturalLogTaylor_04_test.go:45:
         ln(0.99999) mismatch
         Expected: -0.000010000050000333341666708333208
         Actual:   -0.000010000050000333307851983852299
-    xt_naturalLogTaylor_04_test.go:45: 
+    xt_naturalLogTaylor_04_test.go:45:
         ln(0.999999) mismatch
         Expected: -0.000001000000500000333333416666708
         Actual:   -0.000001000000500000303430390151452
---- FAIL: Test_Natural_Logarithm_Taylor_NearMinusOne (0.00s)
+--- FAIL: Test_Natural_Logarithm_Taylor_NearMinusOne (0.01s)
 FAIL
 exit status 1
-FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	0.285s
+FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	0.242s
