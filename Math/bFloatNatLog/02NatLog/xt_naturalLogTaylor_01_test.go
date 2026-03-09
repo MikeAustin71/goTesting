@@ -164,7 +164,7 @@ func Test_Natural_Logarithm_Taylor_03(t *testing.T) {
     "0.000000099999995000000333333308333335333333166666681"
   //   123456789012345678901234567890123456789012345678901
   //   ---------1---------2---------3---------4---------5
-  //     39- Decimal Digits of Accuracy
+  //     51- Decimal Digits of Accuracy
 
   startTime := time.Now()
 
