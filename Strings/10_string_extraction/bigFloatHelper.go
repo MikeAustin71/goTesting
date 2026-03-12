@@ -1,7 +1,6 @@
 package Strings_string_extraction10
 
 import (
-	"fmt"
 	"math"
 	"math/big"
 )
@@ -38,43 +37,6 @@ func (bFloatHlpr *BigFloatHelper) CountDigits(numStr string, decimalSeparator ru
 	}
 
 	return intDigits, decDigits
-}
-
-func (bFloatHlpr *BigFloatHelper) ConvertNumStrDigitsToBFloat(numStr *string, numStrDecimalDigits uint) (*big.Float, error) {
-
-	ePrefix := "ConvertNumStrDigitsToBFloat()"
-
-	if numStrDecimalDigits == 0 {
-		return eulersNumBaseFull, nil
-	}
-
-	if numStrDecimalDigits > uint(lenEulersNumberStr) {
-
-		return new(big.Float).SetInt(big.NewInt(0)),
-			fmt.Errorf("%v\n"+
-				"Error: Number of decimal digits requested (%v)\n"+
-				"is greater than the number of available digits in\n"+
-				"the Euler's number (%v).",
-				ePrefix,
-				numStrDecimalDigits,
-				lenEulersNumberStr)
-
-	}
-
-	bFloatEulersNumber, isOk := new(big.Float).
-		SetMode(big.AwayFromZero).
-		SetPrec(128).
-		SetString(eulersConstNumStr[:numStrDecimalDigits+2])
-
-	if !isOk {
-		return new(big.Float).SetInt(big.NewInt(0)),
-			fmt.Errorf("%v\n"+
-				"Error: Unable to convert string to big.Float.\n"+
-				"SetString(eulersConstNumStr[:numStrDecimalDigits+2]) Failed!\n\n",
-				ePrefix)
-	}
-
-	return bFloatEulersNumber, nil
 }
 
 // ComputeBigFloatPrecisionBits ...

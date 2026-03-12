@@ -9,7 +9,10 @@ import (
 
 type BigFloatHelper struct{}
 
-// ComputeBigFloatPrecisionBits ...
+// ComputeBigFloatPrecisionBits
+//
+//	Calculates the big.Float bit precision needed to achieve the
+//	desired number of decimal digits of accuracy.
 func (bFloatHlpr *BigFloatHelper) ComputeBigFloatPrecisionBits(resultDecDigits uint, multiplyCount uint) uint {
 
 	baseBits := float64(resultDecDigits) * 3.321928094887362
@@ -18,7 +21,10 @@ func (bFloatHlpr *BigFloatHelper) ComputeBigFloatPrecisionBits(resultDecDigits u
 	return uint(math.Ceil(baseBits + safety))
 }
 
-// ComputeBigFloatDecimalDigits ...
+// ComputeBigFloatDecimalDigits
+//
+//	Calculates the number of decimal digits achievable for a
+//	given big.Float precision value in bits.
 func (bFloatHlpr *BigFloatHelper) ComputeBigFloatDecimalDigits(
 	precisionBits uint,
 	digitsSafetyMargin uint) uint {
@@ -41,14 +47,22 @@ func (bFloatHlpr *BigFloatHelper) ComputeBigFloatDecimalDigits(
 		SetMode(big.AwayFromZero).
 		SetUint64(uint64(precisionBits))
 
-	bFloatDecDigits := new(big.Float).Quo(bFloatPrecisionBits, bFloatLog210)
-	bFloatDecDigits.Add(bFloatDecDigits, bFloatDigitSafetyMargin)
+	bFloatDecimalDigits :=
+		new(big.Float).Quo(bFloatPrecisionBits, bFloatLog210)
 
-	uint64NumOfDigits, _ := bFloatDecDigits.Uint64()
+	bFloatDecimalDigits.
+		Add(bFloatDecimalDigits, bFloatDigitSafetyMargin)
 
-	return uint(uint64NumOfDigits)
+	uint64NumOfDecimalDigits, _ := bFloatDecimalDigits.Uint64()
+
+	return uint(uint64NumOfDecimalDigits)
 }
 
+// CountDigits
+//
+//	Takes a string representation of a number and a decimal
+//	separator and counts the integer and decimal digits contained
+//	in input parameter 'numStr'.
 func (bFloatHlpr *BigFloatHelper) CountDigits(numStr string, decimalSeparator rune) (intDigits int, decDigits int) {
 
 	intDigits = 0

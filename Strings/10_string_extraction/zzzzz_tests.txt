@@ -5,7 +5,7 @@
 === RUN   Test_getPi_02
 --- PASS: Test_getPi_02 (0.00s)
 === RUN   Test_getPi_03
---- PASS: Test_getPi_03 (0.06s)
+--- PASS: Test_getPi_03 (0.05s)
 === RUN   Test_getPi_04
 --- PASS: Test_getPi_04 (0.05s)
 === RUN   Test_getLn2_01
@@ -25,4 +25,4 @@
 === RUN   Test_getEulersNumber_Default_04
 --- PASS: Test_getEulersNumber_Default_04 (0.32s)
 PASS
-ok  	github.com/mikeaustin71/Strings/10_string_extraction	1.743s
+ok  	github.com/mikeaustin71/Strings/10_string_extraction	1.742s
