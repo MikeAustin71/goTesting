@@ -1095,8 +1095,11 @@ func (nlSharedMech *naturalLogSharedMechanics) getLn2(decimalDigitsOfPrecision u
 		decimalDigitsOfPrecision = uint(lenNatLogNumberStr - 2)
 	}
 
+	// DEFAULT_BASE_NUM_DECIMAL_DIGITS generate 2,000 decimal digits
+	// in the returned value for Natural Log of 2.
 	if decimalDigitsOfPrecision == DEFAULT_BASE_NUM_DECIMAL_DIGITS {
 
+		// Natural log of 2 with 2,000 decimal digits.
 		newNatLog2Number := new(big.Float).Copy(ln2Full)
 
 		return newNatLog2Number

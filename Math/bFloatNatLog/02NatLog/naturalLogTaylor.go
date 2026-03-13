@@ -74,13 +74,18 @@ func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float,
 	//ln2 := nlSharedMech.getLn2(workPrec)
 
 	// 008Fix01 - Calculate number of digits needed for
-	// Natural Log of 2 constant value.
-	uintNumOfLn2DecimalDigits := uint(DEFAULT_BASE_NUM_DECIMAL_DIGITS)
+	// constant value: Natural Log of 2.
+	//
+	// Note: DEFAULT_BASE_NUM_DECIMAL_DIGITS will generate
+	// Natural log of 2 with 2,000 decimal digits.
+	uintNumOfLn2DecimalDigits := DEFAULT_BASE_NUM_DECIMAL_DIGITS
 
-	if workingDecimalDigitsOfPrecision > 5000 {
+	if workingDecimalDigitsOfPrecision > 10000 {
+		uintNumOfLn2DecimalDigits = 20003 // max available digits
+	} else if workingDecimalDigitsOfPrecision > 5000 {
 		uintNumOfLn2DecimalDigits = 10000
 	} else if workingDecimalDigitsOfPrecision > 1000 {
-		uintNumOfLn2DecimalDigits = 4000
+		uintNumOfLn2DecimalDigits = 5000
 	}
 
 	ln2 := nlSharedMech.getLn2(uintNumOfLn2DecimalDigits)
