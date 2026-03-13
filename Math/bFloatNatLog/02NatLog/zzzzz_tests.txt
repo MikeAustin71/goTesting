@@ -1,11 +1,7 @@
 === RUN   Test_CountDigits_01
 --- PASS: Test_CountDigits_01 (0.00s)
 === RUN   Test_Natural_Logarithm_Dispatcher_Range
-    xt_naturalLogDispatcher_01_test.go:66: 
-        ln(1.0001) mismatch
-        Expected: 0.000099995000333308335333166680951
-        Actual:   0.000099995000333308380778377230489
---- FAIL: Test_Natural_Logarithm_Dispatcher_Range (0.02s)
+--- PASS: Test_Natural_Logarithm_Dispatcher_Range (0.00s)
 === RUN   Test_getPi_01
 --- PASS: Test_getPi_01 (0.00s)
 === RUN   Test_getPi_02
@@ -27,9 +23,9 @@
 === RUN   Test_getEulersNumber_Default_02
 --- PASS: Test_getEulersNumber_Default_02 (0.00s)
 === RUN   Test_getEulersNumber_Default_03
---- PASS: Test_getEulersNumber_Default_03 (0.97s)
+--- PASS: Test_getEulersNumber_Default_03 (0.96s)
 === RUN   Test_getEulersNumber_Default_04
---- PASS: Test_getEulersNumber_Default_04 (0.34s)
+--- PASS: Test_getEulersNumber_Default_04 (0.32s)
 === RUN   Test_Natural_Logarithm_Taylor_01
 --- PASS: Test_Natural_Logarithm_Taylor_01 (0.01s)
 === RUN   Test_Natural_Logarithm_Taylor_02
@@ -39,12 +35,12 @@
 
 Test_Natural_Logarithm_Taylor_03()
 Successful Completion !
-expected Result = '0.000000099999995000000333333308333335333333166666681'
-  actual Result = '0.000000099999995000000333333308333335333333166666681'
-XValue = '1.0000001'
-     Big Float Precision Bits - prec = '247'
-   Decimal Digits of Input Precision = '74'
-Decimal Digits of Expected Precision = '51'
+expected Result = '0.00009999500033330833533316668095113106348206440107107551266129432164491607407171907733994721288860975'
+  actual Result = '0.00009999500033330833533316668095113106348206440107107551266129432164491607407171907733994721288860975'
+XValue = '1.0001'
+     Big Float Precision Bits - workingPrecision = '404'
+   Decimal Digits of Input Precision = '122'
+Decimal Digits of Expected Precision = '101'
 naturalLogTaylor.lnTaylorDirect() Execution Time: 0 min, 0 sec, 0 milliseconds, 0 microseconds, 0 nanoseconds
 
 --- PASS: Test_Natural_Logarithm_Taylor_03 (0.00s)
@@ -70,6 +66,8 @@ naturalLogTaylor.lnTaylorDirect() Execution Time: 0 min, 0 sec, 0 milliseconds, 
         Expected: 0.000999500333083423333416708333208
         Actual:   0.000999500333083533187605284746431
 --- FAIL: Test_Natural_Logarithm_Taylor_NearOne (0.01s)
+=== RUN   Test_Natural_Logarithm_Taylor_NearMinusOne_01
+--- PASS: Test_Natural_Logarithm_Taylor_NearMinusOne_01 (0.00s)
 FAIL
 exit status 1
-FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	1.837s
+FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	1.790s
