@@ -1,92 +1,113 @@
 package naturalLogCalcs
 
 import (
-	"math/big"
-	"testing"
+  "math/big"
+  "testing"
 )
 
 func Test_Natural_Logarithm_Dispatcher_Range(t *testing.T) {
 
-	tests := []struct {
-		xStr     string
-		expected string
-	}{
-		// Near 1
-		// {"1.0001", "0.000099995000333308335416654166250"},
-		{"1.0001", "0.000099995000333308335333166681"},
-		//               Calculator   0.00009999500033330833533316668095113106348206440107107551266129432164491607407171907733994721288860975
-		// Original Local Copilot     0.000099995000333308335333166680951
-		//      Bing Copilot          0.000099995000333308335333166680555341171633562180100586805488327095926381493498941289678
-		//                    Google  0.00009999500033329732302199351671461307129289868903350109720552546654971833095803199109004110324709458890
-		//                              12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
-		//                                       1         2         3         4         5         6         7         8         9         0
-		//                                                                                                                                 0
-		//                                                                                                                                 1
+  ePrefix := "Test_Natural_Logarithm_Dispatcher_Range()"
 
-		// Small
-		{"0.125", "-2.079441541679835928251696364375"},
-		//                       −2.0794415416798359282516963643745
-		// Large
-		{"3237", "8.082402253926244350924204901779"},
+  tests := []struct {
+    xStr     string
+    expected string
+  }{
+    // Near 1
+    // {"1.0001", "0.000099995000333308335416654166250"},
+    {"1.0001", "0.00009999500033330833533316668095113106348206440107107551266129432164491607407171907733994721288860975"},
+    //                          12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
+    //                                   1         2         3         4         5         6         7         8         9         0
+    //                                                                                                                             0
+    //                                                                                                                             1
+    //               Calculator   0.00009999500033330833533316668095113106348206440107107551266129432164491607407171907733994721288860975
+    // Original Local Copilot     0.000099995000333308335333166680951
+    //      Bing Copilot          0.000099995000333308335333166680555341171633562180100586805488327095926381493498941289678
+    //                    Google  0.00009999500033329732302199351671461307129289868903350109720552546654971833095803199109004110324709458890
 
-		// Powers of 2
-		{"2", "0.693147180559945309417232121458"},
-		{"4", "1.386294361119890618834464242916"},
-		{"8", "2.079441541679835928251696364375"},
-		//                   2.079441541679835928251696364374 5
-		// Mid-range
-		// {"17.5", "2.862200880929468980535438056161"},
-		{"17.5", "2.86220088092946837028887995521119080"},
-	}
+    // Small
+    {"0.125", "-2.079441541679835928251696364375"},
+    //                       −2.0794415416798359282516963643745
+    // Large
+    {"3237", "8.082402253926244350924204901779"},
 
-	var workingPrecision uint
+    // Powers of 2
+    {"2", "0.693147180559945309417232121458"},
+    {"4", "1.386294361119890618834464242916"},
+    {"8", "2.079441541679835928251696364375"},
+    //                   2.079441541679835928251696364374 5
+    // Mid-range
+    // {"17.5", "2.862200880929468980535438056161"},
+    {"17.5", "2.86220088092946837028887995521119080"},
+  }
 
-	var sourceDecimalDigits int
+  dispatch := new(NaturalLogDispatcher)
 
-	dispatch := new(NaturalLogDispatcher)
+  bFloatHlpr := new(BigFloatHelper)
 
-	bFloatHlpr := new(BigFloatHelper)
+  var workingPrecision uint
 
-	var decDigits int
+  var sourceExpectedDecimalDigits, sourceInputDecimalDigits, sourceCalculatedDecimalDigits int
 
-	for _, tc := range tests {
+  for idx, tc := range tests {
 
-		_, sourceDecimalDigits = bFloatHlpr.CountDigits(tc.expected, '.')
+    tc.expected = bFloatHlpr.CleanNumberString(tc.expected)
 
-		if sourceDecimalDigits == 0 {
-			sourceDecimalDigits = 3
-		} else {
-			sourceDecimalDigits += 3
-		}
+    _, sourceExpectedDecimalDigits = bFloatHlpr.CountDigits(tc.expected, '.')
 
-		workingPrecision = bFloatHlpr.ComputeBigFloatPrecisionBits(uint(sourceDecimalDigits), 1)
+    _, sourceInputDecimalDigits = bFloatHlpr.CountDigits(tc.xStr, '.')
 
-		x, ok := new(big.Float).
-			SetMode(big.AwayFromZero).
-			SetPrec(workingPrecision).
-			SetString(tc.xStr)
+    if sourceInputDecimalDigits > sourceExpectedDecimalDigits {
+      sourceCalculatedDecimalDigits = sourceInputDecimalDigits
+    } else {
+      sourceCalculatedDecimalDigits = sourceExpectedDecimalDigits
+    }
 
-		if !ok {
-			t.Errorf("FAILED: SetString(%v)", tc.xStr)
-			continue
-		}
+    if sourceCalculatedDecimalDigits == 0 {
+      sourceCalculatedDecimalDigits = 3
+    } else {
+      sourceCalculatedDecimalDigits += 3
+    }
 
-		actual, err := dispatch.Compute(x, workingPrecision)
+    workingPrecision = bFloatHlpr.ComputeBigFloatPrecisionBits(uint(sourceCalculatedDecimalDigits), 1)
 
-		if err != nil {
-			t.Errorf("Error computing ln(%v): %v", tc.xStr, err)
-			continue
-		}
+    bFloatXValue, ok := new(big.Float).
+      SetMode(big.AwayFromZero).
+      SetPrec(workingPrecision).
+      SetString(tc.xStr)
 
-		_, decDigits = bFloatHlpr.CountDigits(tc.expected, '.')
+    if !ok {
+      t.Errorf("%v\n"+
+        "FAILED: SetString(%v)\n"+
+        "Structure Index: %v\n",
+        ePrefix, tc.xStr, idx)
+      continue
+    }
 
-		//actualStr := actual.Text('f', 30)
+    actual, err := dispatch.Compute(bFloatXValue, workingPrecision)
 
-		actualStr := actual.Text('f', decDigits)
+    if err != nil {
+      t.Errorf("Error computing ln(%v): %v", tc.xStr, err)
+      continue
+    }
 
-		if actualStr != tc.expected {
-			t.Errorf("\nln(%v) mismatch\nExpected: %v\nActual:   %v\n",
-				tc.xStr, tc.expected, actualStr)
-		}
-	}
+    actualStr := actual.Text('f', sourceExpectedDecimalDigits)
+
+    if actualStr != tc.expected {
+      t.Errorf("%v\n"+
+        "ln(%v) mismatch\n"+
+        "Expected: %v\n"+
+        "  Actual: %v\n"+
+        "sourceCalculatedDecimalDigits = %v\n"+
+        "Big Float Precision Bits - workingPrecision = %v\n",
+        ePrefix,
+        tc.xStr,
+        tc.expected,
+        actualStr,
+        sourceCalculatedDecimalDigits,
+        workingPrecision)
+    }
+
+  } // End of 'for' loop
+
 }

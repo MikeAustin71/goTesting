@@ -70,20 +70,6 @@ naturalLogTaylor.lnTaylorDirect() Execution Time: 0 min, 0 sec, 0 milliseconds, 
         Expected: 0.000999500333083423333416708333208
         Actual:   0.000999500333083533187605284746431
 --- FAIL: Test_Natural_Logarithm_Taylor_NearOne (0.01s)
-=== RUN   Test_Natural_Logarithm_Taylor_NearMinusOne
-    xt_naturalLogTaylor_04_test.go:45: 
-        ln(0.9999) mismatch
-        Expected: -0.000100005000333416708416708333208
-        Actual:   -0.000100005000333358326572270337636
-    xt_naturalLogTaylor_04_test.go:45: 
-        ln(0.99999) mismatch
-        Expected: -0.000010000050000333341666708333208
-        Actual:   -0.000010000050000333307851983852299
-    xt_naturalLogTaylor_04_test.go:45: 
-        ln(0.999999) mismatch
-        Expected: -0.000001000000500000333333416666708
-        Actual:   -0.000001000000500000303430390151452
---- FAIL: Test_Natural_Logarithm_Taylor_NearMinusOne (0.01s)
 FAIL
 exit status 1
 FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	1.837s
