@@ -87,7 +87,11 @@ func Test_Natural_Logarithm_Dispatcher_Range(t *testing.T) {
 		actual, err := dispatch.Compute(bFloatXValue, workingPrecision)
 
 		if err != nil {
-			t.Errorf("Error computing ln(%v): %v", tc.xStr, err)
+			t.Errorf("%v\n"+
+				"Error computing ln(%v): %v\n",
+				ePrefix,
+				tc.xStr,
+				err)
 			continue
 		}
 
