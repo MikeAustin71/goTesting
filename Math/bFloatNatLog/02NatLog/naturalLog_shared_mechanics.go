@@ -1038,15 +1038,17 @@ func (nlSharedMech *naturalLogSharedMechanics) getEulersNum(decimalDigitsOfPreci
 
 // getPi
 //
-//		Returns the full-precision cached value of π.
-//		Internal algorithms should always use this value directly.
+//			Returns the full-precision cached value of π.
+//			Internal algorithms should always use this value directly.
 //
-//	 When the input parameter 'decimalDigitsOfPrecision' is set to
-//	 zero (0), the default value of pi is returned to 2,000 digits
-//	 of decimal precision.
+//		 When the input parameter 'decimalDigitsOfPrecision' is set to
+//		 zero (0), the default value of pi is returned to 2,000 digits
+//		 of decimal precision.
 //
-//	 The maximum number of decimal digits of precision is limited to
-//	 20,000.
+//		 The maximum number of decimal digits of precision is limited to
+//		 20,000.
+//
+//	  Note: DEFAULT_BASE_NUM_DECIMAL_DIGITS = 0
 func (nlSharedMech *naturalLogSharedMechanics) getPi(decimalDigitsOfPrecision uint) *big.Float {
 
 	if int(decimalDigitsOfPrecision) > (lenPiNumberStr - 2) {

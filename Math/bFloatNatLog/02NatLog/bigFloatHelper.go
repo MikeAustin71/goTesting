@@ -58,6 +58,26 @@ func (bFloatHlpr *BigFloatHelper) ComputeBigFloatDecimalDigits(
 	return uint(uint64NumOfDecimalDigits)
 }
 
+func (bFloatHlpr *BigFloatHelper) CleanNumberString(rawNumberStr string) string {
+
+	var cleanRuneArray = make([]rune, 0, len(rawNumberStr))
+
+	for _, v := range rawNumberStr {
+
+		if v >= '0' && v <= '9' {
+
+			cleanRuneArray = append(cleanRuneArray, v)
+		}
+
+		if v == '.' || v == '-' || v == '+' {
+			cleanRuneArray = append(cleanRuneArray, v)
+		}
+
+	}
+
+	return string(cleanRuneArray)
+}
+
 // CountDigits
 //
 //	Takes a string representation of a number and a decimal

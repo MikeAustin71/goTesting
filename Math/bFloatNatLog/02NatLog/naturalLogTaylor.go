@@ -25,6 +25,10 @@ func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float,
 
 	// Working precision with safety margin.
 	workPrec := prec + 64
+
+	// 008Fix01 - Calculate working decimal digits of precision.
+	workingDecimalDigitsOfPrecision := new(BigFloatHelper).ComputeBigFloatPrecisionBits(workPrec, 1)
+
 	nlShared := new(naturalLogShared)
 
 	xWork := nlShared.newFloat(workPrec)
@@ -67,7 +71,19 @@ func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float,
 
 	// k * ln(2)
 	nlSharedMech := new(naturalLogSharedMechanics)
-	ln2 := nlSharedMech.getLn2(workPrec)
+	//ln2 := nlSharedMech.getLn2(workPrec)
+
+	// 008Fix01 - Calculate number of digits needed for
+	// Natural Log of 2 constant value.
+	uintNumOfLn2DecimalDigits := uint(DEFAULT_BASE_NUM_DECIMAL_DIGITS)
+
+	if workingDecimalDigitsOfPrecision > 5000 {
+		uintNumOfLn2DecimalDigits = 10000
+	} else if workingDecimalDigitsOfPrecision > 1000 {
+		uintNumOfLn2DecimalDigits = 4000
+	}
+
+	ln2 := nlSharedMech.getLn2(uintNumOfLn2DecimalDigits)
 
 	kInt := big.NewInt(int64(k))
 	kFloat := nlShared.newFloat(workPrec)

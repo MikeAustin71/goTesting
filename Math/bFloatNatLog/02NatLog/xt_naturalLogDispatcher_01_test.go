@@ -13,7 +13,15 @@ func Test_Natural_Logarithm_Dispatcher_Range(t *testing.T) {
 	}{
 		// Near 1
 		// {"1.0001", "0.000099995000333308335416654166250"},
-		{"1.0001", "0.000099995000333308335333166680951"},
+		{"1.0001", "0.000099995000333308335333166681"},
+		//               Calculator   0.00009999500033330833533316668095113106348206440107107551266129432164491607407171907733994721288860975
+		// Original Local Copilot     0.000099995000333308335333166680951
+		//      Bing Copilot          0.000099995000333308335333166680555341171633562180100586805488327095926381493498941289678
+		//                    Google  0.00009999500033329732302199351671461307129289868903350109720552546654971833095803199109004110324709458890
+		//                              12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
+		//                                       1         2         3         4         5         6         7         8         9         0
+		//                                                                                                                                 0
+		//                                                                                                                                 1
 
 		// Small
 		{"0.125", "-2.079441541679835928251696364375"},
@@ -31,7 +39,10 @@ func Test_Natural_Logarithm_Dispatcher_Range(t *testing.T) {
 		{"17.5", "2.86220088092946837028887995521119080"},
 	}
 
-	prec := uint(7000)
+	var workingPrecision uint
+
+	var sourceDecimalDigits int
+
 	dispatch := new(NaturalLogDispatcher)
 
 	bFloatHlpr := new(BigFloatHelper)
@@ -40,8 +51,19 @@ func Test_Natural_Logarithm_Dispatcher_Range(t *testing.T) {
 
 	for _, tc := range tests {
 
+		_, sourceDecimalDigits = bFloatHlpr.CountDigits(tc.expected, '.')
+
+		if sourceDecimalDigits == 0 {
+			sourceDecimalDigits = 3
+		} else {
+			sourceDecimalDigits += 3
+		}
+
+		workingPrecision = bFloatHlpr.ComputeBigFloatPrecisionBits(uint(sourceDecimalDigits), 1)
+
 		x, ok := new(big.Float).
 			SetMode(big.AwayFromZero).
+			SetPrec(workingPrecision).
 			SetString(tc.xStr)
 
 		if !ok {
@@ -49,7 +71,7 @@ func Test_Natural_Logarithm_Dispatcher_Range(t *testing.T) {
 			continue
 		}
 
-		actual, err := dispatch.Compute(x, prec)
+		actual, err := dispatch.Compute(x, workingPrecision)
 
 		if err != nil {
 			t.Errorf("Error computing ln(%v): %v", tc.xStr, err)

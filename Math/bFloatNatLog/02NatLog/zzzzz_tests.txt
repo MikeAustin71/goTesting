@@ -1,0 +1,89 @@
+=== RUN   Test_CountDigits_01
+--- PASS: Test_CountDigits_01 (0.00s)
+=== RUN   Test_Natural_Logarithm_Dispatcher_Range
+    xt_naturalLogDispatcher_01_test.go:66: 
+        ln(1.0001) mismatch
+        Expected: 0.000099995000333308335333166680951
+        Actual:   0.000099995000333308380778377230489
+--- FAIL: Test_Natural_Logarithm_Dispatcher_Range (0.02s)
+=== RUN   Test_getPi_01
+--- PASS: Test_getPi_01 (0.00s)
+=== RUN   Test_getPi_02
+--- PASS: Test_getPi_02 (0.00s)
+=== RUN   Test_getPi_03
+--- PASS: Test_getPi_03 (0.05s)
+=== RUN   Test_getPi_04
+--- PASS: Test_getPi_04 (0.05s)
+=== RUN   Test_getLn2_01
+--- PASS: Test_getLn2_01 (0.00s)
+=== RUN   Test_getLn2_02
+--- PASS: Test_getLn2_02 (0.00s)
+=== RUN   Test_getLn2_03
+--- PASS: Test_getLn2_03 (0.15s)
+=== RUN   Test_getLn2_04
+--- PASS: Test_getLn2_04 (0.05s)
+=== RUN   Test_getEulersNumber_Default_01
+--- PASS: Test_getEulersNumber_Default_01 (0.00s)
+=== RUN   Test_getEulersNumber_Default_02
+--- PASS: Test_getEulersNumber_Default_02 (0.00s)
+=== RUN   Test_getEulersNumber_Default_03
+--- PASS: Test_getEulersNumber_Default_03 (0.97s)
+=== RUN   Test_getEulersNumber_Default_04
+--- PASS: Test_getEulersNumber_Default_04 (0.34s)
+=== RUN   Test_Natural_Logarithm_Taylor_01
+--- PASS: Test_Natural_Logarithm_Taylor_01 (0.01s)
+=== RUN   Test_Natural_Logarithm_Taylor_02
+--- PASS: Test_Natural_Logarithm_Taylor_02 (0.01s)
+=== RUN   Test_Natural_Logarithm_Taylor_03
+
+
+Test_Natural_Logarithm_Taylor_03()
+Successful Completion !
+expected Result = '0.000000099999995000000333333308333335333333166666681'
+  actual Result = '0.000000099999995000000333333308333335333333166666681'
+XValue = '1.0000001'
+     Big Float Precision Bits - prec = '247'
+   Decimal Digits of Input Precision = '74'
+Decimal Digits of Expected Precision = '51'
+naturalLogTaylor.lnTaylorDirect() Execution Time: 0 min, 0 sec, 0 milliseconds, 0 microseconds, 0 nanoseconds
+
+--- PASS: Test_Natural_Logarithm_Taylor_03 (0.00s)
+=== RUN   Test_Natural_Logarithm_Taylor_NearOne
+    xt_naturalLogTaylor_03_test.go:48: 
+        ln(1.0000001) mismatch
+        Expected: 0.000000099999995000000333333341666666708
+        Actual:   0.000000099999995000056974130803067509659
+    xt_naturalLogTaylor_03_test.go:48: 
+        ln(1.000001) mismatch
+        Expected: 0.000000999999500000333333416666708333208
+        Actual:   0.000000999999500000357640004371999315707
+    xt_naturalLogTaylor_03_test.go:48: 
+        ln(1.00001) mismatch
+        Expected: 0.000009999950000333341666708333208333208
+        Actual:   0.000009999950000333357062110002369299336
+    xt_naturalLogTaylor_03_test.go:48: 
+        ln(1.0001) mismatch
+        Expected: 0.000099995000333308335333166680951
+        Actual:   0.000099995000333308380778377230489
+    xt_naturalLogTaylor_03_test.go:48: 
+        ln(1.001) mismatch
+        Expected: 0.000999500333083423333416708333208
+        Actual:   0.000999500333083533187605284746431
+--- FAIL: Test_Natural_Logarithm_Taylor_NearOne (0.01s)
+=== RUN   Test_Natural_Logarithm_Taylor_NearMinusOne
+    xt_naturalLogTaylor_04_test.go:45: 
+        ln(0.9999) mismatch
+        Expected: -0.000100005000333416708416708333208
+        Actual:   -0.000100005000333358326572270337636
+    xt_naturalLogTaylor_04_test.go:45: 
+        ln(0.99999) mismatch
+        Expected: -0.000010000050000333341666708333208
+        Actual:   -0.000010000050000333307851983852299
+    xt_naturalLogTaylor_04_test.go:45: 
+        ln(0.999999) mismatch
+        Expected: -0.000001000000500000333333416666708
+        Actual:   -0.000001000000500000303430390151452
+--- FAIL: Test_Natural_Logarithm_Taylor_NearMinusOne (0.01s)
+FAIL
+exit status 1
+FAIL	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	1.837s
