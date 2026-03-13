@@ -13,9 +13,10 @@ type BigFloatHelper struct{}
 //
 //	Calculates the big.Float bit precision needed to achieve the
 //	desired number of decimal digits of accuracy.
-func (bFloatHlpr *BigFloatHelper) ComputeBigFloatPrecisionBits(resultDecDigits uint, multiplyCount uint) uint {
+func (bFloatHlpr *BigFloatHelper) ComputeBigFloatPrecisionBits(resultDecimalDigits uint, multiplyCount uint) uint {
 
-	baseBits := float64(resultDecDigits) * 3.321928094887362
+	baseBits := float64(resultDecimalDigits) * 3.321928094887362
+
 	safety := 64.0 + (float64(multiplyCount) * 4.0)
 
 	return uint(math.Ceil(baseBits + safety))
@@ -26,7 +27,7 @@ func (bFloatHlpr *BigFloatHelper) ComputeBigFloatPrecisionBits(resultDecDigits u
 //	Calculates the number of decimal digits achievable for a
 //	given big.Float precision value in bits.
 func (bFloatHlpr *BigFloatHelper) ComputeBigFloatDecimalDigits(
-	precisionBits uint,
+	bigFloatPrecisionBits uint,
 	digitsSafetyMargin uint) uint {
 
 	bFloatRoundValue := new(big.Float).
@@ -45,7 +46,7 @@ func (bFloatHlpr *BigFloatHelper) ComputeBigFloatDecimalDigits(
 
 	bFloatPrecisionBits := new(big.Float).
 		SetMode(big.AwayFromZero).
-		SetUint64(uint64(precisionBits))
+		SetUint64(uint64(bigFloatPrecisionBits))
 
 	bFloatDecimalDigits :=
 		new(big.Float).Quo(bFloatPrecisionBits, bFloatLog210)

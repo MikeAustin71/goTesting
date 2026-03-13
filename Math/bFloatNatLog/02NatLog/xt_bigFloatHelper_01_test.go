@@ -1,6 +1,8 @@
 package naturalLogCalcs
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_CountDigits_01(t *testing.T) {
 
@@ -47,4 +49,87 @@ func Test_CountDigits_01(t *testing.T) {
 	}
 
 	return
+}
+
+func Test_CleanNumberString_01(t *testing.T) {
+
+	ePrefix := "Test_CleanNumberString_01"
+
+	tests := []struct {
+		DirtyString string
+		CleanString string
+	}{
+		{"123.456", "123.456"},
+		{"123 456", "123456"},
+		{"123,456.1233", "123456.1233"},
+		{"-123456.1233", "-123456.1233"},
+		{"+123456.1233", "+123456.1233"},
+		{"$123456.1233", "123456.1233"},
+		{"123456789", "123456789"},
+		{"123456789.1234568", "123456789.1234568"},
+		{"XXX123456789.1234568XXX", "123456789.1234568"},
+		{"@@@123456789.1234568@@@", "123456789.1234568"},
+		{"♣123456789.1234568♣", "123456789.1234568"},
+	}
+
+	var testResultStr string
+
+	bFloatHlpr := new(BigFloatHelper)
+
+	for idx, tCase := range tests {
+
+		testResultStr = bFloatHlpr.CleanNumberString(tCase.DirtyString)
+
+		if testResultStr != tCase.CleanString {
+			t.Errorf("%v\n"+
+				"Error: CleanString is INCORRECT!\n"+
+				"Test Case Index: %v\n"+
+				"Expected CleanString = '%v'\n"+
+				"  Actual CleanString = '%v'\n"+
+				"Test Index = %v\n",
+				ePrefix, idx, tCase.CleanString, testResultStr, idx)
+		}
+
+	}
+}
+
+func Test_ComputeBigFloatPrecisionBits_01(t *testing.T) {
+
+	uintNumOfDecimalDigits := uint(100)
+
+	expectedPrecisionResult := uint(397)
+
+	bFloatHlpr := new(BigFloatHelper)
+
+	actualPrecisionResult := bFloatHlpr.ComputeBigFloatPrecisionBits(uintNumOfDecimalDigits, 0)
+
+	if actualPrecisionResult != expectedPrecisionResult {
+		t.Errorf("Error: Precision Bits is INCORRECT!\n"+
+			"Expected Precision Bits = '%v'\n"+
+			"  Actual Precision Bits = '%v'\n",
+			expectedPrecisionResult, actualPrecisionResult)
+	}
+
+	return
+}
+
+func Test_ComputeBigFloatDecimalDigits_01(t *testing.T) {
+
+	inputPrecisionResult := uint(397)
+
+	expectedNumOfDecimalDigits := uint(120)
+
+	bFloatHlpr := new(BigFloatHelper)
+
+	actualNumOfDecimalDigits := bFloatHlpr.ComputeBigFloatDecimalDigits(inputPrecisionResult, 0)
+
+	if actualNumOfDecimalDigits != expectedNumOfDecimalDigits {
+		t.Errorf("Error: Decimal Digits is INCORRECT!\n"+
+			"Expected Decimal Digits = '%v'\n"+
+			"  Actual Decimal Digits = '%v'\n",
+			expectedNumOfDecimalDigits, actualNumOfDecimalDigits)
+	}
+
+	return
+
 }

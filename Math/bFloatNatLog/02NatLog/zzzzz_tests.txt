@@ -1,5 +1,11 @@
 === RUN   Test_CountDigits_01
 --- PASS: Test_CountDigits_01 (0.00s)
+=== RUN   Test_CleanNumberString_01
+--- PASS: Test_CleanNumberString_01 (0.00s)
+=== RUN   Test_ComputeBigFloatPrecisionBits_01
+--- PASS: Test_ComputeBigFloatPrecisionBits_01 (0.00s)
+=== RUN   Test_ComputeBigFloatDecimalDigits_01
+--- PASS: Test_ComputeBigFloatDecimalDigits_01 (0.00s)
 === RUN   Test_Natural_Logarithm_Dispatcher_Range
 --- PASS: Test_Natural_Logarithm_Dispatcher_Range (0.00s)
 === RUN   Test_getPi_01
@@ -15,7 +21,7 @@
 === RUN   Test_getLn2_02
 --- PASS: Test_getLn2_02 (0.00s)
 === RUN   Test_getLn2_03
---- PASS: Test_getLn2_03 (0.16s)
+--- PASS: Test_getLn2_03 (0.15s)
 === RUN   Test_getLn2_04
 --- PASS: Test_getLn2_04 (0.05s)
 === RUN   Test_getEulersNumber_Default_01
@@ -25,7 +31,7 @@
 === RUN   Test_getEulersNumber_Default_03
 --- PASS: Test_getEulersNumber_Default_03 (0.96s)
 === RUN   Test_getEulersNumber_Default_04
---- PASS: Test_getEulersNumber_Default_04 (0.32s)
+--- PASS: Test_getEulersNumber_Default_04 (0.33s)
 === RUN   Test_Natural_Logarithm_Taylor_01
 --- PASS: Test_Natural_Logarithm_Taylor_01 (0.00s)
 === RUN   Test_Natural_Logarithm_Taylor_02
@@ -37,4 +43,4 @@
 === RUN   Test_Natural_Logarithm_Taylor_NearMinusOne_01
 --- PASS: Test_Natural_Logarithm_Taylor_NearMinusOne_01 (0.00s)
 PASS
-ok  	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	1.922s
+ok  	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	2.294s
