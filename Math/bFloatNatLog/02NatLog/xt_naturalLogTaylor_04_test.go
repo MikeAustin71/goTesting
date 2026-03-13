@@ -66,11 +66,7 @@ func Test_Natural_Logarithm_Taylor_NearMinusOne_01(t *testing.T) {
 			sourceCalculatedDecimalDigits = sourceExpectedDecimalDigits
 		}
 
-		if sourceCalculatedDecimalDigits == 0 {
-			sourceCalculatedDecimalDigits = 3
-		} else {
-			sourceCalculatedDecimalDigits += 3
-		}
+		sourceCalculatedDecimalDigits += 3
 
 		workingPrecision = bFloatHlpr.ComputeBigFloatPrecisionBits(uint(sourceCalculatedDecimalDigits), 1)
 
