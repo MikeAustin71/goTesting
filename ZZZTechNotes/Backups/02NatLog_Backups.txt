@@ -1,0 +1,6 @@
+
+Backups for :
+ D:\GoProjects\MikeAustin71\goTesting\Math\bFloatNatLog\02NatLog
+
+ Are Stored at:
+ D:\Projects\Math\Math_Big_Float_Code\goTesting\Math\bFloatNatLog\Archive\02NatLog
