@@ -13,7 +13,7 @@
 === RUN   Test_getPi_02
 --- PASS: Test_getPi_02 (0.00s)
 === RUN   Test_getPi_03
---- PASS: Test_getPi_03 (0.06s)
+--- PASS: Test_getPi_03 (0.05s)
 === RUN   Test_getPi_04
 --- PASS: Test_getPi_04 (0.05s)
 === RUN   Test_getLn2_01
@@ -21,7 +21,7 @@
 === RUN   Test_getLn2_02
 --- PASS: Test_getLn2_02 (0.00s)
 === RUN   Test_getLn2_03
---- PASS: Test_getLn2_03 (0.15s)
+--- PASS: Test_getLn2_03 (0.16s)
 === RUN   Test_getLn2_04
 --- PASS: Test_getLn2_04 (0.05s)
 === RUN   Test_getEulersNumber_Default_01
@@ -29,9 +29,9 @@
 === RUN   Test_getEulersNumber_Default_02
 --- PASS: Test_getEulersNumber_Default_02 (0.00s)
 === RUN   Test_getEulersNumber_Default_03
---- PASS: Test_getEulersNumber_Default_03 (0.97s)
+--- PASS: Test_getEulersNumber_Default_03 (0.96s)
 === RUN   Test_getEulersNumber_Default_04
---- PASS: Test_getEulersNumber_Default_04 (0.33s)
+--- PASS: Test_getEulersNumber_Default_04 (0.32s)
 === RUN   Test_Natural_Logarithm_Taylor_01
 --- PASS: Test_Natural_Logarithm_Taylor_01 (0.00s)
 === RUN   Test_Natural_Logarithm_Taylor_02
@@ -43,4 +43,4 @@
 === RUN   Test_Natural_Logarithm_Taylor_NearMinusOne_01
 --- PASS: Test_Natural_Logarithm_Taylor_NearMinusOne_01 (0.00s)
 PASS
-ok  	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	1.824s
+ok  	github.com/mikeaustin71/Math/bFloatNatLog/02NatLog	1.765s
