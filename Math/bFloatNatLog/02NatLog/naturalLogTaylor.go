@@ -18,6 +18,10 @@ type naturalLogTaylor struct{}
 // to avoid rounding error amplification.
 func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float, error) {
 
+  ePrefix := "naturalLogTaylor.lnTaylorDirect()"
+
+  var err error
+
   if x.Sign() <= 0 {
     return nil, fmt.Errorf("lnTaylorDirect: x must be > 0")
   }
@@ -62,9 +66,24 @@ func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float,
     m.Set(xWork)
     k = 0
   } else {
+
+    // 010Fix - Error is now returned.
     // Normal path: x = m * 2^k, m in [1,2)
-    m, k = nlAGMMech.normalizeMantissa(xWork, workPrec)
-  }
+    m, k, err = nlAGMMech.normalizeMantissa(xWork, workPrec)
+
+    if err != nil {
+
+      return m,
+        &FuncReturnError{
+          ErrPrefix:  ePrefix,
+          ReturnFunc: "m, k, err = nlAGMMech.normalizeMantissa(xWork, workPrec)",
+          ErrContext: fmt.Sprintf("xWork='%v'",
+            xWork.Text('f', 10)),
+          ErrMessage: err.Error(),
+        }
+
+    }
+  } // End of else
 
   // ln(m) via Taylor core.
   lnmWork := nlTaylorMech.lnTaylorCore(m, workPrec)
