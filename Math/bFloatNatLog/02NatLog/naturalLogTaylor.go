@@ -1,8 +1,8 @@
 package naturalLogCalcs
 
 import (
-  "fmt"
-  "math/big"
+	"fmt"
+	"math/big"
 )
 
 type naturalLogTaylor struct{}
@@ -18,108 +18,108 @@ type naturalLogTaylor struct{}
 // to avoid rounding error amplification.
 func (nl *naturalLogTaylor) lnTaylorDirect(x *big.Float, prec uint) (*big.Float, error) {
 
-  ePrefix := "naturalLogTaylor.lnTaylorDirect()"
+	ePrefix := "naturalLogTaylor.lnTaylorDirect()"
 
-  var err error
+	var err error
 
-  if x.Sign() <= 0 {
-    return nil, fmt.Errorf("lnTaylorDirect: x must be > 0")
-  }
+	if x.Sign() <= 0 {
+		return nil, fmt.Errorf("lnTaylorDirect: x must be > 0")
+	}
 
-  nlShared := new(naturalLogShared)
-  nlSharedMech := new(naturalLogSharedMechanics)
-  nlAGMMech := new(naturalLogAGMMechanics)
-  nlTaylorMech := new(naturalLogTaylorMechanics)
-  bFloatHelper := new(BigFloatHelper)
+	nlShared := new(naturalLogShared)
+	nlSharedMech := new(naturalLogSharedMechanics)
+	nlAGMMech := new(naturalLogAGMMechanics)
+	nlTaylorMech := new(naturalLogTaylorMechanics)
+	bFloatHelper := new(BigFloatHelper)
 
-  // 09Fix: keep a modest safety margin on working precision.
-  workPrec := prec + 64
+	// 09Fix: keep a modest safety margin on working precision.
+	workPrec := prec + 64
 
-  // 008Fix01 - Calculate working decimal digits of precision.
-  workingDecimalDigitsOfPrecision := bFloatHelper.ComputeBigFloatPrecisionBits(workPrec, 1)
+	// 008Fix01 - Calculate working decimal digits of precision.
+	workingDecimalDigitsOfPrecision := bFloatHelper.ComputeBigFloatPrecisionBits(workPrec, 1)
 
-  xWork := nlShared.newFloat(workPrec)
-  xWork.Set(x)
+	xWork := nlShared.newFloat(workPrec)
+	xWork.Set(x)
 
-  // ------------------------------------------------------------
-  // Near-1 bypass
-  // ------------------------------------------------------------
-  one := nlShared.newFloat(workPrec)
-  one.SetFloat64(1.0)
+	// ------------------------------------------------------------
+	// Near-1 bypass
+	// ------------------------------------------------------------
+	one := nlShared.newFloat(workPrec)
+	one.SetFloat64(1.0)
 
-  delta := nlShared.newFloat(workPrec)
-  delta.Sub(xWork, one)
+	delta := nlShared.newFloat(workPrec)
+	delta.Sub(xWork, one)
 
-  absDelta := nlShared.newFloat(workPrec)
-  absDelta.Abs(delta)
+	absDelta := nlShared.newFloat(workPrec)
+	absDelta.Abs(delta)
 
-  // Fixed threshold is fine for your current precision regime.
-  threshold := nlShared.newFloat(workPrec)
-  threshold.SetFloat64(1e-3)
+	// Fixed threshold is fine for your current precision regime.
+	threshold := nlShared.newFloat(workPrec)
+	threshold.SetFloat64(1e-3)
 
-  var m *big.Float
-  var k int
+	var m *big.Float
+	var k int
 
-  if absDelta.Cmp(threshold) < 0 {
-    // Skip normalization entirely
-    m = nlShared.newFloat(workPrec)
-    m.Set(xWork)
-    k = 0
-  } else {
+	if absDelta.Cmp(threshold) < 0 {
+		// Skip normalization entirely
+		m = nlShared.newFloat(workPrec)
+		m.Set(xWork)
+		k = 0
+	} else {
 
-    // 010Fix - Error is now returned.
-    // Normal path: x = m * 2^k, m in [1,2)
-    m, k, err = nlAGMMech.normalizeMantissa(xWork, workPrec)
+		// 010Fix - Error is now returned.
+		// Normal path: x = m * 2^k, m in [1,2)
+		m, k, err = nlAGMMech.normalizeMantissa(xWork, workPrec)
 
-    if err != nil {
+		if err != nil {
 
-      return m,
-        &FuncReturnError{
-          ErrPrefix:  ePrefix,
-          ReturnFunc: "m, k, err = nlAGMMech.normalizeMantissa(xWork, workPrec)",
-          ErrContext: fmt.Sprintf("xWork='%v'",
-            xWork.Text('f', 10)),
-          ErrMessage: err.Error(),
-        }
+			return m,
+				&FuncReturnError{
+					ErrPrefix:  ePrefix,
+					ReturnFunc: "m, k, err = nlAGMMech.normalizeMantissa(xWork, workPrec)",
+					ErrContext: fmt.Sprintf("xWork='%v'",
+						xWork.Text('f', 10)),
+					ErrMessage: err.Error(),
+				}
 
-    }
-  } // End of else
+		}
+	} // End of else
 
-  // ln(m) via Taylor core.
-  lnmWork := nlTaylorMech.lnTaylorCore(m, workPrec)
+	// ln(m) via Taylor core.
+	lnmWork := nlTaylorMech.lnTaylorCore(m, workPrec)
 
-  // 008Fix01 - Calculate number of digits needed for
-  // constant value: Natural Log of 2.
-  //
-  // Note: DEFAULT_BASE_NUM_DECIMAL_DIGITS will generate
-  // Natural log of 2 with 2,000 decimal digits.
-  uintNumOfLn2DecimalDigits := DEFAULT_BASE_NUM_DECIMAL_DIGITS
+	// 008Fix01 - Calculate number of digits needed for
+	// constant value: Natural Log of 2.
+	//
+	// Note: DEFAULT_BASE_NUM_DECIMAL_DIGITS will generate
+	// Natural log of 2 with 2,000 decimal digits.
+	uintNumOfLn2DecimalDigits := DEFAULT_BASE_NUM_DECIMAL_DIGITS
 
-  if workingDecimalDigitsOfPrecision > 10000 {
-    uintNumOfLn2DecimalDigits = 20003 // max available digits
-  } else if workingDecimalDigitsOfPrecision > 5000 {
-    uintNumOfLn2DecimalDigits = 10000
-  } else if workingDecimalDigitsOfPrecision > 1000 {
-    uintNumOfLn2DecimalDigits = 5000
-  }
+	if workingDecimalDigitsOfPrecision > 10000 {
+		uintNumOfLn2DecimalDigits = 20003 // max available digits
+	} else if workingDecimalDigitsOfPrecision > 5000 {
+		uintNumOfLn2DecimalDigits = 10000
+	} else if workingDecimalDigitsOfPrecision > 1000 {
+		uintNumOfLn2DecimalDigits = 5000
+	}
 
-  // k * ln(2)
-  ln2 := nlSharedMech.getLn2(uintNumOfLn2DecimalDigits)
+	// k * ln(2)
+	ln2 := nlSharedMech.getLn2(uintNumOfLn2DecimalDigits)
 
-  kInt := big.NewInt(int64(k))
-  kFloat := nlShared.newFloat(workPrec)
-  kFloat.SetInt(kInt)
+	kInt := big.NewInt(int64(k))
+	kFloat := nlShared.newFloat(workPrec)
+	kFloat.SetInt(kInt)
 
-  kLn2 := nlShared.newFloat(workPrec)
-  kLn2.Mul(kFloat, ln2)
+	kLn2 := nlShared.newFloat(workPrec)
+	kLn2.Mul(kFloat, ln2)
 
-  // ln(x) = ln(m) + k * ln(2)
-  lnxWork := nlShared.newFloat(workPrec)
-  lnxWork.Add(lnmWork, kLn2)
+	// ln(x) = ln(m) + k * ln(2)
+	lnxWork := nlShared.newFloat(workPrec)
+	lnxWork.Add(lnmWork, kLn2)
 
-  // Round to requested precision.
-  lnx := nlShared.newFloat(prec)
-  lnx.Set(lnxWork)
+	// Round to requested precision.
+	lnx := nlShared.newFloat(prec)
+	lnx.Set(lnxWork)
 
-  return lnx, nil
+	return lnx, nil
 }
