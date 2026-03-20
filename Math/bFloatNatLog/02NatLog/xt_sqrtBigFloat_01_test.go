@@ -80,6 +80,23 @@ func Test_sqrtBigFloat_Basic_01(t *testing.T) {
   }
 }
 
+func Test_sqrtBigFloat_NegativeInput_01(t *testing.T) {
+
+  ePrefix := "Test_sqrtBigFloat_NegativeInput_01()"
+
+  sqrtCalc := new(BigFloatMath)
+
+  xVal := new(big.Float).
+    SetMode(big.AwayFromZero).
+    SetPrec(128).
+    SetFloat64(-1.0)
+
+  _, err := sqrtCalc.SqrtBigFloat(xVal, 128)
+
+  if err == nil {
+    t.Errorf("%v\nExpected error for negative input, but got nil\n", ePrefix)
+  }
+}
 func Test_sqrtBigFloat_1000Digits_01(t *testing.T) {
 
   ePrefix := "Test_sqrtBigFloat_1000Digits_01()"
