@@ -103,16 +103,23 @@ func (bFloatMath *BigFloatMath) IntExpoBigFloat(
 
 // SqrtBigFloat
 //
-//	Computes sqrt(x) using the classic Newton iteration:
+//		Computes sqrt(x) using the classic Newton iteration:
 //
-//	  y_{k+1} = 1/2 * (y_k + x / y_k)
+//		  y_{k+1} = 1/2 * (y_k + x / y_k)
 //
-//	Preconditions:
-//	  - x must be non‑nil
-//	  - x must be >= 0
-//	On success, returns a *big.Float with precision 'precBits'.
+//		Preconditions:
+//		  - x must be non‑nil
+//		  - x must be >= 0
+//		On success, returns a *big.Float with precision 'precBits'.
+//
+//	 integerDigits is the number of integer digits in the input
+//	 parameter 'x'.
+//
+//	 If integerDigits == 0, the number of integer digits is
+//	 calculated for the input parameter 'x'.
 func (bFloatMath *BigFloatMath) SqrtBigFloat(
   x *big.Float,
+  integerDigits uint,
   precBits uint) (*big.Float, error) {
 
   ePrefix := "bFloatMath.SqrtBigFloat()"
@@ -143,8 +150,12 @@ func (bFloatMath *BigFloatMath) SqrtBigFloat(
     }
   }
 
+  bFloatLog210 := new(big.Float).
+    SetMode(big.AwayFromZero).
+    SetFloat64(3.321928094887362)
+
   // Working precision: a bit higher than requested to improve convergence
-  workingPrec := precBits + 8
+  workingPrec := precBits + uint(float64(precBits)*0.12)
 
   // Create helpers with consistent mode/precision
   newF := func() *big.Float {
@@ -155,6 +166,7 @@ func (bFloatMath *BigFloatMath) SqrtBigFloat(
 
   // Initial guess: x / 2
   half := newF().SetFloat64(0.5)
+
   y := newF().Mul(x, half)
 
   // If x is very small, avoid zero initial guess
@@ -162,32 +174,29 @@ func (bFloatMath *BigFloatMath) SqrtBigFloat(
     y.SetFloat64(1.0)
   }
 
-  preBits := newF()
+  preBits := new(big.Float).
+    SetMode(big.AwayFromZero).
+    SetPrec(0).
+    SetUint64(uint64(workingPrec))
+
   tmp := newF()
   xOverY := newF()
 
-  // const maxIter = 128
+  if integerDigits == 0 {
+    intNumStr := x.Text('f', 0)
 
-  bFloatLog210 := new(big.Float).
-    SetMode(big.AwayFromZero).
-    SetFloat64(3.321928094887362)
+    integerDigits = uint(len(intNumStr))
+
+  }
 
   bFloatDecimalDigits :=
     new(big.Float).Quo(preBits, bFloatLog210)
 
   uint64NumOfDecimalDigits, _ := bFloatDecimalDigits.Uint64()
 
-  var i, maxIter int
+  var i, maxIter uint64
 
-  if uint64NumOfDecimalDigits > 8192 {
-    maxIter = 1024
-  } else if uint64NumOfDecimalDigits > 4096 {
-    maxIter = 512
-  } else if uint64NumOfDecimalDigits > 2048 {
-    maxIter = 256
-  } else {
-    maxIter = 128
-  }
+  maxIter = (uint64(integerDigits) + uint64NumOfDecimalDigits) * uint64(100)
 
   for i = 0; i < maxIter; i++ {
 
@@ -212,9 +221,8 @@ func (bFloatMath *BigFloatMath) SqrtBigFloat(
   // Round result to requested precision
   result := new(big.Float).
     SetMode(big.AwayFromZero).
-    SetPrec(precBits)
-
-  result.Set(y)
+    SetPrec(workingPrec).
+    Set(y)
 
   return result, nil
 }

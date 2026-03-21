@@ -53,7 +53,7 @@ func Test_sqrtBigFloat_Basic_01(t *testing.T) {
 				ePrefix, tc.xStr, idx)
 		}
 
-		actual, err := sqrtCalc.SqrtBigFloat(xVal, precBits)
+		actual, err := sqrtCalc.SqrtBigFloat(xVal, 0, precBits)
 
 		if err != nil {
 			t.Fatalf("%v\nError computing sqrt(%v): %v\n",
@@ -91,7 +91,7 @@ func Test_sqrtBigFloat_NegativeInput_01(t *testing.T) {
 		SetPrec(128).
 		SetFloat64(-1.0)
 
-	_, err := sqrtCalc.SqrtBigFloat(xVal, 128)
+	_, err := sqrtCalc.SqrtBigFloat(xVal, 0, 128)
 
 	if err == nil {
 		t.Errorf("%v\nExpected error for negative input, but got nil\n", ePrefix)
@@ -131,7 +131,7 @@ func Test_sqrtBigFloat_1000Digits_01(t *testing.T) {
 			ePrefix, xValStr)
 	}
 
-	actual, err := sqrtCalc.SqrtBigFloat(xVal, precBits)
+	actual, err := sqrtCalc.SqrtBigFloat(xVal, 0, precBits)
 
 	if err != nil {
 		t.Errorf("%v\n"+
@@ -192,7 +192,7 @@ func Test_sqrtBigFloat_1000Digits_02(t *testing.T) {
 			ePrefix, xValStr)
 	}
 
-	actual, err := sqrtCalc.SqrtBigFloat(xVal, precBits)
+	actual, err := sqrtCalc.SqrtBigFloat(xVal, 0, precBits)
 
 	if err != nil {
 		t.Errorf("%v\n"+
