@@ -6,223 +6,205 @@ package naturalLogCalcs
 // ***********************
 
 import (
-  "math/big"
+	"math"
+	"math/big"
+
+	ePref "github.com/MikeAustin71/errpref"
 )
 
 type BigFloatMath struct{}
 
 // IntExpoBigFloat
 //
-// 013Fix
+//	Calculates a big.Float base raised to an integer exponent with
+//	specified precision in expressed in bits for use with big.Float.
 //
-// Computes x^n for a *big.Float base x and integer exponent n,
-// using exponentiation by squaring.
+//	bFloatBase: the base as a *big.Float, must not be nil.
 //
-//   - x	 must be non-nil
-//   - precBits is the desired output precision in bits
-//   - n may be negative, zero, or positive
+//	intExponent: the integer exponent value. Handles zero and
+//	negative exponents per mathematical conventions.
 //
-// On success, returns a *big.Float with precision 'precBits'.
+//	calculationPrecisionBits: big.Float precision for the calculation
+//	expressed in bits. This controls the number of decimal digits
+//	achievable for the result.
+//
+//	Returns an error if the base is nil or division by zero
+//	occurs for a negative exponent.
+//
+//	On success, returns a *big.Float with precision
+//	'calculationPrecisionBits'.
 func (bFloatMath *BigFloatMath) IntExpoBigFloat(
-  x *big.Float,
-  n int64,
-  precBits uint) (*big.Float, error) {
+	bFloatBase *big.Float,
+	intExponent int64,
+	calculationPrecisionBits uint) (*big.Float, error) {
 
-  ePrefix := "BigFloatMath.IntExpoBigFloat()"
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-  if x == nil {
-    return nil, &InputPtrNilError{
-      ErrPrefix:     ePrefix,
-      ErrContext:    "",
-      ParameterName: "'x'",
-    }
-  }
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"BigFloatMath.IntExpoBigFloat()",
+		"")
 
-  // Handle exponent == 0: x^0 = 1 (even if x == 0, we follow the usual convention)
-  if n == 0 {
-    return new(big.Float).
-      SetMode(big.AwayFromZero).
-      SetPrec(precBits).
-      SetFloat64(1.0), nil
-  }
+	if err != nil {
+		return new(big.Float), err
+	}
 
-  // Working precision slightly above requested precision
-  workingPrec := precBits + 8
+	return new(bigFloatMathMacrobot).intExpoBigFloat(
+		bFloatBase,
+		intExponent,
+		calculationPrecisionBits,
+		ePrefix)
+}
 
-  newF := func() *big.Float {
-    return new(big.Float).
-      SetMode(big.AwayFromZero).
-      SetPrec(workingPrec)
-  }
+// IntExpoBigFloatDigits
+//
+//	Calculates a big.Float base raised to an integer exponent with
+//	big.Float precision bits calculated from input parameter decimal
+//	digit precision (calculationDecimalDigits). Decimal digits are
+//	defined as those digits to the right of the decimal point.
+//
+//	bFloatBase: The base as a *big.Float, must not be nil.
+//
+//	intExponent: The integer exponent supports zero and negative
+//	exponents per mathematical conventions.
+//
+//	calculationDecimalDigits: The number of decimal digits to the
+//	right of the decimal point which will be used in generating the
+//	calculated results.
+//
+//	Returns an error if the 'bFloatBase' is nil or division by zero
+//	occurs for a negative exponent.
+//
+//	On success, returns a *big.Float with precision derived from
+//	the 'calculationDecimalDigits' input parameter.
+func (bFloatMath *BigFloatMath) IntExpoBigFloatDigits(
+	bFloatBase *big.Float,
+	intExponent int64,
+	calculationDecimalDigits uint) (*big.Float, error) {
 
-  // Copy base to working precision
-  base := newF().Set(x)
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-  // Track sign of exponent
-  negExponent := n < 0
-  if negExponent {
-    n = -n
-  }
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"BigFloatMath.IntExpoBigFloatDigits()",
+		"")
 
-  // result = 1
-  result := newF().SetFloat64(1.0)
+	if err != nil {
+		return new(big.Float), err
+	}
 
-  // Exponentiation by squaring
-  for n > 0 {
-    if (n & 1) == 1 {
-      result.Mul(result, base)
-    }
-    base.Mul(base, base)
-    n >>= 1
-  }
+	safetyMarginDigits := uint(math.Ceil(float64(calculationDecimalDigits) * 0.5))
 
-  // If exponent was negative, take reciprocal
-  if negExponent {
-    one := newF().SetFloat64(1.0)
-    // Guard against division by zero
-    if result.Sign() == 0 {
-      return nil, &FuncReturnError{
-        ErrPrefix:  ePrefix,
-        ReturnFunc: "IntExpoBigFloat(x, n, precBits)",
-        ErrContext: "Attempted reciprocal of zero for negative exponent.",
-        ErrMessage: "division by zero",
-      }
-    }
-    result.Quo(one, result)
-  }
+	if safetyMarginDigits < 4 {
+		safetyMarginDigits = 4
+	}
 
-  // Round to requested precision
-  out := new(big.Float).
-    SetMode(big.AwayFromZero).
-    SetPrec(precBits)
+	calculationPrecisionBits := new(BigFloatHelper).
+		ComputeBigFloatPrecisionBits(calculationDecimalDigits+safetyMarginDigits, 1)
 
-  out.Set(result)
-
-  return out, nil
+	return new(bigFloatMathMacrobot).intExpoBigFloat(
+		bFloatBase,
+		intExponent,
+		calculationPrecisionBits,
+		ePrefix)
 }
 
 // SqrtBigFloat
 //
-//		Computes sqrt(x) using the classic Newton iteration:
+//	 Computes sqrt(x) using the classic Newton iteration:
 //
-//		  y_{k+1} = 1/2 * (y_k + x / y_k)
+//			  y_{k+1} = 1/2 * (y_k + x / y_k)
 //
-//		Preconditions:
-//		  - x must be non‑nil
-//		  - x must be >= 0
-//		On success, returns a *big.Float with precision 'precBits'.
+//	 Preconditions:
+//			  - x must be non‑nil
+//			  - x must be >= 0
 //
-//	 integerDigits is the number of integer digits in the input
-//	 parameter 'x'.
+//	 'integerDigits' is the number of integer digits to the
+//	 left of the decimal point in the input parameter,
+//	 'bFloatXValue'.
 //
-//	 If integerDigits == 0, the number of integer digits is
-//	 calculated for the input parameter 'x'.
+//		If integerDigits == 0, the number of integer digits is
+//		calculated for the input parameter 'bFloatXValue'.
+//
+//	 If the input parameter, 'bFloatXValue' is zero, the result
+//	 is zero.
+//
+//	 If the input parameter, 'bFloatXValue' is negative, an error
+//	 is returned.
+//
+//	 On success, returns a *big.Float with a precision bits value
+//	 of 'calculationPrecisionBits'.
 func (bFloatMath *BigFloatMath) SqrtBigFloat(
-  x *big.Float,
-  integerDigits uint,
-  precBits uint) (*big.Float, error) {
+	bFloatXValue *big.Float,
+	integerDigits uint,
+	calculationPrecisionBits uint) (*big.Float, error) {
 
-  ePrefix := "bFloatMath.SqrtBigFloat()"
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-  if x == nil {
-    return nil, &InputPtrNilError{
-      ErrPrefix:     ePrefix,
-      ErrContext:    "",
-      ParameterName: "'x'",
-    }
-  }
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"BigFloatMath.SqrtBigFloat()",
+		"")
 
-  // Handle x == 0 quickly
-  if x.Sign() == 0 {
-    return new(big.Float).
-      SetMode(big.AwayFromZero).
-      SetPrec(precBits).
-      SetFloat64(0.0), nil
-  }
+	if err != nil {
+		return new(big.Float), err
+	}
 
-  // Negative input is invalid for real sqrt
-  if x.Sign() < 0 {
-    return nil, &FuncReturnError{
-      ErrPrefix:  ePrefix,
-      ReturnFunc: "SqrtBigFloat(x, precBits)",
-      ErrContext: "Input parameter 'x' is negative.",
-      ErrMessage: "square root of negative number is undefined in this context",
-    }
-  }
+	return new(bigFloatMathMacrobot).sqrtBigFloat(bFloatXValue, integerDigits, calculationPrecisionBits, ePrefix)
+}
 
-  bFloatLog210 := new(big.Float).
-    SetMode(big.AwayFromZero).
-    SetFloat64(3.321928094887362)
+// SqrtBigFloatDigits
+//
+// Calculates the square root of a big.Float value with precision
+// derived from decimal digits of precision (calculationDecimalDigits).
+//
+// bFloatXValue: The input value as a *big.Float, must not be nil or
+// negative. Zero returns zero without error.
+//
+// calculationDecimalDigits: The number of decimal digits to the right
+// of the decimal place used for precision during calculation. This
+// value is converted to precision bits used in big.Float calculations.
+//
+// Returns an error if the input value is nil or negative.
+//
+// On success, returns the square root of 'bFloatXValue' as a
+// type *big.Float with a precision bits value derived from
+// 'calculationDecimalDigits'.
+func (bFloatMath *BigFloatMath) SqrtBigFloatDigits(
+	bFloatXValue *big.Float,
+	calculationDecimalDigits uint) (*big.Float, error) {
 
-  // Working precision: a bit higher than requested to improve convergence
-  workingPrec := precBits + uint(float64(precBits)*0.12)
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-  // Create helpers with consistent mode/precision
-  newF := func() *big.Float {
-    return new(big.Float).
-      SetMode(big.AwayFromZero).
-      SetPrec(workingPrec)
-  }
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"BigFloatMath.SqrtBigFloatDigits()",
+		"")
 
-  // Initial guess: x / 2
-  half := newF().SetFloat64(0.5)
+	if err != nil {
+		return new(big.Float), err
+	}
 
-  y := newF().Mul(x, half)
+	safetyMarginDigits := uint(math.Ceil(float64(calculationDecimalDigits) * 0.5))
 
-  // If x is very small, avoid zero initial guess
-  if y.Sign() == 0 {
-    y.SetFloat64(1.0)
-  }
+	if safetyMarginDigits < 4 {
+		safetyMarginDigits = 4
+	}
 
-  preBits := new(big.Float).
-    SetMode(big.AwayFromZero).
-    SetPrec(0).
-    SetUint64(uint64(workingPrec))
+	calculationPrecisionBits := new(BigFloatHelper).
+		ComputeBigFloatPrecisionBits(calculationDecimalDigits+safetyMarginDigits, 1)
 
-  tmp := newF()
-  xOverY := newF()
+	intXValueStr := bFloatXValue.Text('f', 0)
 
-  if integerDigits == 0 {
-    intNumStr := x.Text('f', 0)
+	integerDigits := uint(len(intXValueStr))
 
-    integerDigits = uint(len(intNumStr))
-
-  }
-
-  bFloatDecimalDigits :=
-    new(big.Float).Quo(preBits, bFloatLog210)
-
-  uint64NumOfDecimalDigits, _ := bFloatDecimalDigits.Uint64()
-
-  var i, maxIter uint64
-
-  maxIter = (uint64(integerDigits) + uint64NumOfDecimalDigits) * uint64(100)
-
-  for i = 0; i < maxIter; i++ {
-
-    // xOverY = x / y
-    xOverY.Quo(x, y)
-
-    // tmp = y + x/y
-    tmp.Add(y, xOverY)
-
-    // yNext = 0.5 * tmp
-    yNext := newF().Mul(tmp, half)
-
-    // Check convergence: if yNext == y at this precision, stop
-    if yNext.Cmp(y) == 0 {
-      y = yNext
-      break
-    }
-
-    y = yNext
-  }
-
-  // Round result to requested precision
-  result := new(big.Float).
-    SetMode(big.AwayFromZero).
-    SetPrec(workingPrec).
-    Set(y)
-
-  return result, nil
+	return new(bigFloatMathMacrobot).sqrtBigFloat(bFloatXValue, integerDigits, calculationPrecisionBits, ePrefix)
 }
