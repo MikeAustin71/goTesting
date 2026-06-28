@@ -1,4 +1,5 @@
 // naturalLogAGMMolecule.go
+
 package naturalLogCalcs
 
 import (
