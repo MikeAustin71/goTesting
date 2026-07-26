@@ -117,7 +117,7 @@ func (nl *naturalLogAGM) lnAGMDirect(
 //
 // 011Fix
 //
-// Computes ln(m) for mantissa m in (0, 2].
+// Computes ln(m) for mantissa m in (0, 2).
 //
 // This function now contains a *true AGM iteration*:
 //
@@ -129,9 +129,9 @@ func (nl *naturalLogAGM) lnAGMDirect(
 // The AGM iteration is run to convergence and the final AGM value is
 // available for future use in a fully AGM-based ln(m) formula.
 //
-// For now, to preserve the existing, validated behavior and test
-// expectations, ln(m) is still computed via the Taylor kernel
-// naturalLogTaylor.lnTaylorDirect(m, precBits).
+// This method reconfigured to wire the Iteration 2 skeletons into the
+// existing AGM subsystem. (015Fix_04b — Integrate Iteration 2
+// Skeletons into the Existing AGM Subsystem)
 func (nl *naturalLogAGM) lnAGMMantissa(
 	m *big.Float,
 	precBits uint) (*big.Float, error) {
@@ -146,78 +146,17 @@ func (nl *naturalLogAGM) lnAGMMantissa(
 		}
 	}
 
-	zero := nl.shared.newFloat(precBits).SetUint64(0)
-	if m.Cmp(zero) <= 0 {
-		return nil, &FuncReturnError{
-			ErrPrefix:  ePrefix,
-			ReturnFunc: "lnAGMMantissa(m, precBits)",
-			ErrContext: "Input parameter 'm' must be greater than zero.",
-			ErrMessage: fmt.Sprintf("m = %v", m.Text('g', 20)),
-		}
-	}
+	// Construct AGM ln(m) context
+	// naturalLogAGM_ln.go
+	ctx := NewLnAGMContext(m, precBits)
 
-	// 011Fix: True AGM iteration on the mantissa
-	one := nl.shared.newFloat(precBits).SetUint64(1)
-	a := nl.shared.newFloat(precBits).Copy(one)
-	g := nl.shared.newFloat(precBits).Copy(m)
+	// Execute full AGM ln(m) pipeline
+	lnM, err := ctx.LnAGMMantissa()
 
-	tmp := nl.shared.newFloat(precBits)
-	geo := nl.shared.newFloat(precBits)
-
-	// Convergence threshold: roughly 2^(-precBits + 4)
-	// This is conservative and keeps the AGM iteration well below
-	// the requested precision.
-	eps := nl.shared.newFloat(precBits)
-	eps.SetMantExp(one, int(-int64(precBits)+4))
-
-	maxIter := 128
-
-	for i := 0; i < maxIter; i++ {
-
-		// aNext = (a + g) / 2
-		tmp.Add(a, g)
-		aNext := nl.shared.newFloat(precBits)
-		aNext.Quo(tmp, nl.shared.newFloat(precBits).SetUint64(2))
-
-		// gNext = sqrt(a * g)
-		geo.Mul(a, g)
-		gNext := nl.shared.newFloat(precBits)
-		gNext.Sqrt(geo)
-
-		// diff = |aNext - gNext|
-		diff := nl.shared.newFloat(precBits)
-		diff.Sub(aNext, gNext)
-		if diff.Sign() < 0 {
-			diff.Neg(diff)
-		}
-
-		if diff.Cmp(eps) <= 0 {
-			a = aNext
-			g = gNext
-			break
-		}
-
-		a = aNext
-		g = gNext
-	}
-
-	// At this point, 'a' and 'g' are both very close to AGM(1, m).
-	// The AGM value is available for future use in a fully AGM-based
-	// ln(m) formula. For now, we preserve the existing, validated
-	// behavior by delegating the actual ln(m) computation to the
-	// Taylor kernel.
-	//
-	// NOTE:
-	//   When you are ready to move to a pure AGM-based ln(m),
-	//   this is the place to replace the Taylor call with a
-	//   mathematically validated AGM formula for ln(m).
-	taylor := new(naturalLogTaylor)
-
-	lnM, err := taylor.lnTaylorDirect(m, precBits)
 	if err != nil {
 		return nil, &FuncReturnError{
 			ErrPrefix:  ePrefix,
-			ReturnFunc: "lnM, err := taylor.lnTaylorDirect(m, precBits)",
+			ReturnFunc: "ctx := NewLnAGMContext(m, precBits)",
 			ErrContext: "",
 			ErrMessage: err.Error(),
 		}

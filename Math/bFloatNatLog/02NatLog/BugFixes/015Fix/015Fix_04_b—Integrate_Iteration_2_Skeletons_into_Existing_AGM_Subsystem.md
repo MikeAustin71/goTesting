@@ -18,7 +18,7 @@ This work element integrates the **Iteration 2 AGM ln(m) skeleton modules** in
 
 Per your directive, this version (**015Fix_04b**) implements **Option A**:
 
-> **Replace the Taylor ln(m) fallback inside** `lnAGMMantissa` **with the new AGM ln(m) pipeline.**   No dispatcher. No mode switching. AGM becomes the default ln(m) path.
+> **Replace the Taylor ln(m) fallback inside** `lnAGMMantissa` (naturalLogAGM.go) with the new AGM ln(m) pipeline.   No dispatcher. No mode switching. AGM becomes the default ln(m) path.
 
 This keeps Iteration 2 focused, clean, and aligned with your architectural goals.
 
@@ -28,55 +28,59 @@ This keeps Iteration 2 focused, clean, and aligned with your architectural goa
 
 Code
 
-```
+```go
 lnAGMDirect(x, precBits)
     ↓
 normalize x → m·2^k
     ↓
-lnAGMMantissa(m, precBits)
+lnAGMMantissa(m, precBits) //(naturalLogAGM.go) 
     ↓
-Taylor ln(m) fallback
+Taylor ln(m) fallback // pre-substitution
     ↓
 ln(x) = ln(m) + k·ln(2)
 ```
+
+
 
 ### **After Iteration 2 Integration (Option A)**
 
 Code
 
-```
+```go
 lnAGMDirect(x, precBits)
     ↓
 normalize x → m·2^k
     ↓
-lnAGMMantissa(m, precBits)
+lnAGMMantissa(m, precBits) //(naturalLogAGM.go)
     ↓
-AGM ln(m) pipeline (LnAGMContext)
+AGM ln(m) pipeline (LnAGMContext)  // substitution
     ↓
 ln(x) = ln(m) + k·ln(2)
 ```
 
-Taylor is removed from the AGM path.
+**Taylor is removed from the AGM path.**
+
+
 
 # **3. File‑Level Integration Instructions**
 
 Below is the exact set of changes required to wire the Iteration 2 skeletons into your existing AGM subsystem.
 
-## **3.1 Modify** `lnAGMMantissa` **to use AGM ln(m)**
+## **3.1 Modify** `lnAGMMantissa` (naturalLogAGM.go) **to use AGM ln(m)**
 
 Locate your existing function:
 
-go
-
-```
+```go
+// (naturalLogAGM.go)
 func lnAGMMantissa(m *big.Float, precBits uint) (*big.Float, error)
 ```
 
+
+
 Replace the Taylor fallback with:
 
-go
-
-```
+```go
+// (naturalLogAGM.go)
 func lnAGMMantissa(m *big.Float, precBits uint) (*big.Float, error) {
 
     // Construct AGM ln(m) context
@@ -96,7 +100,11 @@ This is the **only required change** to switch ln(m) from Taylor → AGM.
 
 Everything else remains structurally identical.
 
+
+
 ## **3.2 Confirm** `lnAGMDirect` **remains unchanged**
+
+### `lnAGMDirect` (naturalLogAGM.go)
 
 Your existing `lnAGMDirect` already performs:
 
@@ -109,13 +117,15 @@ ln⁡(x)=ln⁡(m)+k⋅ln⁡(2)
 
 No changes required.
 
+
+
 ## **3.3 Ensure Iteration 2 modules are imported**
 
 Your AGM subsystem must import:
 
 go
 
-```
+```go
 import (
     // existing imports
     "math/big"
@@ -129,11 +139,11 @@ import (
 
 All three new modules must share the same package name as your existing AGM subsystem:
 
-go
-
-```
+```go
 package naturalLogCalcs
 ```
+
+
 
 ## **3.4 Integration of Iteration 2 Modules**
 
@@ -155,6 +165,10 @@ No external wiring required.
 
 `lnAGMMantissa` → `NewLnAGMContext` → `LnAGMContext.LnAGMMantissa`
 
+**(see naturalLogAGM.go) **
+
+
+
 # **4. Updated Call‑Sequence Narrative (Option A)**
 
 This is the **actual runtime flow** after integration.
@@ -163,23 +177,27 @@ This is the **actual runtime flow** after integration.
 
 Code
 
-```
+```go
 lnAGMDirect(x, precBits)
 ```
+
+
 
 ## **4.2 Mantissa Normalization**
 
 Code
 
-```
+```go
 normalize x → m·2^k
 ```
+
+
 
 ## **4.3 AGM ln(m) Pipeline**
 
 Code
 
-```
+```go
 lnAGMMantissa(m, precBits)
     ↓
 NewLnAGMContext(m, precBits)
@@ -197,6 +215,8 @@ LnAGMContext.computeCorrectionSeries()
 ln(m) = K(k) - S
 ```
 
+
+
 ## **4.4 Final ln(x)**
 
 Code
@@ -204,6 +224,8 @@ Code
 ```
 ln(x) = ln(m) + k·ln(2)
 ```
+
+
 
 # **5. Integration Diagram (Typora‑ready)**
 
@@ -272,6 +294,8 @@ Code
  │ ln(x) = ln(m) + k·ln(2)                      │
  └──────────────────────────────────────────────┘
 ```
+
+
 
 # **6. Summary**
 
