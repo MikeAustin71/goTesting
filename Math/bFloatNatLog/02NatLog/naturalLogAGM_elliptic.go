@@ -1,6 +1,7 @@
 package naturalLogCalcs
 
 import (
+	"fmt"
 	"math"
 	"math/big"
 )
@@ -32,9 +33,14 @@ func (ctx *EllipticContext) ComputeAGMForElliptic() error {
 	epsilon := new(big.Float).SetPrec(ctx.Prec).SetMantExp(big.NewFloat(1.0), -int(ctx.Prec)+4)
 
 	a := new(big.Float).SetPrec(ctx.Prec).SetFloat64(1.0)
+
 	g := new(big.Float).SetPrec(ctx.Prec).Copy(ctx.KPrime)
 
-	for i := 0; i < 256; i++ {
+	//for i := 0; i < 256; i++
+
+	var diff *big.Float
+
+	for i := 0; i < 1000000; i++ {
 
 		// a_{n+1} = (a + g) / 2
 		aNext := new(big.Float).SetPrec(ctx.Prec).Add(a, g)
@@ -47,23 +53,31 @@ func (ctx *EllipticContext) ComputeAGMForElliptic() error {
 		gNext := new(big.Float).SetPrec(ctx.Prec).Sqrt(prod)
 
 		// convergence check
-		diff := new(big.Float).SetPrec(ctx.Prec).Sub(aNext, gNext)
+		diff = new(big.Float).SetPrec(ctx.Prec).Sub(aNext, gNext)
 
 		if diff.Abs(diff).Cmp(epsilon) < 0 {
+
 			ctx.AGM.Copy(aNext)
+
 			return nil
 		}
 
 		a = aNext
+
 		g = gNext
 	}
+
+	diffAbsText := diff.Abs(diff).Text('f', int(ctx.Prec))
+
+	epsilonText := epsilon.Text('f', int(ctx.Prec))
 
 	return &FuncReturnError{
 		ErrPrefix:  ePrefix,
 		ReturnFunc: "",
-		ErrContext: "",
+		ErrContext: fmt.Sprintf("Absolute Difference= %s\n"+
+			"  epsilon= %s\n", diffAbsText, epsilonText),
 		ErrMessage: "Error: Unexpected Result!\n" +
-			"AGM(1,k') did not converge\n\n",
+			"  AGM(1,k') did not converge\n\n",
 	}
 }
 
