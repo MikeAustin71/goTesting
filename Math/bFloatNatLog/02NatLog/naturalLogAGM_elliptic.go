@@ -36,11 +36,13 @@ func (ctx *EllipticContext) ComputeAGMForElliptic() error {
 
 	g := new(big.Float).SetPrec(ctx.Prec).Copy(ctx.KPrime)
 
-	//for i := 0; i < 256; i++
-
 	var diff *big.Float
 
-	for i := 0; i < 1000000; i++ {
+	diff = big.NewFloat(0.0)
+
+	var i uint64
+
+	for i = 0; i < math.MaxUint64; i++ {
 
 		// a_{n+1} = (a + g) / 2
 		aNext := new(big.Float).SetPrec(ctx.Prec).Add(a, g)
@@ -75,9 +77,10 @@ func (ctx *EllipticContext) ComputeAGMForElliptic() error {
 		ErrPrefix:  ePrefix,
 		ReturnFunc: "",
 		ErrContext: fmt.Sprintf("Absolute Difference= %s\n"+
-			"  epsilon= %s\n", diffAbsText, epsilonText),
+			"              epsilon= %s\n"+
+			"  i count = %v", diffAbsText, epsilonText, i),
 		ErrMessage: "Error: Unexpected Result!\n" +
-			"  AGM(1,k') did not converge\n\n",
+			"  AGM(1,k') did not converge",
 	}
 }
 
