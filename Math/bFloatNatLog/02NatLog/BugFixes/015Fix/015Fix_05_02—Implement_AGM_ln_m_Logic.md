@@ -414,3 +414,11 @@ to iterations == 1,000,000
           Error: Unexpected Result!
           AGM(1,k') did not converge
 --- FAIL: Test_LnAGM_Mantissa_05 (0.00s)
+
+
+
+# Modifications 015Fix_05_02
+
+
+
+EllipticContext.ComputeAGMForElliptic(). Set ***i*** counter to loop < uint64 max.
