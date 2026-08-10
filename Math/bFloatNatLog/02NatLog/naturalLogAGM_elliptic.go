@@ -6,7 +6,7 @@ import (
 	"math/big"
 )
 
-// Computes AGM(1, k\') and elliptic integral K(k)
+// Computes AGM (1, k\') and elliptic integral K(k)
 
 type EllipticContext struct {
 	K      *big.Float
@@ -40,9 +40,7 @@ func (ctx *EllipticContext) ComputeAGMForElliptic() error {
 
 	diff = big.NewFloat(0.0)
 
-	var i uint64
-
-	for i = 0; i < math.MaxUint64; i++ {
+	for range math.MaxUint32 {
 
 		// a_{n+1} = (a + g) / 2
 		aNext := new(big.Float).SetPrec(ctx.Prec).Add(a, g)
@@ -78,7 +76,7 @@ func (ctx *EllipticContext) ComputeAGMForElliptic() error {
 		ReturnFunc: "",
 		ErrContext: fmt.Sprintf("Absolute Difference= %s\n"+
 			"              epsilon= %s\n"+
-			"  i count = %v", diffAbsText, epsilonText, i),
+			"  i count = %v", diffAbsText, epsilonText, math.MaxUint32),
 		ErrMessage: "Error: Unexpected Result!\n" +
 			"  AGM(1,k') did not converge",
 	}
