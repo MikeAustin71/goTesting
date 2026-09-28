@@ -6,6 +6,7 @@ import (
 )
 
 func Test_LnAGM_Mantissa_05_01(t *testing.T) {
+
 	m := big.NewFloat(1.5)
 	prec := uint(2048)
 
