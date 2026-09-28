@@ -64,12 +64,12 @@ func (e *FuncReturnError) Error() string {
 	}
 
 	if e.ErrContext != "" {
-		errStr += e.ErrContext + "\n"
+		errStr += "Error Context: \n  " + e.ErrContext + "\n"
 		foundCnt++
 	}
 
 	if e.ErrMessage != "" {
-		errStr += "Error: \n  " + e.ErrMessage + "\n"
+		errStr += "Error Msg: \n  " + e.ErrMessage + "\n"
 		foundCnt++
 	}
 

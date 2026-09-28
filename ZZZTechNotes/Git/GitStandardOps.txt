@@ -1,0 +1,12 @@
+
+Standard Git Operations
+
+-------------------------------------------------------------------
+** Push to Dev
+-------------------------------------------------------------------
+
+git status
+git add -A
+git commit -m"Modified README"
+git status
+git push origin dev

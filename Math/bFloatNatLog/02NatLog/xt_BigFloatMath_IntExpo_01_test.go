@@ -1,9 +1,9 @@
 package naturalLogCalcs
 
-// ************************************
-// ** xt_expoBigFloat_01_test.go     **
-// ** 013Fix — IntExpoBigFloat tests **
-// ************************************
+// ********************************************
+// **    xt_BigFloatMath_IntExpo_01_test.go  **
+// **    013Fix — IntExpoBigFloat tests      **
+// *********************************************
 
 import (
 	"math/big"
