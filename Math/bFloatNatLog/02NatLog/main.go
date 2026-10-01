@@ -1,5 +1,0 @@
-package naturalLogCalcs
-
-//func main() {
-
-//}
