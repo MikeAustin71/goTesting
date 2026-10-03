@@ -15,8 +15,6 @@ go run main.go
 
 
 
-
-
 ![Caution30](D:\GoProjects\MikeAustin71\goTesting\assets\Caution30.png)
 
 ## Be Advised - USE WITH CAUTION!
