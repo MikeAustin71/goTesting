@@ -24,4 +24,4 @@ go run main.go
 ### These solutions May or May NOT Work for You!
 
 
-## Uses Go 1.27
+## Supporting Go 1.27
