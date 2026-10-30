@@ -106,7 +106,7 @@ an+1=an+gn2
 
 gn+1=angn
 
-This iteration converges quadratically to a common limit M(a0,g0). **Source:** Wolfram MathWorld — Arithmetic‑Geometric Mean **Source:** NIST DLMF §19.8 — Gauss’s AGM iteration
+This iteration converges quadratically to a common limit M(a0,g0). **Source:**  [Wolfram MathWorld — Arithmetic‑Geometric Mean](https://mathworld.wolfram.com/Arithmetic-GeometricMean.html) **Source:** [NIST DLMF §19.8 — Gauss’s AGM iteration - Digital Library of Mathematical Functions | NIST](https://www.nist.gov/mathematics-statistics/digital-library-mathematical-functions)
 
 ## **3.2 Convergence Properties**
 
