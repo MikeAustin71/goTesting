@@ -15,8 +15,6 @@ go run main.go
 
 
 
-
-
 ![Caution30](D:\GoProjects\MikeAustin71\goTesting\assets\Caution30.png)
 
 ## Be Advised - USE WITH CAUTION!
@@ -26,4 +24,4 @@ go run main.go
 ### These solutions May or May NOT Work for You!
 
 
-## Uses Go 1.26
+## Supporting Go 1.27

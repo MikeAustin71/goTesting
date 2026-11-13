@@ -17,7 +17,7 @@ directory which are stored in the text file, `zzzzz_tests.txt`.
 
 ## Running Tests with code coverage
 
-First pull down and install the `cover` package.
+First, pull down and install the `cover` package.
  
 `go get golang.org/x/tools/cmd/cover`
   
