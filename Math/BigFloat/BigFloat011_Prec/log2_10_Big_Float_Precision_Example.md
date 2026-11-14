@@ -184,3 +184,116 @@ If you have worked with SQL or financial libraries, this is often a point of con
 | **Floating-Point (`big.Float`)**        | **Precision (`prec`)**                 | The total bit capacity of the mantissa. It covers **all significant digits** (integer + fractional). |
 
 Because `Log2Of10` is $3.3219\dots$, the leading `3` is the first significant figure and cannot be omitted. Counting both the `3` and all the fractional digits ensures the mantissa has enough bits to store the entire number without truncation.
+
+
+
+# Question: NewLog2Of10()
+
+In the example function: `func NewLog2Of10() (*big.Float, error)`  ***bitsNeeded*** is calculated with a float64 and a log2(10) value with only 15-fractional decimals. If I wanted to calculate ***bitsNeeded*** using a big.Float and a log2(10) value with more than 15-fractional decimals, how would that calculation be structured.
+
+
+
+To calculate `bitsNeeded` using `big.Float` instead of `float64`, the process requires:
+
+1. **Setting a higher working precision** on the `big.Float` variables (e.g., 256 bits $\approx 77$ decimal digits, far exceeding `float64`'s ~15–17 digits).
+2. **Parsing the high-precision constant** using `SetString()`.
+3. **Multiplying** the digit count by $\log_2(10)$ using `big.Float.Mul()`.
+4. **Implementing `math.Ceil()`** for `big.Float` using `Int(nil)` and Go's `big.Accuracy` enum.
+
+---
+
+### Implementation Example
+
+```go
+package main
+
+import (
+	"fmt"
+	"math/big"
+)
+
+// calculateBitsNeeded computes ceil(decDigits * log2(10)) using arbitrary precision.
+func calculateBitsNeeded(decDigits uint, log2Str string) (uint, error) {
+	// 1. Define the working precision for this calculation.
+	// 256 bits gives ~77 decimal digits of precision (IEEE float64 only has 53 bits / ~15 digits).
+	const workPrec = 256
+
+	// 2. Load the high-precision log2(10) string into a big.Float
+	log2Val, ok := new(big.Float).SetPrec(workPrec).SetString(log2Str)
+	if !ok {
+		return 0, fmt.Errorf("failed to parse log2 string")
+	}
+
+	// 3. Convert decDigits to big.Float
+	digitsFloat := new(big.Float).SetPrec(workPrec).SetUint64(uint64(decDigits))
+
+	// 4. Multiply: product = decDigits * log2(10)
+	product := new(big.Float).SetPrec(workPrec).Mul(digitsFloat, log2Val)
+
+	// 5. Perform the equivalent of math.Ceil(product):
+	//
+	// In Go, product.Int(nil) truncates towards zero and returns the big.Accuracy:
+	// - If product had no fractional part, acc == big.Exact.
+	// - If product > 0 and had a fractional part, acc == big.Below (the int is below the float).
+	intPart, acc := product.Int(nil)
+	if acc == big.Below {
+		// Had fractional digits; round UP to complete the ceiling
+		intPart.Add(intPart, big.NewInt(1))
+	}
+
+	return uint(intPart.Uint64()), nil
+}
+```
+
+---
+
+### How Each Step Works
+
+#### 1. Why `SetPrec(256)` on `SetString`?
+When you call `SetPrec(256)` *before* `SetString(log2Str)`, `SetString` parses the string and automatically keeps as many digits as needed to populate 256 bits (about 77 decimal places), rounding the tail cleanly according to the rounding mode. 
+
+If you wanted to use all 1,000 digits of your string during the multiplication, you could set `workPrec = 3400`. However, 256 bits is already more than quadruple the precision of `float64`.
+
+#### 2. How `math.Ceil` Works in `math/big`
+Go’s standard library does not provide a `big.Float.Ceil()` method. Instead, you use `x.Int(nil)`:
+
+```go
+intPart, acc := product.Int(nil)
+if acc == big.Below {
+    intPart.Add(intPart, big.NewInt(1))
+}
+```
+
+* `x.Int(nil)` truncates the float toward zero and returns a `*big.Int` along with an `Accuracy` flag.
+* If `x > 0` and had any fractional bits at all, the integer result is smaller than the original float, so `acc` is set to `big.Below`.
+* Adding `1` when `acc == big.Below` gives the exact ceiling without any floating-point rounding error.
+
+---
+
+### Integrating It Back Into `NewLog2Of10`
+
+You can use the constant string you already have (`Log2Of10String`) as both the data source and the multiplier:
+
+```go
+func NewLog2Of10() (*big.Float, error) {
+	// 1. Count significant decimal digits
+	decDigits := uint(len(strings.ReplaceAll(Log2Of10String, ".", "")))
+
+	// 2. High-precision bits calculation using big.Float
+	bitsNeeded, err := calculateBitsNeeded(decDigits, Log2Of10String)
+	if err != nil {
+		return nil, err
+	}
+
+	// 3. Align to 64-bit word boundary + 64 guard bits
+	prec := ((bitsNeeded + 63) / 64 * 64) + 64
+
+	// 4. Allocate target big.Float with exact precision
+	target := new(big.Float).SetPrec(prec).SetMode(big.ToNearestEven)
+	if _, ok := target.SetString(Log2Of10String); !ok {
+		return nil, fmt.Errorf("failed to parse Log2Of10String")
+	}
+
+	return target, nil
+}
+```
