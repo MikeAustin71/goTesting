@@ -81,7 +81,9 @@ func TestPrec001() {
 
 }
 
-// This Fails
+// TestPrec002
+//
+// This Passes
 func TestPrec002() {
 
 	spacerStr := " "
@@ -90,7 +92,7 @@ func TestPrec002() {
 
 	lineBreakStr += strings.Repeat("-", 50)
 
-	fmt.Printf("\n%v\n%vRunning TestPrec001()\n%v\n\n",
+	fmt.Printf("\n%v\n%vRunning TestPrec002()\n%v\n\n",
 		lineBreakStr,
 		spacerStr,
 		lineBreakStr)
@@ -101,11 +103,25 @@ func TestPrec002() {
 
 	requiredFractionalDigits := uint(14)
 
+	var requiredTotalDigits uint
+
+	for _, s := range expectedResultStr {
+
+		if s == '.' {
+			continue
+		}
+
+		if s >= '0' && s <= '9' {
+			requiredTotalDigits++
+		}
+
+	}
+
 	exponentValue := uint(8)
 
 	baseStr := "10.81233"
 
-	requiredFloatPrecision := ComputeBigFloatPrecisionBits(requiredFractionalDigits, exponentValue)
+	requiredFloatPrecision := ComputeBigFloatPrecisionBits(requiredTotalDigits, exponentValue)
 
 	baseFloat, isOk :=
 		new(big.Float).
@@ -129,7 +145,10 @@ func TestPrec002() {
 		return
 	}
 
-	for i := uint(0); i < exponentValue; i++ {
+	adjustedExponentValue := exponentValue - 1
+
+	for i := uint(0); i < adjustedExponentValue; i++ {
+
 		resultBaseToExponent.Mul(resultBaseToExponent, baseFloat)
 	}
 
