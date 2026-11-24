@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	TestPrec001()
+	TestPrec002()
 }
 
 func TestPrec001() {
@@ -60,6 +60,95 @@ func TestPrec001() {
 	}
 
 	for i := uint(0); i < exponentValue; i++ {
+		resultBaseToExponent.Mul(resultBaseToExponent, baseFloat)
+	}
+
+	actualResultStr := resultBaseToExponent.Text('f', int(requiredFractionalDigits))
+
+	fmt.Printf("\n%v Base: %v\n",
+		spacerStr,
+		baseStr)
+
+	fmt.Printf("%v Exponent: %v\n",
+		spacerStr,
+		exponentValue)
+
+	fmt.Printf("Expected Result: %v\n", expectedResultStr)
+
+	fmt.Printf("Actual Result:   %v\n\n%v\n\n",
+		actualResultStr,
+		lineBreakStr)
+
+}
+
+// TestPrec002
+//
+// This Passes
+func TestPrec002() {
+
+	spacerStr := " "
+
+	lineBreakStr := spacerStr
+
+	lineBreakStr += strings.Repeat("-", 50)
+
+	fmt.Printf("\n%v\n%vRunning TestPrec002()\n%v\n\n",
+		lineBreakStr,
+		spacerStr,
+		lineBreakStr)
+
+	//                    Decimal            1         2         3
+	//                    Digits    12345678901234567890123456789012345
+	expectedResultStr := "186790307.75412594147937"
+
+	requiredFractionalDigits := uint(14)
+
+	var requiredTotalDigits uint
+
+	for _, s := range expectedResultStr {
+
+		if s == '.' {
+			continue
+		}
+
+		if s >= '0' && s <= '9' {
+			requiredTotalDigits++
+		}
+
+	}
+
+	exponentValue := uint(8)
+
+	baseStr := "10.81233"
+
+	requiredFloatPrecision := ComputeBigFloatPrecisionBits(requiredTotalDigits, exponentValue)
+
+	baseFloat, isOk :=
+		new(big.Float).
+			SetPrec(requiredFloatPrecision).
+			SetMode(big.AwayFromZero).
+			SetString(baseStr)
+
+	if !isOk {
+		fmt.Printf("baseFloat SetString(\"3.14159\") Failed!")
+		return
+	}
+
+	resultBaseToExponent, isOk :=
+		new(big.Float).
+			SetPrec(requiredFloatPrecision).
+			SetMode(big.AwayFromZero).
+			SetString(baseStr)
+
+	if !isOk {
+		fmt.Printf("resultBaseToExponent SetString(\"3.14159\") Failed!")
+		return
+	}
+
+	adjustedExponentValue := exponentValue - 1
+
+	for i := uint(0); i < adjustedExponentValue; i++ {
+
 		resultBaseToExponent.Mul(resultBaseToExponent, baseFloat)
 	}
 

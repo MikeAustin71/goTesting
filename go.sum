@@ -1,4 +1,6 @@
 github.com/MikeAustin71/errpref v1.7.1 h1:Cr2cfsUtI7SGbPkxaOAZHKHsD8MopCXo74lLvLG1oCY=
 github.com/MikeAustin71/errpref v1.7.1/go.mod h1:58PVw7dfw5om24uV1OzwiRxljRnQqrQBx/dKPBMZHm8=
+github.com/MikeAustin71/errpref/v2 v2.0.1 h1:UzBKAK9ZqBQgz3o4vXdc4ywn9JKCO+Cqu15UQFOk3YU=
+github.com/MikeAustin71/errpref/v2 v2.0.1/go.mod h1:ak959B2s/drDDz7oT7/v/3ZsmP25zjSpNibsgabfTbw=
 github.com/robryk/semaphore v0.0.0-20140406094550-308efaa1e1fc h1:hrh8+eg/CI2PfGZb3SCEXgGPOxz19eXIX+GwX/BSoJ0=
 github.com/robryk/semaphore v0.0.0-20140406094550-308efaa1e1fc/go.mod h1:vAHySmMv5DqSDfZe6LHa/1+OOmkhJ/euPxkZ1Ij7VuE=
